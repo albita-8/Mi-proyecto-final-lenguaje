@@ -7,7 +7,7 @@
 
  __- Alba Agüera Cuadra__  
 
-__- Elisabet Soria Zaitseva__ 
+__- Elisabet Soria Zaitseva__  
 
 ---
 
