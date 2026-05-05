@@ -3,11 +3,10 @@
 -- Motor: MySQL
 -- ============================================================
 
-CREATE DATABASE IF NOT EXISTS Disney
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
-
+CREATE DATABASE Disney;
+GO
 USE Disney;
+GO
 
 -- ─── Tabla: pelicula ─────────────────────────────────────────
 CREATE TABLE pelicula (
