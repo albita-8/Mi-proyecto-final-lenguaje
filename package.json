@@ -1,10 +1,10 @@
 {
-  "name": "disney-api-backend",
+  "name": "disney-api-wonderland",
   "version": "1.0.0",
   "description": "API REST para The API of Wonderland - Disney Database",
-  "main": "js/app.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node js/app.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

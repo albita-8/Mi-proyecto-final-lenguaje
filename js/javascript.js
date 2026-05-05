@@ -1,241 +1,306 @@
-const express = require('express');
-const mysql = require('mysql2');
-const cors = require('cors');
+/**
+ * @file javascript.js
+ * @description Lógica principal del frontend de The API of Wonderland.
+ * @author Alba Agüera Cuadra, Elisabet Soria Zaitseva
+ */
 
-const app = express();
-const PORT = 3000;
+/** URL base de la API */
+const API = 'http://localhost:3000/api';
 
-// ─── Middlewares ────────────────────────────────────────────────────────────
-app.use(cors());
-app.use(express.json());
+/** @type {Array} Almacena todos los personajes cargados */
+let todosPersonajes = [];
 
-// ─── Conexión a la base de datos ─────────────────────────────────────────────
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',         // Cambia por tu usuario de MySQL
-  password: '',         // Cambia por tu contraseña de MySQL
-  database: 'Disney'
+/** @type {Array} Almacena todas las películas cargadas */
+let todasPeliculas  = [];
+
+/** @type {Array} Almacena todos los reinos cargados */
+let todosReinos     = [];
+
+// ════════════════════════════════════════════════════════════════════════════
+// INICIALIZACIÓN
+// ════════════════════════════════════════════════════════════════════════════
+
+document.addEventListener('DOMContentLoaded', () => {
+  inicializarTabs();
+  cargarPersonajes();
+  cargarPeliculas();
+  cargarReinos();
+
+  // Búsqueda en tiempo real y con Enter
+  document.getElementById('search-personajes').addEventListener('input', filtrarPersonajes);
+  document.getElementById('search-personajes').addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') filtrarPersonajes();
+  });
+
+  // Botón buscar
+  document.getElementById('btn-buscar').addEventListener('click', filtrarPersonajes);
+
+  // Cerrar modal al hacer clic fuera
+  document.getElementById('modal-overlay').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('modal-overlay')) cerrarModal();
+  });
+
+  // Botón cerrar modal
+  document.getElementById('btn-cerrar-modal').addEventListener('click', cerrarModal);
 });
 
-db.connect((err) => {
-  if (err) {
-    console.error('Error al conectar con la base de datos:', err.message);
-    process.exit(1);
+// ════════════════════════════════════════════════════════════════════════════
+// TABS — Navegación entre secciones
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * @function inicializarTabs
+ * @description Asigna los eventos click a los botones de navegación por tabs.
+ */
+function inicializarTabs() {
+  document.querySelectorAll('.tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const seccion = tab.dataset.section;
+      ['personajes', 'peliculas', 'reinos'].forEach((s) => {
+        document.getElementById('sec-' + s).style.display = s === seccion ? '' : 'none';
+      });
+    });
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// PERSONAJES
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * @function cargarPersonajes
+ * @description Obtiene todos los personajes de la API y los renderiza.
+ */
+function cargarPersonajes() {
+  fetch(API + '/personajes')
+    .then((res) => {
+      if (!res.ok) throw new Error('Error ' + res.status);
+      return res.json();
+    })
+    .then((datos) => {
+      todosPersonajes = datos;
+      renderPersonajes(todosPersonajes);
+    })
+    .catch((err) => {
+      document.getElementById('grid-personajes').innerHTML =
+        '<div class="status error-msg">⚠️ No se pudo conectar con la API.<br><small>' + err.message + '</small></div>';
+    });
+}
+
+/**
+ * @function renderPersonajes
+ * @description Pinta las tarjetas de personajes en el grid.
+ * @param {Array} lista - Array de personajes a mostrar.
+ */
+function renderPersonajes(lista) {
+  const grid  = document.getElementById('grid-personajes');
+  const count = document.getElementById('count-personajes');
+
+  count.innerHTML = 'Mostrando <span>' + lista.length + '</span> personaje' + (lista.length !== 1 ? 's' : '');
+
+  if (!lista.length) {
+    grid.innerHTML = '<div class="status">No se encontraron personajes.</div>';
+    return;
   }
-  console.log('Conexión a MySQL establecida correctamente.');
-});
 
-// ════════════════════════════════════════════════════════════════════════════
-// ENDPOINTS — PERSONAJES
-// ════════════════════════════════════════════════════════════════════════════
+  grid.innerHTML = lista.map((p, i) => {
+    const badge = obtenerBadge(p.TipPer);
+    const emoji = obtenerEmoji(p.TipPer);
+    return (
+      '<article class="card" style="animation-delay:' + (i * 0.04) + 's" data-id="' + p.CodPer + '">' +
+        '<div class="card-img">' + emoji + '</div>' +
+        '<div class="card-body">' +
+          '<div class="card-name">' + p.NomPer + '</div>' +
+          '<div class="card-tipo">' + p.EspPer + ' · ' + p.GenPer + '</div>' +
+          '<span class="badge ' + badge.clase + '">' + badge.texto + '</span>' +
+        '</div>' +
+      '</article>'
+    );
+  }).join('');
 
-// GET /api/personajes — Listar todos los personajes
-app.get('/api/personajes', (req, res) => {
-  const sql = `
-    SELECT 
-      p.CodPer,
-      p.NomPer,
-      p.TipPer,
-      p.EspPer,
-      p.AliPer,
-      p.GenPer,
-      p.DesPer,
-      p.ImgPer,
-      p.FNacPer,
-      r.NomRei AS Reino
-    FROM personaje p
-    JOIN reino r ON p.CodRei = r.CodRei
-    ORDER BY p.NomPer ASC
-  `;
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al obtener los personajes.', detalle: err.message });
-    }
-    res.json(results);
-  });
-});
-
-// GET /api/personajes/:id — Detalle de un personaje por ID
-app.get('/api/personajes/:id', (req, res) => {
-  const { id } = req.params;
-  const sql = `
-    SELECT 
-      p.CodPer,
-      p.NomPer,
-      p.TipPer,
-      p.EspPer,
-      p.AliPer,
-      p.GenPer,
-      p.DesPer,
-      p.ImgPer,
-      p.FNacPer,
-      r.NomRei AS Reino,
-      r.UbiRei AS UbicacionReino
-    FROM personaje p
-    JOIN reino r ON p.CodRei = r.CodRei
-    WHERE p.CodPer = ?
-  `;
-  db.query(sql, [id], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al obtener el personaje.', detalle: err.message });
-    }
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Personaje no encontrado.' });
-    }
-    // Obtener también las películas en las que aparece
-    const peliculasSql = `
-      SELECT pel.CodPel, pel.NomPel, pel.AnoPel, pel.GenPel
-      FROM pelicula pel
-      JOIN peli_pers pp ON pel.CodPel = pp.CodPel
-      WHERE pp.CodPer = ?
-    `;
-    db.query(peliculasSql, [id], (err2, peliculas) => {
-      if (err2) {
-        return res.status(500).json({ error: 'Error al obtener las películas del personaje.', detalle: err2.message });
-      }
-      const personaje = results[0];
-      personaje.Peliculas = peliculas;
-      res.json(personaje);
+  // Evento click en cada tarjeta
+  document.querySelectorAll('.card[data-id]').forEach((card) => {
+    card.addEventListener('click', () => {
+      verPersonaje(card.dataset.id);
     });
   });
-});
+}
 
-// POST /api/personajes — Crear un nuevo personaje
-app.post('/api/personajes', (req, res) => {
-  const { NomPer, TipPer, EspPer, AliPer, GenPer, DesPer, ImgPer, FNacPer, CodRei } = req.body;
-  if (!NomPer || !TipPer || !GenPer || !CodRei) {
-    return res.status(400).json({ error: 'Los campos NomPer, TipPer, GenPer y CodRei son obligatorios.' });
-  }
-  const sql = `
-    INSERT INTO personaje (NomPer, TipPer, EspPer, AliPer, GenPer, DesPer, ImgPer, FNacPer, CodRei)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-  db.query(sql, [NomPer, TipPer, EspPer || 'Desconocido', AliPer || 'Desconocido', GenPer, DesPer || 'No hay descripción', ImgPer || 'Sin imagen', FNacPer || 'Desconocida', CodRei], (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al crear el personaje.', detalle: err.message });
-    }
-    res.status(201).json({ mensaje: 'Personaje creado correctamente.', id: result.insertId });
-  });
-});
+/**
+ * @function filtrarPersonajes
+ * @description Filtra el listado de personajes según el texto del buscador.
+ */
+function filtrarPersonajes() {
+  const q = document.getElementById('search-personajes').value.toLowerCase();
+  const filtrados = todosPersonajes.filter((p) =>
+    p.NomPer.toLowerCase().includes(q) ||
+    p.TipPer.toLowerCase().includes(q) ||
+    p.EspPer.toLowerCase().includes(q)
+  );
+  renderPersonajes(filtrados);
+}
 
-// PUT /api/personajes/:id — Actualizar un personaje
-app.put('/api/personajes/:id', (req, res) => {
-  const { id } = req.params;
-  const { NomPer, TipPer, EspPer, AliPer, GenPer, DesPer, ImgPer, FNacPer, CodRei } = req.body;
-  const sql = `
-    UPDATE personaje 
-    SET NomPer = ?, TipPer = ?, EspPer = ?, AliPer = ?, GenPer = ?, DesPer = ?, ImgPer = ?, FNacPer = ?, CodRei = ?
-    WHERE CodPer = ?
-  `;
-  db.query(sql, [NomPer, TipPer, EspPer, AliPer, GenPer, DesPer, ImgPer, FNacPer, CodRei, id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al actualizar el personaje.', detalle: err.message });
-    }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Personaje no encontrado.' });
-    }
-    res.json({ mensaje: 'Personaje actualizado correctamente.' });
-  });
-});
+/**
+ * @function verPersonaje
+ * @description Abre el modal con el detalle de un personaje concreto.
+ * @param {number|string} id - ID del personaje.
+ */
+function verPersonaje(id) {
+  document.getElementById('modal-title').textContent = 'Cargando...';
+  document.getElementById('modal-body').innerHTML = '<div class="status"><div class="spinner"></div></div>';
+  document.getElementById('modal-overlay').classList.add('open');
 
-// DELETE /api/personajes/:id — Eliminar un personaje
-app.delete('/api/personajes/:id', (req, res) => {
-  const { id } = req.params;
-  // Primero eliminar sus relaciones en peli_pers
-  db.query('DELETE FROM peli_pers WHERE CodPer = ?', [id], (err) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al eliminar relaciones del personaje.', detalle: err.message });
-    }
-    db.query('DELETE FROM personaje WHERE CodPer = ?', [id], (err2, result) => {
-      if (err2) {
-        return res.status(500).json({ error: 'Error al eliminar el personaje.', detalle: err2.message });
-      }
-      if (result.affectedRows === 0) {
-        return res.status(404).json({ error: 'Personaje no encontrado.' });
-      }
-      res.json({ mensaje: 'Personaje eliminado correctamente.' });
+  fetch(API + '/personajes/' + id)
+    .then((res) => {
+      if (!res.ok) throw new Error('Error ' + res.status);
+      return res.json();
+    })
+    .then((p) => {
+      document.getElementById('modal-title').textContent = p.NomPer;
+      const peliculas = p.Peliculas && p.Peliculas.length
+        ? p.Peliculas.map((pel) => pel.NomPel).join(', ')
+        : 'Sin asignar';
+
+      document.getElementById('modal-body').innerHTML =
+        '<div class="modal-row"><label>Alias</label><p>'             + (p.AliPer || '—')  + '</p></div>' +
+        '<div class="modal-row"><label>Tipo</label><p>'              + p.TipPer            + '</p></div>' +
+        '<div class="modal-row"><label>Especie</label><p>'           + p.EspPer            + '</p></div>' +
+        '<div class="modal-row"><label>Género</label><p>'            + p.GenPer            + '</p></div>' +
+        '<div class="modal-row"><label>Reino</label><p>'             + p.Reino             + '</p></div>' +
+        '<div class="modal-row"><label>Películas</label><p>'         + peliculas           + '</p></div>' +
+        '<div class="modal-row"><label>Fecha de nacimiento</label><p>' + p.FNacPer         + '</p></div>' +
+        '<div class="modal-row"><label>Descripción</label><p>'       + p.DesPer            + '</p></div>';
+    })
+    .catch(() => {
+      document.getElementById('modal-body').innerHTML = '<p class="error-msg">Error al cargar el personaje.</p>';
     });
-  });
-});
+}
 
 // ════════════════════════════════════════════════════════════════════════════
-// ENDPOINTS — PELÍCULAS
+// PELÍCULAS
 // ════════════════════════════════════════════════════════════════════════════
 
-// GET /api/peliculas — Listar todas las películas
-app.get('/api/peliculas', (req, res) => {
-  const sql = `
-    SELECT CodPel, NomPel, AnoPel, GenPel, MinPel, SinPel
-    FROM pelicula
-    ORDER BY AnoPel ASC
-  `;
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al obtener las películas.', detalle: err.message });
-    }
-    res.json(results);
-  });
-});
-
-// GET /api/peliculas/:id — Detalle de una película por ID
-app.get('/api/peliculas/:id', (req, res) => {
-  const { id } = req.params;
-  const sql = 'SELECT * FROM pelicula WHERE CodPel = ?';
-  db.query(sql, [id], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al obtener la película.', detalle: err.message });
-    }
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Película no encontrada.' });
-    }
-    // Obtener los personajes de esa película
-    const personajesSql = `
-      SELECT p.CodPer, p.NomPer, p.TipPer, p.ImgPer
-      FROM personaje p
-      JOIN peli_pers pp ON p.CodPer = pp.CodPer
-      WHERE pp.CodPel = ?
-    `;
-    db.query(personajesSql, [id], (err2, personajes) => {
-      if (err2) {
-        return res.status(500).json({ error: 'Error al obtener los personajes.', detalle: err2.message });
-      }
-      const pelicula = results[0];
-      pelicula.Personajes = personajes;
-      res.json(pelicula);
+/**
+ * @function cargarPeliculas
+ * @description Obtiene todas las películas de la API y las renderiza.
+ */
+function cargarPeliculas() {
+  fetch(API + '/peliculas')
+    .then((res) => {
+      if (!res.ok) throw new Error('Error ' + res.status);
+      return res.json();
+    })
+    .then((datos) => {
+      todasPeliculas = datos;
+      renderPeliculas(todasPeliculas);
+    })
+    .catch((err) => {
+      document.getElementById('list-peliculas').innerHTML =
+        '<div class="status error-msg">⚠️ No se pudo conectar con la API.<br><small>' + err.message + '</small></div>';
     });
-  });
-});
+}
+
+/**
+ * @function renderPeliculas
+ * @description Pinta el listado de películas.
+ * @param {Array} lista - Array de películas a mostrar.
+ */
+function renderPeliculas(lista) {
+  document.getElementById('count-peliculas').innerHTML =
+    'Mostrando <span>' + lista.length + '</span> película' + (lista.length !== 1 ? 's' : '');
+
+  document.getElementById('list-peliculas').innerHTML = lista.map((p, i) =>
+    '<div class="list-item" style="animation-delay:' + (i * 0.04) + 's">' +
+      '<h3>🎬 ' + p.NomPel + '</h3>' +
+      '<p>' + p.SinPel + '</p>' +
+      '<p class="meta">🎭 ' + p.GenPel + ' &nbsp;·&nbsp; ⏱ ' + p.MinPel + ' min &nbsp;·&nbsp; 📅 ' + new Date(p.AnoPel).getFullYear() + '</p>' +
+    '</div>'
+  ).join('');
+}
 
 // ════════════════════════════════════════════════════════════════════════════
-// ENDPOINTS — REINOS
+// REINOS
 // ════════════════════════════════════════════════════════════════════════════
 
-// GET /api/reinos — Listar todos los reinos
-app.get('/api/reinos', (req, res) => {
-  const sql = 'SELECT * FROM reino ORDER BY NomRei ASC';
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al obtener los reinos.', detalle: err.message });
-    }
-    res.json(results);
-  });
-});
+/**
+ * @function cargarReinos
+ * @description Obtiene todos los reinos de la API y los renderiza.
+ */
+function cargarReinos() {
+  fetch(API + '/reinos')
+    .then((res) => {
+      if (!res.ok) throw new Error('Error ' + res.status);
+      return res.json();
+    })
+    .then((datos) => {
+      todosReinos = datos;
+      renderReinos(todosReinos);
+    })
+    .catch((err) => {
+      document.getElementById('list-reinos').innerHTML =
+        '<div class="status error-msg">⚠️ No se pudo conectar con la API.<br><small>' + err.message + '</small></div>';
+    });
+}
 
-// GET /api/reinos/:id — Detalle de un reino por ID
-app.get('/api/reinos/:id', (req, res) => {
-  const { id } = req.params;
-  db.query('SELECT * FROM reino WHERE CodRei = ?', [id], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al obtener el reino.', detalle: err.message });
-    }
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Reino no encontrado.' });
-    }
-    res.json(results[0]);
-  });
-});
+/**
+ * @function renderReinos
+ * @description Pinta el listado de reinos.
+ * @param {Array} lista - Array de reinos a mostrar.
+ */
+function renderReinos(lista) {
+  document.getElementById('count-reinos').innerHTML =
+    'Mostrando <span>' + lista.length + '</span> reino' + (lista.length !== 1 ? 's' : '');
 
-// ─── Arranque del servidor ────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+  document.getElementById('list-reinos').innerHTML = lista.map((r, i) =>
+    '<div class="list-item" style="animation-delay:' + (i * 0.04) + 's">' +
+      '<h3>🗺️ ' + r.NomRei + '</h3>' +
+      '<p>' + r.DesRei + '</p>' +
+      '<p class="meta">📍 ' + r.UbiRei + ' &nbsp;·&nbsp; 🕰 ' + r.AnoRei + '</p>' +
+    '</div>'
+  ).join('');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// MODAL
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * @function cerrarModal
+ * @description Cierra el modal de detalle de personaje.
+ */
+function cerrarModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * @function obtenerBadge
+ * @description Devuelve la clase CSS y el texto del badge según el tipo de personaje.
+ * @param {string} tipo - Tipo del personaje.
+ * @returns {{ clase: string, texto: string }}
+ */
+function obtenerBadge(tipo) {
+  const t = tipo.toLowerCase();
+  if (t.includes('protagonista')) return { clase: 'badge-protagonista', texto: 'Protagonista' };
+  if (t.includes('villano'))      return { clase: 'badge-villano',      texto: 'Villano' };
+  return { clase: 'badge-secundario', texto: 'Secundario' };
+}
+
+/**
+ * @function obtenerEmoji
+ * @description Devuelve el emoji de la tarjeta según el tipo de personaje.
+ * @param {string} tipo - Tipo del personaje.
+ * @returns {string}
+ */
+function obtenerEmoji(tipo) {
+  const t = tipo.toLowerCase();
+  if (t.includes('protagonista')) return '⭐';
+  if (t.includes('villano'))      return '💀';
+  return '🌟';
+}
