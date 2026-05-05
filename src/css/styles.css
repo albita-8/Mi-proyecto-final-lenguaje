@@ -510,3 +510,356 @@ footer {
   color: var(--text-dim);
   font-size: .82rem;
 }
+
+/* ============================================================
+   Realizar Visita — Estilos específicos
+   The API of Wonderland
+   ============================================================ */
+
+.visita-section {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 3rem auto 0;
+  padding: 0 1.2rem 5rem;
+}
+
+.visita-title {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: clamp(1.1rem, 3vw, 1.8rem);
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: .5rem;
+  text-shadow: 0 0 20px rgba(240,192,64,.35);
+}
+
+.visita-subtitle {
+  text-align: center;
+  font-style: italic;
+  color: var(--text-dim);
+  font-size: .95rem;
+  margin-bottom: 3rem;
+}
+
+/* ── Grid de parques ─────────────────────────────────────── */
+.parques-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.parque-card {
+  background: var(--navy-card);
+  border: 1px solid rgba(240,192,64,.18);
+  border-radius: 20px;
+  overflow: hidden;
+  animation: fadeUp .45s ease both;
+  transition: transform .25s, box-shadow .25s, border-color .25s;
+}
+
+.parque-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(240,192,64,.45);
+  box-shadow: 0 16px 48px rgba(0,0,0,.5), 0 0 24px rgba(240,192,64,.08);
+}
+
+.parque-card:nth-child(2) { animation-delay: .07s; }
+.parque-card:nth-child(3) { animation-delay: .14s; }
+.parque-card:nth-child(4) { animation-delay: .21s; }
+.parque-card:nth-child(5) { animation-delay: .28s; }
+.parque-card:nth-child(6) { animation-delay: .35s; }
+
+/* ── Banner de color por parque ──────────────────────────── */
+.parque-banner {
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.4rem;
+  border-bottom: 1px solid rgba(240,192,64,.12);
+}
+
+.paris    { background: linear-gradient(135deg, #1a3a6e 0%, #0d1f3c 100%); }
+.orlando  { background: linear-gradient(135deg, #6e1a1a 0%, #3c0d0d 100%); }
+.anaheim  { background: linear-gradient(135deg, #1a6e3a 0%, #0d3c1f 100%); }
+.tokyo    { background: linear-gradient(135deg, #6e1a4a 0%, #3c0d27 100%); }
+.hongkong { background: linear-gradient(135deg, #6e4a1a 0%, #3c270d 100%); }
+.shanghai { background: linear-gradient(135deg, #4a1a6e 0%, #270d3c 100%); }
+
+.parque-flag { font-size: 2.2rem; }
+.parque-emoji {
+  font-size: 2.8rem;
+  filter: drop-shadow(0 0 12px rgba(240,192,64,.4));
+}
+
+/* ── Info del parque ─────────────────────────────────────── */
+.parque-info {
+  padding: 1.2rem 1.4rem 1rem;
+}
+
+.parque-nombre {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: .85rem;
+  color: var(--gold);
+  margin-bottom: .6rem;
+  line-height: 1.4;
+}
+
+.parque-lugar {
+  font-size: .85rem;
+  color: var(--text);
+  margin-bottom: .3rem;
+}
+
+.parque-dato {
+  font-size: .8rem;
+  color: var(--text-dim);
+  margin-bottom: .2rem;
+}
+
+.parque-btn {
+  display: inline-block;
+  margin-top: .9rem;
+  padding: .45rem 1.1rem;
+  background: transparent;
+  border: 1px solid rgba(240,192,64,.35);
+  border-radius: 50px;
+  color: var(--gold);
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-decoration: none;
+  transition: background .2s, border-color .2s, box-shadow .2s;
+}
+
+.parque-btn:hover {
+  background: rgba(240,192,64,.12);
+  border-color: var(--gold);
+  box-shadow: 0 0 14px rgba(240,192,64,.2);
+}
+
+/* ── Mapa ────────────────────────────────────────────────── */
+.mapa-container {
+  border-top: 1px solid rgba(240,192,64,.1);
+  overflow: hidden;
+}
+
+.mapa-container iframe {
+  display: block;
+  filter: brightness(.9) saturate(.8);
+  transition: filter .3s;
+}
+
+.parque-card:hover .mapa-container iframe {
+  filter: brightness(1) saturate(1);
+}
+
+/* ── Tab activo ──────────────────────────────────────────── */
+.tab-active {
+  background: var(--gold);
+  color: var(--navy);
+  border-color: var(--gold);
+  box-shadow: 0 0 18px rgba(240,192,64,.4);
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem 1rem;
+  border-top: 1px solid rgba(240,192,64,.1);
+  color: var(--text-dim);
+  font-size: .82rem;
+}
+
+/* ============================================================
+   Perfil — Estilos específicos
+   The API of Wonderland
+   ============================================================ */
+
+.perfil-section {
+  position: relative;
+  z-index: 1;
+  max-width: 620px;
+  margin: 3rem auto 0;
+  padding: 0 1.2rem 5rem;
+}
+
+.perfil-title {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: clamp(1.1rem, 3vw, 1.8rem);
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: .5rem;
+  text-shadow: 0 0 20px rgba(240,192,64,.35);
+}
+
+.perfil-subtitle {
+  text-align: center;
+  font-style: italic;
+  color: var(--text-dim);
+  font-size: .95rem;
+  margin-bottom: 2.5rem;
+}
+
+/* ── Tarjeta del formulario ──────────────────────────────── */
+.form-card {
+  background: var(--navy-card);
+  border: 1px solid rgba(240,192,64,.18);
+  border-radius: 20px;
+  padding: 2.2rem 2.4rem;
+  animation: fadeUp .45s ease both;
+}
+
+/* ── Grupos de campo ─────────────────────────────────────── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  margin-bottom: 1.3rem;
+}
+
+.form-group label {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: .7rem;
+  letter-spacing: .07em;
+  color: var(--gold-dark);
+}
+
+.form-group input,
+.form-group select {
+  background: var(--navy-mid);
+  border: 1px solid rgba(240,192,64,.2);
+  border-radius: 10px;
+  padding: .7rem 1rem;
+  color: var(--text);
+  font-family: 'Lora', serif;
+  font-size: .9rem;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  appearance: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 10px rgba(240,192,64,.15);
+}
+
+.form-group input::placeholder { color: var(--text-dim); }
+
+.form-group select option {
+  background: var(--navy-mid);
+  color: var(--text);
+}
+
+/* ── Error ───────────────────────────────────────────────── */
+.form-error {
+  font-size: .75rem;
+  color: #e06090;
+  min-height: 1rem;
+}
+
+.input-error {
+  border-color: #c0396a !important;
+  box-shadow: 0 0 8px rgba(192,57,106,.25) !important;
+}
+
+/* ── Divisor ─────────────────────────────────────────────── */
+.form-divider {
+  text-align: center;
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: .65rem;
+  letter-spacing: .1em;
+  color: rgba(240,192,64,.4);
+  margin: 1.8rem 0 1.4rem;
+}
+
+/* ── Botón enviar ────────────────────────────────────────── */
+.btn-enviar {
+  width: 100%;
+  margin-top: .5rem;
+  padding: .85rem 1rem;
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  border-radius: 12px;
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  cursor: pointer;
+  transition: opacity .2s, box-shadow .2s, transform .15s;
+}
+
+.btn-enviar:hover {
+  opacity: .88;
+  box-shadow: 0 0 20px rgba(240,192,64,.4);
+  transform: translateY(-2px);
+}
+
+.btn-enviar:active {
+  transform: translateY(0);
+}
+
+/* ── Mensaje de confirmación ─────────────────────────────── */
+.mensaje-enviado {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1rem;
+  animation: fadeUp .5s ease both;
+}
+
+.mensaje-enviado.visible {
+  display: flex;
+}
+
+.mensaje-icono {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 20px rgba(240,192,64,.6));
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.12); }
+}
+
+.mensaje-texto {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin-bottom: .6rem;
+  text-shadow: 0 0 16px rgba(240,192,64,.4);
+}
+
+.mensaje-subtexto {
+  font-size: .9rem;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* ── Tab activo ──────────────────────────────────────────── */
+.tab-active {
+  background: var(--gold);
+  color: var(--navy);
+  border-color: var(--gold);
+  box-shadow: 0 0 18px rgba(240,192,64,.4);
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem 1rem;
+  border-top: 1px solid rgba(240,192,64,.1);
+  color: var(--text-dim);
+  font-size: .82rem;
+}
