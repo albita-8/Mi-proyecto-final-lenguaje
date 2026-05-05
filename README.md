@@ -172,17 +172,6 @@ disney-api/
 
 ---
 
-## 🛠️ Tecnologías Utilizadas
-
-| Capa | Tecnología |
-|------|------------|
-| Base de datos | MySQL |
-| Backend | Node.js + Express |
-| Frontend | HTML5 + CSS3 + JavaScript |
-| Herramienta DB | MySQL Workbench |
-
----
-
 ## 🚀 Instrucciones de Uso
 
 1. Importar el fichero `bd/disney_db.sql` en MySQL.
