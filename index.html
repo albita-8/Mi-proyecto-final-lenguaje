@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The API of Wonderland 🏰</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+
+<header>
+  <span class="castle-emoji">🏰</span>
+  <h1>The API of Wonderland</h1>
+  <p class="subtitle">Explora el universo mágico de Disney</p>
+</header>
+
+<nav>
+  <button class="tab active" data-section="personajes">✨ Personajes</button>
+  <button class="tab" data-section="peliculas">🎬 Películas</button>
+  <button class="tab" data-section="reinos">🗺️ Reinos</button>
+</nav>
+
+<main>
+
+  <!-- Sección Personajes -->
+  <section id="sec-personajes">
+    <div class="search-bar">
+      <input type="text" id="search-personajes" placeholder="Buscar personaje..." />
+      <button class="btn-search" onclick="filtrarPersonajes()">Buscar</button>
+    </div>
+    <div class="count-info" id="count-personajes"></div>
+    <div class="grid" id="grid-personajes">
+      <div class="status"><div class="spinner"></div>Cargando personajes...</div>
+    </div>
+  </section>
+
+  <!-- Sección Películas -->
+  <section id="sec-peliculas" style="display:none">
+    <div class="count-info" id="count-peliculas"></div>
+    <div id="list-peliculas">
+      <div class="status"><div class="spinner"></div>Cargando películas...</div>
+    </div>
+  </section>
+
+  <!-- Sección Reinos -->
+  <section id="sec-reinos" style="display:none">
+    <div class="count-info" id="count-reinos"></div>
+    <div id="list-reinos">
+      <div class="status"><div class="spinner"></div>Cargando reinos...</div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Modal detalle personaje -->
+<div class="overlay" id="modal-overlay" onclick="cerrarModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title"></div>
+      <button class="modal-close" onclick="cerrarModalBtn()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:3000/api';
+
+  let todosPersonajes = [];
+  let todasPeliculas  = [];
+  let todosReinos     = [];
+
+  // ── Tabs
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const sec = tab.dataset.section;
+      ['personajes', 'peliculas', 'reinos'].forEach(s => {
+        document.getElementById('sec-' + s).style.display = s === sec ? '' : 'none';
+      });
+    });
+  });
+
+  // ── Personajes
+  async function cargarPersonajes() {
+    try {
+      const res = await fetch(`${API}/personajes`);
+      if (!res.ok) throw new Error('Error ' + res.status);
+      todosPersonajes = await res.json();
+      renderPersonajes(todosPersonajes);
+    } catch (e) {
+      document.getElementById('grid-personajes').innerHTML =
+        `<div class="status error-msg">⚠️ No se pudo conectar con la API.<br><small>${e.message}</small></div>`;
+    }
+  }
+
+  function renderPersonajes(lista) {
+    const grid  = document.getElementById('grid-personajes');
+    const count = document.getElementById('count-personajes');
+    count.innerHTML = `Mostrando <span>${lista.length}</span> personaje${lista.length !== 1 ? 's' : ''}`;
+    if (!lista.length) { grid.innerHTML = '<div class="status">No se encontraron personajes.</div>'; return; }
+    grid.innerHTML = lista.map((p, i) => {
+      const badge = badgeTipo(p.TipPer);
+      const emoji = emojiTipo(p.TipPer);
+      return `
+        <article class="card" style="animation-delay:${i * 0.04}s" onclick="verPersonaje(${p.CodPer})">
+          <div class="card-img">${emoji}</div>
+          <div class="card-body">
+            <div class="card-name">${p.NomPer}</div>
+            <div class="card-tipo">${p.EspPer} · ${p.GenPer}</div>
+            <span class="badge ${badge.clase}">${badge.texto}</span>
+          </div>
+        </article>`;
+    }).join('');
+  }
+
+  function filtrarPersonajes() {
+    const q = document.getElementById('search-personajes').value.toLowerCase();
+    renderPersonajes(todosPersonajes.filter(p =>
+      p.NomPer.toLowerCase().includes(q) ||
+      p.TipPer.toLowerCase().includes(q) ||
+      p.EspPer.toLowerCase().includes(q)
+    ));
+  }
+
+  document.getElementById('search-personajes').addEventListener('keyup', e => { if (e.key === 'Enter') filtrarPersonajes(); });
+  document.getElementById('search-personajes').addEventListener('input', filtrarPersonajes);
+
+  async function verPersonaje(id) {
+    document.getElementById('modal-title').textContent = 'Cargando...';
+    document.getElementById('modal-body').innerHTML = '<div class="status"><div class="spinner"></div></div>';
+    document.getElementById('modal-overlay').classList.add('open');
+    try {
+      const res = await fetch(`${API}/personajes/${id}`);
+      const p   = await res.json();
+      document.getElementById('modal-title').textContent = p.NomPer;
+      const peliculas = p.Peliculas && p.Peliculas.length ? p.Peliculas.map(pel => pel.NomPel).join(', ') : 'Sin asignar';
+      document.getElementById('modal-body').innerHTML = `
+        <div class="modal-row"><label>Alias</label><p>${p.AliPer || '—'}</p></div>
+        <div class="modal-row"><label>Tipo</label><p>${p.TipPer}</p></div>
+        <div class="modal-row"><label>Especie</label><p>${p.EspPer}</p></div>
+        <div class="modal-row"><label>Género</label><p>${p.GenPer}</p></div>
+        <div class="modal-row"><label>Reino</label><p>${p.Reino}</p></div>
+        <div class="modal-row"><label>Películas</label><p>${peliculas}</p></div>
+        <div class="modal-row"><label>Fecha de nacimiento</label><p>${p.FNacPer}</p></div>
+        <div class="modal-row"><label>Descripción</label><p>${p.DesPer}</p></div>`;
+    } catch (e) {
+      document.getElementById('modal-body').innerHTML = `<p class="error-msg">Error al cargar el personaje.</p>`;
+    }
+  }
+
+  function cerrarModalBtn() { document.getElementById('modal-overlay').classList.remove('open'); }
+  function cerrarModal(e)   { if (e.target === document.getElementById('modal-overlay')) cerrarModalBtn(); }
+
+  // ── Películas
+  async function cargarPeliculas() {
+    try {
+      const res = await fetch(`${API}/peliculas`);
+      if (!res.ok) throw new Error('Error ' + res.status);
+      todasPeliculas = await res.json();
+      renderPeliculas(todasPeliculas);
+    } catch (e) {
+      document.getElementById('list-peliculas').innerHTML =
+        `<div class="status error-msg">⚠️ No se pudo conectar con la API.<br><small>${e.message}</small></div>`;
+    }
+  }
+
+  function renderPeliculas(lista) {
+    document.getElementById('count-peliculas').innerHTML = `Mostrando <span>${lista.length}</span> película${lista.length !== 1 ? 's' : ''}`;
+    document.getElementById('list-peliculas').innerHTML = lista.map((p, i) => `
+      <div class="list-item" style="animation-delay:${i * 0.04}s">
+        <h3>🎬 ${p.NomPel}</h3>
+        <p>${p.SinPel}</p>
+        <p class="meta">🎭 ${p.GenPel} &nbsp;·&nbsp; ⏱ ${p.MinPel} min &nbsp;·&nbsp; 📅 ${new Date(p.AnoPel).getFullYear()}</p>
+      </div>`).join('');
+  }
+
+  // ── Reinos
+  async function cargarReinos() {
+    try {
+      const res = await fetch(`${API}/reinos`);
+      if (!res.ok) throw new Error('Error ' + res.status);
+      todosReinos = await res.json();
+      renderReinos(todosReinos);
+    } catch (e) {
+      document.getElementById('list-reinos').innerHTML =
+        `<div class="status error-msg">⚠️ No se pudo conectar con la API.<br><small>${e.message}</small></div>`;
+    }
+  }
+
+  function renderReinos(lista) {
+    document.getElementById('count-reinos').innerHTML = `Mostrando <span>${lista.length}</span> reino${lista.length !== 1 ? 's' : ''}`;
+    document.getElementById('list-reinos').innerHTML = lista.map((r, i) => `
+      <div class="list-item" style="animation-delay:${i * 0.04}s">
+        <h3>🗺️ ${r.NomRei}</h3>
+        <p>${r.DesRei}</p>
+        <p class="meta">📍 ${r.UbiRei} &nbsp;·&nbsp; 🕰 ${r.AnoRei}</p>
+      </div>`).join('');
+  }
+
+  // ── Helpers
+  function badgeTipo(tipo) {
+    const t = tipo.toLowerCase();
+    if (t.includes('protagonista')) return { clase: 'badge-protagonista', texto: 'Protagonista' };
+    if (t.includes('villano'))      return { clase: 'badge-villano',      texto: 'Villano' };
+    return { clase: 'badge-secundario', texto: 'Secundario' };
+  }
+
+  function emojiTipo(tipo) {
+    const t = tipo.toLowerCase();
+    if (t.includes('protagonista')) return '⭐';
+    if (t.includes('villano'))      return '💀';
+    return '🌟';
+  }
+
+  cargarPersonajes();
+  cargarPeliculas();
+  cargarReinos();
+</script>
+</body>
+</html>
