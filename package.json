@@ -1,14 +1,28 @@
 {
   "name": "disney-api-wonderland",
   "version": "1.0.0",
-  "description": "API REST para The API of Wonderland - Disney Database",
+  "description": "API de Personajes de Disney.",
   "main": "backend/server.js",
   "scripts": {
-    "start": "node backend/server.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
   },
+  "keywords": [
+    "html",
+    "css",
+    "javascript",
+    "json",
+    "mysql"
+  ],
+  "author": "Elisabet y Alba",
+  "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "mysql2": "^3.6.1"
-  }
+    "cors": "^2.8.6",
+    "express": "^4.22.1",
+    "mysql2": "^3.22.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  } 
 }
