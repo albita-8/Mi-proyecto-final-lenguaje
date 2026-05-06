@@ -1,4 +1,4 @@
-Eli: mysql, pagina index.html, pagina personajes.html, pagina estilos.css
+Eli: mysql, pagina index.html, pagina personajes.html, pagina estilos.css, logica proyecto
 
 Alba: Pagina visita.html, pagina perfil.html, pagina sobre-nosotras.html, pagina peliculas.html, pagina canciones.html
 
