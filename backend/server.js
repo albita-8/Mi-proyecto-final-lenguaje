@@ -24,9 +24,9 @@ const PORT = 3000; // Puerto donde correrá nuestro servidor
 const pool_mysql = mysql2.createPool({
   host: "localhost", // Dirección del servidor
   port: 3306, // Puerto al que nos conectamos en MySQL
-  user: "profesor", // Usuario al que nos conectamos
-  password: "lmsgi2526", // Contraseña del usuario al que nos conectamos
-  database: "ejemplo_usuarios", // Nombre de la base de datos que nos conectamos
+  user: "root", // Usuario al que nos conectamos
+  password: "", // Contraseña del usuario al que nos conectamos
+  database: "Disney", // Nombre de la base de datos que nos conectamos
   waitForConnections: true, // Hace que las nuevas peticiones esperan en cola hasta que haya una conexión libre. Si vale false esas nuevas peticiones fallan
   connectionLimit: 10, // Define el máximo de conexiones simultáneas al servidor MySQL
   queueLimit: 0, // Define el límite de peticiones en espera. El valor 0 define una cola infinita
@@ -44,7 +44,7 @@ function iniciarServer() {
     }
     connection.release();
     // Iniciamos el servidor en el puerto especificado
-    app.listen(PORT, () => {
+    api.listen(PORT, () => {
       // Confirmación en la consola de que se ha lanzado el servidor OK
       console.log(
         `Se ha conectado satisfactoriamente a MySQL. Servidor corriendo en http://localhost:${PORT}`,
@@ -53,7 +53,7 @@ function iniciarServer() {
   });
 }
 
-app.get("/pelicula", (req, res) => {
+api.get("/pelicula", (req, res) => {
   const params = new URL(`http://localhost:${PORT}${req.url}`).searchParams;
   const nombre = params.get("nombre");
   // Alternativa:
@@ -74,3 +74,5 @@ app.get("/pelicula", (req, res) => {
     res.json(resultados);
   });
 });
+
+iniciarServer();

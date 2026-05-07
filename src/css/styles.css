@@ -32,18 +32,18 @@
     font-style: normal;
 }
 
-:root {
-  --gold:      #f0c040;
-  --gold-dark: #b8860b;
-  --navy:      #0a0e2a;
-  --navy-mid:  #111636;
-  --navy-card: #161c3e;
-  --purple:    #2a1a5e;
-  --rose:      #c0396a;
-  --text:      #e8e0f0;
-  --text-dim:  #9090b8;
-  --radius:    14px;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+
+.detacado-elemento {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+}
+
+
 
 html { scroll-behavior: smooth; }
 
