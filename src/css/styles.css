@@ -1,8 +1,36 @@
 /* ============================================================
    The API of Wonderland — Estilos
    ============================================================ */
+/* FUENTE DISNEY CLÁSICA FINA*/
+@font-face {
+    font-family: 'ClassicDisneyThin';
+    src: url('../assets/fonts/waltograph42.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+/* FUENTE DISNEY CLÁSICA GRUESA*/
+@font-face {
+    font-family: 'ClassicDisneyBold';
+    src: url('../assets/fonts/waltographUI.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* FUENTE MODERNA DISNEY MONTSERRAT */
+@font-face {
+    font-family: 'ModernDisney';
+    src: url('../assets/fonts/Montserrat-VariableFont_wght.ttf') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* FUENTE DISNEY MODERNA QUESTRIAL */
+@font-face {
+    font-family: 'MarvelStyle';
+    src: url('../assets/fonts/bebas-neue.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 
 :root {
   --gold:      #f0c040;
