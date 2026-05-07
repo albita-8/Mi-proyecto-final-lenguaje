@@ -14,26 +14,23 @@
 </head>
 <body>
 
-  <!-- ══ HEADER ══════════════════════════════════════ -->
-  <header>
-    <span class="castle-emoji" aria-hidden="true">🏰</span>
-    <h1>The API of Wonderland</h1>
-    <p class="subtitle">Explora el universo mágico de Disney</p>
-  </header>
+ <header class="cabecera">
+        <nav class="navegador">
+            <ul>
+                <li class="nav-menu"><a href="../index.html">Inicio<img src="../assets/images/nav_Inicio.png" alt="Inicio"
+                            class="nav-img"></a></li>
+                <li class="nav-menu"><a href="perfil.html">Perfil<img src="../assets/images/nav_Perfil.png"
+                            alt="Perfil" class="nav-img"></a></li>
+                <li class="nav-menu"><a href="sobre-nosotras.html">Sobre Nosotros<img
+                            src="../assets/images/nav_Nosotros.png" alt="Sobre Nosotros" class="nav-img"></a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <!-- ══ NAV ═════════════════════════════════════════ -->
-  <nav aria-label="Navegación principal">
-    <button class="tab" onclick="window.location.href='../index.html'">Inicio</button>
-    <button class="tab tab-active" aria-current="page">🎬 Películas</button>
-    <button class="tab" onclick="window.location.href='canciones.html'">🎵 Canciones</button>
-    <button class="tab" onclick="window.location.href='realizar-visita.html'">🗺️ Realizar Visita</button>
-    <button class="tab" onclick="window.location.href='perfil.html'">👤 Perfil</button>
-    <button class="tab" onclick="window.location.href='sobre-nosotras.html'">👑 Sobre Nosotras</button>
-  </nav>
 
   <!-- ══ MAIN ════════════════════════════════════════ -->
   <main>
-    <section class="peliculas-section">
+    <div class="peliculas-section">
 
       <h2 class="peliculas-title">🎬 Películas Disney</h2>
       <p class="peliculas-subtitle">Todas las películas de nuestra base de datos mágica</p>
@@ -48,175 +45,7 @@
       <!-- Grid de películas -->
       <div class="peliculas-grid" id="peliculas-grid">
 
-        <!-- El Rey León -->
-        <article class="pelicula-card" data-nombre="el rey leon aventuras drama">
-          <div class="pelicula-poster leon">
-            <span class="poster-emoji" aria-hidden="true">🦁</span>
-          </div>
-          <div class="pelicula-body">
-            <h3 class="pelicula-titulo">El Rey León</h3>
-            <div class="pelicula-tags">
-              <span class="tag">Aventuras</span>
-              <span class="tag">Drama</span>
-            </div>
-            <p class="pelicula-meta">📅 1994 &nbsp;·&nbsp; ⏱ 88 min</p>
-            <p class="pelicula-sinopsis">Tras la muerte de su padre, el pequeño león Simba huye de su reino para aprender el significado de la responsabilidad antes de reclamar su trono.</p>
-            <a class="pelicula-btn" href="https://www.disneyplus.com/movies/the-lion-king/1Iyf4lqrIwlB" target="_blank" rel="noopener noreferrer">Ver en Disney+</a>
-          </div>
-        </article>
-
-        <!-- La Bella y la Bestia -->
-        <article class="pelicula-card" data-nombre="la bella y la bestia romance fantasia">
-          <div class="pelicula-poster bella">
-            <span class="poster-emoji" aria-hidden="true">🌹</span>
-          </div>
-          <div class="pelicula-body">
-            <h3 class="pelicula-titulo">La Bella y la Bestia</h3>
-            <div class="pelicula-tags">
-              <span class="tag">Romance</span>
-              <span class="tag">Fantasía</span>
-            </div>
-            <p class="pelicula-meta">📅 1991 &nbsp;·&nbsp; ⏱ 84 min</p>
-            <p class="pelicula-sinopsis">Una joven brillante acepta ser prisionera de una Bestia en su castillo para salvar a su padre, descubriendo la belleza interior.</p>
-            <a class="pelicula-btn" href="https://www.disneyplus.com/movies/beauty-and-the-beast/7gHBuCHzST27" target="_blank" rel="noopener noreferrer">Ver en Disney+</a>
-          </div>
-        </article>
-
-        <!-- Frozen -->
-        <article class="pelicula-card" data-nombre="frozen fantasia musical">
-          <div class="pelicula-poster frozen">
-            <span class="poster-emoji" aria-hidden="true">❄️</span>
-          </div>
-          <div class="pelicula-body">
-            <h3 class="pelicula-titulo">Frozen</h3>
-            <div class="pelicula-tags">
-              <span class="tag">Fantasía</span>
-              <span class="tag">Musical</span>
-            </div>
-            <p class="pelicula-meta">📅 2013 &nbsp;·&nbsp; ⏱ 102 min</p>
-            <p class="pelicula-sinopsis">La princesa Anna emprende un viaje épico para encontrar a su hermana Elsa, cuyos poderes de hielo han condenado al reino a un invierno eterno.</p>
-            <a class="pelicula-btn" href="https://www.disneyplus.com/movies/frozen/3T8Jjber1kHj" target="_blank" rel="noopener noreferrer">Ver en Disney+</a>
-          </div>
-        </article>
-
-        <!-- Toy Story -->
-        <article class="pelicula-card" data-nombre="toy story aventura comedia">
-          <div class="pelicula-poster toystory">
-            <span class="poster-emoji" aria-hidden="true">🤠</span>
-          </div>
-          <div class="pelicula-body">
-            <h3 class="pelicula-titulo">Toy Story</h3>
-            <div class="pelicula-tags">
-              <span class="tag">Aventura</span>
-              <span class="tag">Comedia</span>
-            </div>
-            <p class="pelicula-meta">📅 1995 &nbsp;·&nbsp; ⏱ 81 min</p>
-            <p class="pelicula-sinopsis">Los juguetes de Andy cobran vida cuando él no está. El vaquero Woody ve amenazado su puesto con la llegada de Buzz Lightyear.</p>
-            <a class="pelicula-btn" href="https://www.disneyplus.com/movies/toy-story/5xTx3dMFHoRV" target="_blank" rel="noopener noreferrer">Ver en Disney+</a>
-          </div>
-        </article>
-
-        <!-- La Cenicienta -->
-        <article class="pelicula-card" data-nombre="la cenicienta fantasia romance">
-          <div class="pelicula-poster cenicienta">
-            <span class="poster-emoji" aria-hidden="true">👠</span>
-          </div>
-          <div class="pelicula-body">
-            <h3 class="pelicula-titulo">La Cenicienta</h3>
-            <div class="pelicula-tags">
-              <span class="tag">Fantasía</span>
-              <span class="tag">Romance</span>
-            </div>
-            <p class="pelicula-meta">📅 1950 &nbsp;·&nbsp; ⏱ 74 min</p>
-            <p class="pelicula-sinopsis">Una joven maltratada por su madrastra logra asistir al baile real gracias a su Hada Madrina.</p>
-            <a class="pelicula-btn" href="https://www.disneyplus.com/movies/cinderella/5tSgHqFqtIDI" target="_blank" rel="noopener noreferrer">Ver en Disney+</a>
-          </div>
-        </article>
-
-        <!-- Alicia en el País de las Maravillas -->
-        <article class="pelicula-card" data-nombre="alicia pais maravillas fantasia surrealismo">
-          <div class="pelicula-poster alicia">
-            <span class="poster-emoji" aria-hidden="true">🐇</span>
-          </div>
-          <div class="pelicula-body">
-            <h3 class="pelicula-titulo">Alicia en el País de las Maravillas</h3>
-            <div class="pelicula-tags">
-              <span class="tag">Fantasía</span>
-              <span class="tag">Surrealismo</span>
-            </div>
-            <p class="pelicula-meta">📅 1951 &nbsp;·&nbsp; ⏱ 75 min</p>
-            <p class="pelicula-sinopsis">Alicia sigue a un conejo blanco y cae en un mundo mágico lleno de personajes excéntricos.</p>
-            <a class="pelicula-btn" href="https://www.disneyplus.com/movies/alice-in-wonderland/2c6FrS6h6qBK" target="_blank" rel="noopener noreferrer">Ver en Disney+</a>
-          </div>
-        </article>
-
-        <!-- 101 Dálmatas -->
-        <article class="pelicula-card" data-nombre="101 dalmatas aventura comedia">
-          <div class="pelicula-poster dalmatas">
-            <span class="poster-emoji" aria-hidden="true">🐾</span>
-          </div>
-          <div class="pelicula-body">
-            <h3 class="pelicula-titulo">101 Dálmatas</h3>
-            <div class="pelicula-tags">
-              <span class="tag">Aventura</span>
-              <span class="tag">Comedia</span>
-            </div>
-            <p class="pelicula-meta">📅 1961 &nbsp;·&nbsp; ⏱ 79 min</p>
-            <p class="pelicula-sinopsis">Una pareja de dálmatas debe rescatar a sus cachorros de las manos de la malvada Cruella de Vil.</p>
-            <a class="pelicula-btn" href="https://www.disneyplus.com/movies/101-dalmatians/3FrIWuqmSQj7" target="_blank" rel="noopener noreferrer">Ver en Disney+</a>
-          </div>
-        </article>
-
-        <!-- Enredados -->
-        <article class="pelicula-card" data-nombre="enredados aventura musical">
-          <div class="pelicula-poster enredados">
-            <span class="poster-emoji" aria-hidden="true">🏮</span>
-          </div>
-          <div class="pelicula-body">
-            <h3 class="pelicula-titulo">Enredados</h3>
-            <div class="pelicula-tags">
-              <span class="tag">Aventura</span>
-              <span class="tag">Musical</span>
-            </div>
-            <p class="pelicula-meta">📅 2010 &nbsp;·&nbsp; ⏱ 100 min</p>
-            <p class="pelicula-sinopsis">Rapunzel, una joven con cabello mágico, escapa de su torre con un bandido para ver las linternas flotantes.</p>
-            <a class="pelicula-btn" href="https://www.disneyplus.com/movies/tangled/1Ixfq4BdFMpB" target="_blank" rel="noopener noreferrer">Ver en Disney+</a>
-          </div>
-        </article>
-
-        <!-- Pinocho -->
-        <article class="pelicula-card" data-nombre="pinocho fantasia aventura">
-          <div class="pelicula-poster pinocho">
-            <span class="poster-emoji" aria-hidden="true">🪆</span>
-          </div>
-          <div class="pelicula-body">
-            <h3 class="pelicula-titulo">Pinocho</h3>
-            <div class="pelicula-tags">
-              <span class="tag">Fantasía</span>
-              <span class="tag">Aventura</span>
-            </div>
-            <p class="pelicula-meta">📅 1940 &nbsp;·&nbsp; ⏱ 88 min</p>
-            <p class="pelicula-sinopsis">Una marioneta de madera debe demostrar que es buena para que el Hada Azul lo convierta en un niño de verdad.</p>
-            <a class="pelicula-btn" href="https://www.disneyplus.com/movies/pinocchio/3Q9ZvWn3uKE7" target="_blank" rel="noopener noreferrer">Ver en Disney+</a>
-          </div>
-        </article>
-
-        <!-- Bambi -->
-        <article class="pelicula-card" data-nombre="bambi drama naturaleza">
-          <div class="pelicula-poster bambi">
-            <span class="poster-emoji" aria-hidden="true">🦌</span>
-          </div>
-          <div class="pelicula-body">
-            <h3 class="pelicula-titulo">Bambi</h3>
-            <div class="pelicula-tags">
-              <span class="tag">Drama</span>
-              <span class="tag">Naturaleza</span>
-            </div>
-            <p class="pelicula-meta">📅 1942 &nbsp;·&nbsp; ⏱ 70 min</p>
-            <p class="pelicula-sinopsis">Un joven ciervo aprende sobre el amor y la supervivencia en el bosque hasta convertirse en el Gran Príncipe.</p>
-            <a class="pelicula-btn" href="https://www.disneyplus.com/movies/bambi/5Y4OT0L3CPPV" target="_blank" rel="noopener noreferrer">Ver en Disney+</a>
-          </div>
-        </article>
+      <h2>Cargando películas...</h2>
 
       </div><!-- /peliculas-grid -->
 
@@ -225,7 +54,7 @@
         <p>No se encontraron películas para tu búsqueda.</p>
       </div>
 
-    </section>
+    </div>
   </main>
 
   <!-- ══ FOOTER ══════════════════════════════════════ -->
