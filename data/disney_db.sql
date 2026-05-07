@@ -1,6 +1,5 @@
 -- ============================================================
--- The API of Wonderland — Base de datos Disney
--- Motor: MySQL
+--       The API of Wonderland — Base de datos Disney
 -- ============================================================
 
 CREATE DATABASE Disney;

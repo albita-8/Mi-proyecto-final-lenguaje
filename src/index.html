@@ -1,80 +1,53 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Alba Agüera Cuadra, Elisabet Soria Zaitseva" />
-  <title>The API of Wonderland 🏰</title>
-  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="estilos.css">
+    <title>Disney Universe</title>
 </head>
+
 <body>
+    <header class="cabecera">
+        <nav class="navegador">
+            <ul>
+                <li class="nav-menu"><a href="index.html">Inicio<img src="img/nav_Inicio.png" alt="Inicio"
+                            class="nav-img"></a></li>
+                <li class="nav-menu"><a href="pages/perfil.html">Perfil<img src="img/nav_Perfil.png" alt="Perfil"
+                            class="nav-img"></a></li>
+                <li class="nav-menu"><a href="pages/sobre-nosotras.html">Sobre Nosotros<img src="img/nav_Nosotros.png"
+                            alt="Sobre Nosotros" class="nav-img"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="contenedor-principal">
+        <div class="logotipo">
+            <img src="img/logotipo.png" alt="Logotipo de Disney">
+        </div>
+        <div class="portada-inicio">
+            <img src="img/portada_inicio_up.png" alt="Míticas Peliculas de Disney">
+        </div>
 
-  <!-- ══ HEADER ══════════════════════════════════════ -->
-  <header>
-    <span class="castle-emoji" aria-hidden="true">🏰</span>
-    <h1>The API of Wonderland</h1>
-    <p class="subtitle">Explora el universo mágico de Disney</p>
-  </header>
-
-  <!-- ══ NAV ═════════════════════════════════════════ -->
-  <nav aria-label="Navegación principal">
-    <button class="tab active" data-section="personajes">✨ Personajes</button>
-    <button class="tab" data-section="peliculas">🎬 Películas</button>
-    <button class="tab" data-section="reinos">🗺️ Reinos</button>
-    <button class="tab" onclick="window.location.href='pages/sobre-nosotras.html'">👑 Sobre Nosotras</button>
-  </nav>
-
-  <!-- ══ MAIN ════════════════════════════════════════ -->
-  <main>
-
-    <!-- Sección Personajes -->
-    <section id="sec-personajes">
-      <div class="search-bar">
-        <input type="text" id="search-personajes" placeholder="Buscar personaje..." />
-        <button class="btn-search" id="btn-buscar">Buscar</button>
-      </div>
-      <div class="count-info" id="count-personajes"></div>
-      <div class="grid" id="grid-personajes">
-        <div class="status"><div class="spinner"></div>Cargando personajes...</div>
-      </div>
-    </section>
-
-    <!-- Sección Películas -->
-    <section id="sec-peliculas" style="display:none">
-      <div class="count-info" id="count-peliculas"></div>
-      <div id="list-peliculas">
-        <div class="status"><div class="spinner"></div>Cargando películas...</div>
-      </div>
-    </section>
-
-    <!-- Sección Reinos -->
-    <section id="sec-reinos" style="display:none">
-      <div class="count-info" id="count-reinos"></div>
-      <div id="list-reinos">
-        <div class="status"><div class="spinner"></div>Cargando reinos...</div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ══ MODAL detalle personaje ═════════════════════ -->
-  <div class="overlay" id="modal-overlay">
-    <div class="modal" id="modal">
-      <div class="modal-header">
-        <div class="modal-title" id="modal-title"></div>
-        <button class="modal-close" id="btn-cerrar-modal" aria-label="Cerrar">✕</button>
-      </div>
-      <div class="modal-body" id="modal-body"></div>
-    </div>
-  </div>
-
-  <!-- ══ FOOTER ══════════════════════════════════════ -->
-  <footer>
-    <p>✨ The API of Wonderland &mdash; Alba Agüera Cuadra &amp; Elisabet Soria Zaitseva &mdash; DAW 2024/25</p>
-  </footer>
-
-  <script src="js/javascript.js"></script>
+        <div class="destacado">
+            <div class="destacado-elemento">
+               
+            <iframe  class="elemento-destacado"  width="560" height="315" src="https://www.youtube.com/embed/bjJvvrKl83M?si=zUruwLh2qEe1jo-z" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen><img src="" alt=""></iframe>
+       
+        </div>
+        </div>
+    </main>
+    <footer>
+        <ul>
+            <li><a href=""><img src="img/pie_Instagram.png" alt="Instagram de Disney"></a></li>
+            <li><a href=""><img src="img/pie_TikTok.png" alt="TikTok de Disney"></a></li>
+            <li><a href=""><img src="img/pie_Disney.png" alt="Página de Disney"></a></li>
+            <li><a href=""><img src="img/pie_X.png" alt="Twitter de Disney"></a></li>
+        </ul>
+    </footer>
 </body>
+
 </html>

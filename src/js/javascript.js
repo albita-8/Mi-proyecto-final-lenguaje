@@ -4,6 +4,11 @@
  * @author Alba Agüera Cuadra, Elisabet Soria Zaitseva
  */
 
+const API_URL = "http://localhost:3000/";
+
+const ENDPOINT_OBTENER_PERSONAJES = "personajes";
+
+
 
 
 // /** URL base de la API */
