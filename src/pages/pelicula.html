@@ -1,52 +1,62 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Alba Agüera Cuadra, Elisabet Soria Zaitseva" />
   <link rel="stylesheet" href="../css/styles.css" />
-  <title>Películas — The API of Wonderland</title>
-  
+  <link rel="icon" href="../assets/images/icono.png" type="image/png">
+  <title>Películas Disney</title>
 </head>
+
 <body>
 
- <header class="cabecera">
-        <nav class="navegador">
-            <ul>
-                <li class="nav-menu"><a href="../index.html">Inicio<img src="../assets/images/nav_Inicio.png" alt="Inicio"
-                            class="nav-img"></a></li>
-                <li class="nav-menu"><a href="perfil.html">Perfil<img src="../assets/images/nav_Perfil.png"
-                            alt="Perfil" class="nav-img"></a></li>
-                <li class="nav-menu"><a href="sobre-nosotras.html">Sobre Nosotros<img
-                            src="../assets/images/nav_Nosotros.png" alt="Sobre Nosotros" class="nav-img"></a></li>
-            </ul>
-        </nav>
-    </header>
+  <header class="cabecera">
+    <nav class="navegador">
+      <ul>
+        <li class="nav-menu"><a href="../index.html">Inicio<img src="../assets/images/nav_Inicio.png" alt="Inicio"
+              class="nav-img"></a></li>
+        <li class="nav-menu"><a href="pages/ayudanos.html">Ayúdanos<img src="../assets/images/nav_Perfil.png"
+              alt="Perfil" class="nav-img"></a></li>
+        <li class="nav-menu"><a href="pages/sobre-nosotras.html">Sobre Nosotros<img
+              src="../assets/images/nav_Nosotros.png" alt="Sobre Nosotros" class="nav-img"></a></li>
+      </ul>
+    </nav>
+  </header>
 
 
- <main class="cont-prin-peli">
-    <input type="text" class="buscador-peli" placeholder="Buscar película..."/>
-    <select class="filtro-pelis">
-      <option value="">Todos los géneros</option>
-    </select>
-  </div>
- 
-  <p class="count-pelis"></p>
- 
-  <div class="grid-elemento-peli">
-    <h2>Cargando Películas...</h2>
-  </div>
+  <main class="cont-prin-peli">
+    <nav class="nav-peli">
+      <div class="search-peli">
+        <input type="text" id="input" placeholder="Buscar película...">
+        <ul class=" menu-pelis"></ul>
+      </div>
+      <div class="orden-peli">
+        <p>Ordenar por:</p>
+        <select class="select-peli">
+          <option value="nombre">Género</option>
+          <option value="precio">Nombre</option>
+        </select>
+      </div>
+    </nav>
+    <div class="grid-elemento-peli">
+      <h2>Cargando Películas...</h2>
+    </div>
   </main>
 
-   <footer>
-        <ul>
-            <li><a href=""><img src="../assets/images/pie_Instagram.png" alt="Instagram de Disney"></a></li>
-            <li><a href=""><img src="../assets/images/pie_TikTok.png" alt="TikTok de Disney"></a></li>
-            <li><a href=""><img src="../assets/images/pie_Disney.png" alt="Página de Disney"></a></li>
-            <li><a href=""><img src="../assets/images/pie_X.png" alt="Twitter de Disney"></a></li>
-        </ul>
-    </footer>
+  <footer class="pie">
+    <ul>
+      <li><a href="https://www.instagram.com/disney/"><img src="../assets/images/pie_Instagram.png"
+            alt="Instagram de Disney"></a></li>
+      <li><a href="https://www.tiktok.com/@disney?lang=es-419"><img src="../assets/images/pie_TikTok.png"
+            alt="TikTok de Disney"></a></li>
+      <li><a href="https://www.disney.es/"><img src="../assets/images/pie_Disney.png" alt="Página de Disney"></a></li>
+      <li><a href="https://x.com/DisneySpain"><img src="../assets/images/pie_X.png" alt="Twitter de Disney"></a></li>
+    </ul>
+  </footer>
 
   <script src="../js/javascript.js"></script>
 </body>
+
 </html>
