@@ -59,8 +59,8 @@ inicioSrv();
 
 // API para obtener todas las películas o filtrar por nombre
 api.get("/pelicula", (req, res) => {
-   const nombre = req.query.nombre;
-  
+  const nombre = req.query.nombre;
+
   let valores = [];
   let sql = "SELECT * FROM pelicula";
 
@@ -74,20 +74,37 @@ api.get("/pelicula", (req, res) => {
       console.error("Error al realizar la consulta:", error);
       return res.status(500).json({ error });
     }
+
     res.json(resultados);
   });
 });
 
-// API para obtener todos los personajes o filtrar por nombre
+// API para obtener todos los personajes o filtrar por nombre y tipo (Protagonista, Villano o Secundario)
 api.get("/personaje", (req, res) => {
-   const nombre = req.query.nombre;
-  
-  let valores = [];
-  let sql = "SELECT * FROM personaje";
+  const nombre = req.query.nombre;
+  const tipo = req.query.tipo;
 
-  if (nombre) {
-    sql += " WHERE NomPer = ?";
+  let valores = [];
+  let sql = `
+    SELECT 
+      p.CodPer, p.NomPer, p.EdaPer, p.TipPer,
+      p.EspPer, p.AliPer, p.GenPer, p.DesPer, p.ImgPer,
+      r.NomRei AS Reino
+    FROM personaje p
+    JOIN reino r ON (p.CodRei = r.CodRei)
+  `;
+
+  if (nombre && tipo) {
+    sql += " WHERE p.NomPer = ? AND p.TipPer = ?";
+    valores.push(nombre, tipo);
+
+  } else if (nombre) {
+    sql += " WHERE p.NomPer = ?";
     valores.push(nombre);
+
+  } else if (tipo) {
+    sql += " WHERE p.TipPer = ?";
+    valores.push(tipo);
   }
 
   pool_mysql.query(sql, valores, (error, resultados) => {
@@ -95,9 +112,10 @@ api.get("/personaje", (req, res) => {
       console.error("Error al realizar la consulta:", error);
       return res.status(500).json({ error });
     }
+
     res.json(resultados);
   });
-});
+})
 
 
 
