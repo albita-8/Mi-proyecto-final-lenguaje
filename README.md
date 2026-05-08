@@ -1,4 +1,3 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/qK0N-K2C)
 # 🏰 The API of Wonderland
 
 ---
@@ -58,14 +57,11 @@ Interfaz web desarrollada con **HTML, CSS y JavaScript**. Permite visualizar el 
 API REST desarrollada con **Node.js y Express**. Gestiona las rutas, la lógica de negocio y la comunicación con la base de datos. Expone los siguientes grupos de endpoints:
 
 ```
-GET    /api/personajes           → Listar todos los personajes
-GET    /api/personajes/:id       → Detalle de un personaje
-GET    /api/peliculas            → Listar todas las películas
-GET    /api/peliculas/:id        → Detalle de una película
-GET    /api/reinos               → Listar todos los reinos
-POST   /api/personajes           → Crear personaje
-PUT    /api/personajes/:id       → Actualizar personaje
-DELETE /api/personajes/:id       → Eliminar personaje
+GET    /api/personajes      → Listar todos los personajes
+GET    /api/peliculas       → Listar todas las películas
+POST   /api/personajes      → Crear personaje
+PUT    /api/peliculas       → Actualizar personaje
+DELETE /api/peliculas       → Eliminar personaje
 ```
 
 ### Base de Datos
@@ -93,62 +89,68 @@ Base de datos relacional en **MySQL** con las siguientes tablas principales:
 ### Tablas de la base de datos
 
 ```sql
-CREATE TABLE pelicula (
+CREATE TABLE pelicula
+(
   CodPel INT NOT NULL AUTO_INCREMENT,
   NomPel VARCHAR(50) NOT NULL,
-  AnoPel DATE NOT NULL,
+  AnoPel VARCHAR(15) NOT NULL,
   GenPel VARCHAR(15) NOT NULL,
   SinPel VARCHAR(500) NOT NULL,
   MinPel INT NOT NULL,
-  PRIMARY KEY (CodPel),
-  UNIQUE (NomPel)
+  ImgPel VARCHAR(500) NOT NULL DEFAULT 'Sin imagen',
+  CONSTRAINT PK_pelicula_CodPel PRIMARY KEY (CodPel),
+  CONSTRAINT UQ_pelicula_NomPel UNIQUE (NomPel)
 );
 
-CREATE TABLE reino (
+CREATE TABLE reino
+(
   CodRei INT NOT NULL AUTO_INCREMENT,
   NomRei VARCHAR(50) NOT NULL,
   UbiRei VARCHAR(50) NOT NULL DEFAULT 'Desconocido',
-  AnoRei INT NOT NULL,
+  AnoRei VARCHAR(25) NOT NULL DEFAULT 'Desconocido',
   DesRei VARCHAR(500) NOT NULL DEFAULT 'No hay descripción',
-  PRIMARY KEY (CodRei)
+  CONSTRAINT PK_reino_CodRei PRIMARY KEY (CodRei)
 );
 
-CREATE TABLE personaje (
+CREATE TABLE personaje
+(
   CodPer INT NOT NULL AUTO_INCREMENT,
   NomPer VARCHAR(50) NOT NULL,
+  EdaPer INT NOT NULL,
   TipPer VARCHAR(50) NOT NULL,
   EspPer VARCHAR(50) NOT NULL DEFAULT 'Desconocido',
   AliPer VARCHAR(20) DEFAULT 'Desconocido',
   GenPer VARCHAR(15) NOT NULL,
   DesPer VARCHAR(500) NOT NULL DEFAULT 'No hay descripción',
   ImgPer VARCHAR(500) NOT NULL DEFAULT 'Sin imagen',
-  FNacPer VARCHAR(100) NOT NULL,
   CodRei INT NOT NULL,
-  PRIMARY KEY (CodPer),
-  FOREIGN KEY (CodRei) REFERENCES reino(CodRei)
+  CONSTRAINT PK_personaje_CodPer PRIMARY KEY (CodPer),
+  CONSTRAINT FK_personaje_CodRei FOREIGN KEY (CodRei) REFERENCES reino(CodRei)
 );
 
-CREATE TABLE peli_pers (
+CREATE TABLE peli_pers
+(
   CodPel INT NOT NULL,
   CodPer INT NOT NULL,
-  PRIMARY KEY (CodPel, CodPer),
-  FOREIGN KEY (CodPel) REFERENCES pelicula(CodPel),
-  FOREIGN KEY (CodPer) REFERENCES personaje(CodPer)
+  CONSTRAINT PK_peli_pers_CodPel_CodPer PRIMARY KEY (CodPel, CodPer),
+  CONSTRAINT FK_peli_pers_CodPel FOREIGN KEY (CodPel) REFERENCES pelicula(CodPel),
+  CONSTRAINT FK_peli_pers_CodPer FOREIGN KEY (CodPer) REFERENCES personaje(CodPer)
 );
 
-CREATE TABLE cancion (
+CREATE TABLE cancion
+(
   CodCan INT NOT NULL AUTO_INCREMENT,
   NomCan VARCHAR(50) NOT NULL,
-  UrlCan VARCHAR(500) NOT NULL,
-  PRIMARY KEY (CodCan)
+  CONSTRAINT PK_cancion_CodCan PRIMARY KEY (CodCan)
 );
 
-CREATE TABLE canc_peli (
+CREATE TABLE canc_peli
+(
   CodCan INT NOT NULL,
   CodPel INT NOT NULL,
-  PRIMARY KEY (CodCan, CodPel),
-  FOREIGN KEY (CodCan) REFERENCES cancion(CodCan),
-  FOREIGN KEY (CodPel) REFERENCES pelicula(CodPel)
+  CONSTRAINT PK_canc_peli_CodCan_CodPel PRIMARY KEY (CodCan, CodPel),
+  CONSTRAINT FK_canc_peli_CodCan FOREIGN KEY (CodCan) REFERENCES cancion(CodCan),
+  CONSTRAINT FK_canc_peli_CodPel FOREIGN KEY (CodPel) REFERENCES pelicula(CodPel)
 );
 ```
 
@@ -159,14 +161,30 @@ CREATE TABLE canc_peli (
 ```
 disney-api/
 ├── backend/
-│   ├── js/
-│   │   └── app.js
-│   └── package.json
-├── frontend/
-│   ├── index.html
-│   └── estilos.css
-├── bd/
+│   └── server.js
+├── data/
 │   └── disney_db.sql
+├── src/
+│   ├── assets
+│   │    ├── fonts/
+│   │    └── images/
+│   │        ├── peliculas/
+│   │        └── personajes/
+│   ├── css/
+│   │   └── styles.css
+│   ├── js/
+│   │   └── javascript.js
+│   ├── pages/
+│   │     ├── pelicula.html
+│   │     ├── personaje.html
+│   │     ├── sobre-nosotras.html
+│   │     └── cancion.html
+│   └── index.html
+├── .gitignore
+├── package-lock.json
+├── package.json
+├── pnpm-lock.yaml
+├── REPARTO.md
 └── README.md
 ```
 
@@ -174,8 +192,8 @@ disney-api/
 
 ## 🚀 Instrucciones de Uso
 
-1. Importar el fichero `bd/disney_db.sql` en MySQL.
-2. Configurar las credenciales de la base de datos en `backend/js/app.js`.
+1. Importar el fichero `data/disney_db.sql` en MySQL.
+2. Configurar las credenciales de la base de datos en `backend/server.js`.
 3. Instalar dependencias del backend:
    ```bash
    cd backend
@@ -185,7 +203,7 @@ disney-api/
    ```bash
    node js/app.js
    ```
-5. Abrir `frontend/index.html` en el navegador.
+5. Abrir `src/index.html` en el navegador.
 
 ---
 
@@ -193,21 +211,18 @@ disney-api/
 
 ### Añadido
 - Endpoint `GET /api/personajes` para listar todos los personajes desde la base de datos.
-- Endpoint `GET /api/personajes/:id` para obtener el detalle de un personaje por su ID.
 - Endpoint `GET /api/peliculas` para listar todas las películas.
-- Endpoint `GET /api/reinos` para listar todos los reinos.
-- Servidor Node.js con Express en `backend/js/app.js` con conexión operativa a MySQL.
+- Servidor Node.js con Express en `backend/server.js` con conexión operativa a MySQL.
 - Fichero `package.json` con las dependencias necesarias (`express`, `mysql2`, `cors`).
-- Interfaz web en `frontend/index.html` que consume la API mediante `fetch` y muestra los personajes.
+- Interfaz web en `src/index.html` que consume la API mediante `fetch` y muestra los personajes.
 - Tabla `peli_pers` para gestionar la relación muchos a muchos entre películas y personajes.
 - Tabla `cancion` y `canc_peli` para almacenar canciones asociadas a las películas.
 
 ### Modificado
 - Base de datos migrada de **SQL Server** a **MySQL**, adaptando la sintaxis (`IDENTITY` → `AUTO_INCREMENT`, tipos de datos, etc.).
-- Campo `FNacPer` de la tabla `personaje` cambiado de `DATE` a `VARCHAR(100)` para admitir valores textuales como "Desconocida" o "Nace al inicio de la película".
-- Campo `AnoRei` de la tabla `reino` cambiado de `INT` con `DEFAULT 'Desconocido'` a `VARCHAR(50)` para ser coherente con los datos reales insertados.
+- Campo `AnoRei` de la tabla `reino` cambiado de `INT` con `DEFAULT 'Desconocido'` a `VARCHAR(15)` para ser coherente con los datos reales insertados.
 - La relación entre `personaje` y `pelicula` se ha extraído a una tabla intermedia `peli_pers`, eliminando la clave foránea directa en `personaje`, para soportar personajes que aparecen en varias películas.
-- Estructura del proyecto: separación clara entre carpetas `frontend/`, `backend/` y `bd/`.
+- Estructura del proyecto: separación clara entre carpetas `src/`, `backend/` y `data/`.
 - README actualizado con instrucciones de uso, tecnologías reales y estructura de carpetas definitiva.
 
 ### Eliminado

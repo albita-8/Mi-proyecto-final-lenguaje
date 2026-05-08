@@ -4,13 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Alba Agüera Cuadra, Elisabet Soria Zaitseva" />
-  <title>Películas — The API of Wonderland</title>
-  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/styles.css" />
-  <link rel="stylesheet" href="../css/peliculas.css" />
+  <title>Películas — The API of Wonderland</title>
+  
 </head>
 <body>
 
@@ -28,40 +24,29 @@
     </header>
 
 
-  <!-- ══ MAIN ════════════════════════════════════════ -->
-  <main>
-    <div class="peliculas-section">
-
-      <h2 class="peliculas-title">🎬 Películas Disney</h2>
-      <p class="peliculas-subtitle">Todas las películas de nuestra base de datos mágica</p>
-
-      <!-- Buscador -->
-      <div class="search-bar">
-        <input type="text" id="search-peliculas" placeholder="Buscar película..." />
-        <button class="btn-search" id="btn-buscar-pelicula">Buscar</button>
-      </div>
-      <div class="count-info" id="count-peliculas-page"></div>
-
-      <!-- Grid de películas -->
-      <div class="peliculas-grid" id="peliculas-grid">
-
-      <h2>Cargando películas...</h2>
-
-      </div><!-- /peliculas-grid -->
-
-      <!-- Mensaje sin resultados -->
-      <div class="sin-resultados" id="sin-resultados" style="display:none;">
-        <p>No se encontraron películas para tu búsqueda.</p>
-      </div>
-
-    </div>
+ <main class="cont-prin-peli">
+    <input type="text" class="buscador-peli" placeholder="Buscar película..."/>
+    <select class="filtro-pelis">
+      <option value="">Todos los géneros</option>
+    </select>
+  </div>
+ 
+  <p class="count-pelis"></p>
+ 
+  <div class="grid-elemento-peli">
+    <h2>Cargando Películas...</h2>
+  </div>
   </main>
 
-  <!-- ══ FOOTER ══════════════════════════════════════ -->
-  <footer>
-    <p>✨ The API of Wonderland &mdash; Alba Agüera Cuadra &amp; Elisabet Soria Zaitseva &mdash; DAW 2024/25</p>
-  </footer>
+   <footer>
+        <ul>
+            <li><a href=""><img src="../assets/images/pie_Instagram.png" alt="Instagram de Disney"></a></li>
+            <li><a href=""><img src="../assets/images/pie_TikTok.png" alt="TikTok de Disney"></a></li>
+            <li><a href=""><img src="../assets/images/pie_Disney.png" alt="Página de Disney"></a></li>
+            <li><a href=""><img src="../assets/images/pie_X.png" alt="Twitter de Disney"></a></li>
+        </ul>
+    </footer>
 
-  <script src="../js/peliculas.js"></script>
+  <script src="../js/javascript.js"></script>
 </body>
 </html>

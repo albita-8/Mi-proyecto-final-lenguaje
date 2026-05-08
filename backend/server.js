@@ -14,7 +14,7 @@ api.use(cors());
 api.use(express.json());
 
 
-http: api.use(express.static(path.join(__dirname, "../src")));
+api.use(express.static(path.join(__dirname, "../src")));
 
 
 const PORT = 3000;
