@@ -28,3 +28,6 @@
 - Diseño y maquetación de la página `sobre-nosotras.html`
 - Diseño y creación del `README.md`
 - Diseño y creacion de los `estilos.css`
+
+### Backend (Node.js + Express)
+- Endpoint `CRUD` de todas las paginas

@@ -253,7 +253,7 @@ api.put("/cancion/:id", (req, res) => {
   });
 });
  
-// [NUEVO - CONTROL 3] DELETE: eliminar una canción por su ID
+//DELETE: eliminar una canción por su ID
 api.delete("/cancion/:id", (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM cancion WHERE CodCan = ?";
