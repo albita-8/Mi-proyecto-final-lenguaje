@@ -1,35 +1,32 @@
-/* ============================================================
-   The API of Wonderland — Estilos
-   ============================================================ */
 /* FUENTE DISNEY CLÁSICA FINA*/
 @font-face {
-    font-family: 'ClassicDisneyThin';
-    src: url('../assets/fonts/waltograph42.otf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+  font-family: "ClassicDisneyThin";
+  src: url("../assets/fonts/waltograph42.otf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 /* FUENTE DISNEY CLÁSICA GRUESA*/
 @font-face {
-    font-family: 'ClassicDisneyBold';
-    src: url('../assets/fonts/waltographUI.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+  font-family: "ClassicDisneyBold";
+  src: url("../assets/fonts/waltographUI.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 
 /* FUENTE MODERNA DISNEY MONTSERRAT */
 @font-face {
-    font-family: 'ModernDisney';
-    src: url('../assets/fonts/Montserrat-VariableFont_wght.ttf') format('woff2');
-    font-weight: bold;
-    font-style: normal;
+  font-family: "Montserrat";
+  src: url("../assets/fonts/Montserrat-VariableFont_wght.ttf") format("woff2");
+  font-weight: bold;
+  font-style: normal;
 }
 
 /* FUENTE DISNEY MODERNA QUESTRIAL */
 @font-face {
-    font-family: 'MarvelStyle';
-    src: url('../assets/fonts/bebas-neue.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+  font-family: "Questrial";
+  src: url("../assets/fonts/bebas-neue.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 
 * {
@@ -38,471 +35,380 @@
   padding: 0;
 }
 
-/* ============================================================
-   styles.css — The API of Wonderland · Disney Universe
-   @author Alba Agüera Cuadra, Elisabet Soria Zaitseva
-   ============================================================ */
+.cabecera {
+  background-color: #003087;
+  padding: 12px 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin: 0;
+}
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap');
+.navegador ul {
+  width: 30%;
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+  padding: 5px;
+}
 
-/* ── RESET ── */
-*, *::before, *::after {
+.nav-menu a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  font-family: Montserrat, Questrial;
+  display: flex;
+  transition: color 0.2s;
+  gap: 5px;
+}
+
+.nav-menu a:hover {
+  color: #f5c518;
+}
+
+.nav-img {
+  width: 5%;
+  height: 10%;
+  align-items: center;
+}
+
+.pie {
+  background-color: #003087;
+  padding: 16px;
+  margin-top: auto;
   box-sizing: border-box;
+}
+
+.pie ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
   margin: 0;
   padding: 0;
 }
 
-/* ── VARIABLES ── */
-:root {
-  --navy:       #0b0f1a;
-  --navy-2:     #111827;
-  --navy-3:     #1c2333;
-  --gold:       #d4a843;
-  --gold-light: #f0cc70;
-  --gold-dim:   rgba(212, 168, 67, 0.18);
-  --text:       #e8e2d4;
-  --text-muted: #7a8099;
-  --card-bg:    #141926;
-  --shadow:     rgba(0, 0, 0, 0.5);
-}
-
-/* ── BASE ── */
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--navy);
-  color: var(--text);
-  font-family: 'Crimson Pro', Georgia, serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  line-height: 1.6;
-}
-
-/* ── FONDO ESTRELLADO ── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    radial-gradient(1px 1px at 8%  12%, rgba(255,255,255,0.55) 0%, transparent 100%),
-    radial-gradient(1px 1px at 22% 68%, rgba(255,255,255,0.35) 0%, transparent 100%),
-    radial-gradient(1px 1px at 38%  5%, rgba(255,255,255,0.5)  0%, transparent 100%),
-    radial-gradient(1px 1px at 55% 42%, rgba(255,255,255,0.4)  0%, transparent 100%),
-    radial-gradient(1px 1px at 70% 88%, rgba(255,255,255,0.45) 0%, transparent 100%),
-    radial-gradient(1px 1px at 85% 22%, rgba(255,255,255,0.6)  0%, transparent 100%),
-    radial-gradient(1px 1px at 93% 60%, rgba(255,255,255,0.35) 0%, transparent 100%),
-    radial-gradient(1px 1px at 15% 90%, rgba(255,255,255,0.4)  0%, transparent 100%),
-    radial-gradient(1px 1px at 48% 75%, rgba(255,255,255,0.3)  0%, transparent 100%),
-    radial-gradient(1px 1px at 62% 18%, rgba(255,255,255,0.5)  0%, transparent 100%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ============================================================
-   CABECERA / NAV
-   ============================================================ */
-.cabecera {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(11, 15, 26, 0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(212, 168, 67, 0.25);
-  padding: 14px 40px;
-}
-
-.navegador ul {
-  list-style: none;
-  display: flex;
-  gap: 40px;
-  justify-content: center;
-  align-items: center;
-}
-
-.nav-menu a {
-  color: var(--text-muted);
-  text-decoration: none;
-  font-family: 'Cinzel', serif;
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: color 0.25s;
-}
-
-.nav-menu a:hover {
-  color: var(--gold);
-}
-
-.nav-img {
-  width: 18px;
-  height: 18px;
+.pie img {
+  width: 40px;
+  height: 40px;
   object-fit: contain;
-  opacity: 0.7;
-  transition: opacity 0.25s;
+  transition: transform 0.3s;
+  border-radius: 5px;
 }
 
-.nav-menu a:hover .nav-img {
-  opacity: 1;
+.pie img:hover {
+  transform: scale(1.1);
 }
 
-/* ============================================================
-   INDEX — PÁGINA PRINCIPAL
-   ============================================================ */
-.contenedor-principal {
-  position: relative;
-  z-index: 1;
-  flex: 1;
+.cont-prin-inicio {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48px 24px 64px;
-  gap: 48px;
-}
-
-/* Logotipo */
-.logotipo {
-  text-align: center;
+  gap: 32px;
+  padding: 32px 16px;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  font-family: Questrial;
 }
 
 .logotipo img {
-  max-width: 220px;
-  filter: drop-shadow(0 0 24px rgba(212, 168, 67, 0.4));
-  animation: flotar 4s ease-in-out infinite;
-}
-
-@keyframes flotar {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-10px); }
-}
-
-/* Portada */
-.portada-inicio {
-  width: 100%;
-  max-width: 900px;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid rgba(212, 168, 67, 0.2);
-  box-shadow: 0 24px 80px var(--shadow);
+  width: 180px;
+  object-fit: contain;
 }
 
 .portada-inicio img {
   width: 100%;
-  height: auto;
-  display: block;
+  max-width: 900px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Botones de selección */
 .btns-seleccion {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
+  margin: 0;
+  padding: 0;
 }
 
 .btn-elemento {
-  background: var(--card-bg);
-  border: 1px solid rgba(212, 168, 67, 0.25);
-  border-radius: 10px;
-  padding: 28px 48px;
-  text-align: center;
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
+  background-color: #003087;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition:
+    transform 0.2s,
+    background-color 0.2s;
 }
 
 .btn-elemento:hover {
-  transform: translateY(-5px);
-  border-color: var(--gold);
-  box-shadow: 0 12px 40px rgba(212, 168, 67, 0.15);
+  background-color: #f5c518;
+  transform: translateY(-3px);
 }
 
 .btn-elemento a {
+  display: block;
+  padding: 16px 36px;
   text-decoration: none;
-  color: var(--text);
 }
 
-.btn-elemento h2 {
-  font-family: 'Cinzel', serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: var(--gold-light);
+.btn-elemento h1 {
+  color: #ffffff;
+  font-family: ClassicDisneyBold, ClassicDisneyThin;
+  font-size: 1.5rem;
+  margin: 2.5rem 0;
 }
 
-/* Destacados (iframes YouTube) */
+.btn-elemento:hover h1 {
+  color: #003087;
+}
+
 .destacado {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
   width: 100%;
-  max-width: 900px;
+  max-width: 1100px;
 }
 
-.destacado-elemento {
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid rgba(212, 168, 67, 0.15);
-  box-shadow: 0 8px 32px var(--shadow);
-  transition: transform 0.3s ease;
-}
-
-.destacado-elemento:hover {
-  transform: translateY(-4px);
+.h1-destacado {
+  font-family: ClassicDisneyBold, ClassicDisneyThin;
+  font-size: 2.2rem;
+  color: #003087;
 }
 
 .destacado-elemento iframe {
-  display: block;
-  border: none;
+  width: 100%;
+  height: 220px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 3px solid #f5c518;
 }
 
-/* ============================================================
-   PELICULA — PÁGINA DE PELÍCULAS
-   ============================================================ */
 .cont-prin-peli {
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+.nav-peli {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.search-peli {
   position: relative;
-  z-index: 1;
-  flex: 1;
-  padding: 48px 32px 64px;
-  max-width: 1400px;
-  margin: 0 auto;
-  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
-/* Título de sección */
-.cont-prin-peli::before {
-  content: '✦ Catálogo de Películas ✦';
-  display: block;
-  font-family: 'Cinzel', serif;
-  font-size: 0.7rem;
-  letter-spacing: 0.35em;
-  color: var(--gold);
-  text-align: center;
-  margin-bottom: 8px;
-}
-
-.cont-prin-peli::after {
-  content: 'Películas Disney';
-  display: block;
-  font-family: 'Cinzel', serif;
-  font-size: clamp(1.8rem, 4vw, 3rem);
-  font-weight: 700;
-  color: var(--text);
-  text-align: center;
-  margin-bottom: 32px;
-  letter-spacing: 0.05em;
-}
-
-/* Buscador */
-.buscador-peli {
-  display: block;
-  margin: 0 auto 12px;
-  background: var(--navy-3);
-  border: 1px solid rgba(212, 168, 67, 0.3);
-  border-radius: 50px;
-  padding: 12px 24px;
-  font-family: 'Crimson Pro', serif;
-  font-size: 1rem;
-  color: var(--text);
+.search-peli input {
+  padding: 10px 40px 10px 14px;
+  border: 2px solid #003087;
+  border-radius: 24px;
+  font-size: 0.95rem;
   outline: none;
-  width: 100%;
-  max-width: 440px;
-  transition: border-color 0.25s, box-shadow 0.25s;
+  width: 260px;
 }
 
-.buscador-peli::placeholder {
-  color: var(--text-muted);
+.search-peli img {
+  position: absolute;
+  right: 12px;
+  width: 18px;
+  opacity: 0.6;
 }
 
-.buscador-peli:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.1);
+.orden-peli {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-/* Contador */
-.count-pelis {
-  text-align: center;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 28px;
+.orden-peli p {
+  font-weight: bold;
+  color: #003087;
+  margin: 0;
 }
 
-/* Grid de películas */
-.grid-elemento-peli {
+.select-peli {
+  padding: 8px 12px;
+  border: 2px solid #003087;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.section-peliculas {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 20px;
+  gap: 24px;
 }
 
-/* ── CARD ── */
-.card {
-  background: var(--card-bg);
-  border: 1px solid rgba(212, 168, 67, 0.1);
+.card-pelicula {
+  background: #ffffff;
   border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
-  animation: aparecer 0.45s ease both;
+  transition: transform 0.2s;
 }
 
-.card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(212, 168, 67, 0.4);
-  box-shadow: 0 20px 50px var(--shadow);
+.card-pelicula:hover {
+  transform: translateY(-4px);
 }
 
-@keyframes aparecer {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Imagen */
 .card-img {
   position: relative;
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  overflow: hidden;
-  background: var(--navy-3);
 }
 
 .card-img img {
   width: 100%;
-  height: 100%;
+  height: 400px;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  display: block;
 }
 
-.card:hover .card-img img {
-  transform: scale(1.06);
-}
-
-.card-img-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3.5rem;
-  background: linear-gradient(135deg, var(--navy-2), var(--navy-3));
-}
-
-.card-year {
+.card-ano {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(11, 15, 26, 0.8);
-  backdrop-filter: blur(6px);
-  color: var(--gold-light);
-  font-family: 'Cinzel', serif;
-  font-size: 0.65rem;
-  padding: 4px 10px;
-  border-radius: 4px;
-  letter-spacing: 0.1em;
+  top: 8px;
+  right: 8px;
+  background: #003087;
+  color: #ffffff;
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  border-radius: 20px;
 }
 
-/* Cuerpo de la card */
 .card-elemento {
-  padding: 18px;
-  flex: 1;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  border-top: 2px solid var(--gold);
+  gap: 6px;
+  flex: 1;
 }
 
 .card-gen {
-  font-family: 'Cinzel', serif;
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold);
+  font-size: 0.78rem;
+  background-color: #f5c518;
+  padding: 2px 10px;
+  border-radius: 20px;
+  align-self: flex-start;
+  color: #003087;
+  font-weight: bold;
 }
 
 .card-tit {
-  font-family: 'Cinzel', serif;
+  font-family: Georgia, serif;
   font-size: 1.05rem;
-  font-weight: 600;
-  line-height: 1.25;
-  color: var(--text);
+  color: #003087;
+  margin: 0;
 }
 
-.card-sinopsis {
-  font-size: 0.88rem;
-  color: var(--text-muted);
-  line-height: 1.6;
-  font-weight: 300;
-  flex: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.card-sinop {
+  font-size: 0.85rem;
+  color: #444444;
+  line-height: 1.4;
+  margin: 0;
 }
 
-/* Pie de la card */
 .card-footer {
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px 18px;
-  background: rgba(212, 168, 67, 0.04);
-  border-top: 1px solid rgba(212, 168, 67, 0.08);
+  padding: 10px 14px;
+  background-color: #003087;
 }
 
 .card-min {
-  font-size: 0.75rem;
-  color: var(--text-muted);
+  font-size: 0.85rem;
+  color: #f5c518;
+  font-weight: bold;
+  margin: 0;
 }
 
-.card-min strong {
-  color: var(--gold-light);
-  font-weight: 500;
+.cont-prin-personajes {
+  padding: 24px 32px;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
 }
 
-.cargando, .sin-resultados {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 80px 20px;
-  color: var(--text-muted);
-  font-size: 1.1rem;
+.section-personajes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
 }
 
-.error-msg {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 80px 20px;
-  color: #e06060;
-  line-height: 2;
-}
-footer {
-  position: relative;
-  z-index: 1;
-  background: rgba(11, 15, 26, 0.95);
-  border-top: 1px solid rgba(212, 168, 67, 0.2);
-  padding: 20px 32px;
-}
-
-footer ul {
-  list-style: none;
+.card-personaje {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
   display: flex;
-  justify-content: center;
-  gap: 28px;
+  flex-direction: column;
+  transition: transform 0.2s;
 }
 
-footer ul li a img {
-  width: 26px;
-  height: 26px;
-  object-fit: contain;
-  opacity: 0.55;
-  transition: opacity 0.2s, transform 0.2s;
-  filter: brightness(1.5);
+.card-personaje:hover {
+  transform: translateY(-4px);
 }
 
-footer ul li a:hover img {
-  opacity: 1;
-  transform: translateY(-3px);
+.per-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+.per-des {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.per-nombre {
+  font-family: Georgia, serif;
+  font-size: 1rem;
+  color: #003087;
+  margin: 0;
+}
+
+.per-tipo {
+  font-size: 0.78rem;
+  font-weight: bold;
+  background-color: #f5c518;
+  padding: 2px 10px;
+  border-radius: 20px;
+  align-self: flex-start;
+  color: #003087;
+}
+
+.per-especie,
+.per-reino {
+  font-size: 0.82rem;
+  color: #666666;
+  margin: 0;
+}
+
+.per-desc {
+  font-size: 0.83rem;
+  line-height: 1.4;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.cont-prin-canciones {
+  padding: 24px 32px;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
 }
