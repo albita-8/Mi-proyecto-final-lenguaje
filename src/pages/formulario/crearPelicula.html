@@ -23,8 +23,46 @@
         </nav>
     </header>
 
-  <main class="cont-prin-canciones">
-
+  <main class="form-cre-peli">
+<h2>Añadir Nueva Película</h2>
+    <form action="/crear_pelicula" method="POST">
+        <fieldset>
+            <legend>Información de la Película</legend>
+            <div class="ele-form-peli">
+            <label>Nombre de la Película:
+                <input type="text" class="NomPel" name="NomPel" maxlength="50" required>
+            </label>
+</div>
+ <div class="ele-form-peli">
+            <label>Año / Fecha de Estreno:
+                <input type="date" class="AnoPel" name="AnoPel" maxlength="15" required>
+            </label>
+</div>
+<div class="ele-form-peli">
+            <label>Género:
+                <input type="text" class="GenPel" name="GenPel" maxlength="15" required>
+            </label>
+</div>
+<div class="ele-form-peli">
+            <label>Duración (minutos):
+                <input type="number" class="MinPel" name="MinPel" min="1" required>
+            </label>
+</div>
+<div class="ele-form-peli">
+            <label>Ruta o URL de la Imagen:
+                <input type="text" class="ImgPel" name="ImgPel" maxlength="500" value="Sin imagen">
+            </label>
+</div>
+<div class="ele-form-peli">
+            <label>Sinopsis:<br>
+                <textarea class="SinPel" name="SinPel" maxlength="500" rows="4" cols="50" required></textarea>
+            </label><br><br>
+   </div>         
+        </fieldset>
+        
+        <br>
+        <button type="submit">Crear Película</button>
+    </form>
 
   </main>
 
