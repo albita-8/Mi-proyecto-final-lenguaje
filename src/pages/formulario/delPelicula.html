@@ -6,7 +6,7 @@
      <meta name="author" content="Alba Agüera Cuadra, Elisabet Soria Zaitseva" />
     <link rel="stylesheet" href="../../css/styles.css">
     <link rel="icon" href="../../assets/images/icono.png" type="image/png">
-    <title>Canciones Disney</title>
+    <title>Eliminar Película</title>
 </head>
 
 <body>
@@ -23,15 +23,17 @@
         </nav>
     </header>
 
-  <main class="form-peli form-del-peli">
-    <form action="/eliminar_pelicula" method="POST">
+  <main class="form-peli del-peli-prin">
+    <h2>Eliminar Película</h2>
+    <p>Introduce el nombre exacto de la película que deseas eliminar del sistema de forma permanente.</p>
+    <form class="form-del-peli">
 
     <fieldset>
-        <legend>Eliminar una película</legend>
+        <legend>Zona de Peligro — Eliminar Película</legend>
 
         <div class="ele-form-peli">
             <label>Nombre de la Película:</label>
-            <input type="text" class="del-NomPel" name="NomPel" maxlength="50" required>
+            <input type="text" class="del-NomPel" name="NomPel" maxlength="50" placeholder="Ej: El Rey León" required>
         </div>
 
     </fieldset>

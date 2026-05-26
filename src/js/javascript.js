@@ -53,26 +53,24 @@ function renderizarPeliculas(peliculas) {
 // POST: Crear una nueva película
 function crearPelicula() {
   const formulario = document.getElementById("formulario-crear-pelicula");
-  
-  // Si estamos en una página que no tiene este formulario (ej. el index), salimos de la función
+
   if (!formulario) return; 
 
   formulario.addEventListener("submit", function (evento) {
-    evento.preventDefault(); // Evitamos que la página recargue
+    evento.preventDefault();
 
-    // Recolectamos todos los datos (incluida la imagen)
     const datosFormulario = new FormData(formulario);
 
     fetch(`${API_URL}/pelicula`, {
       method: "POST",
-      // El Content-Type no se pone para que el navegador gestione el archivo solo
+
       body: datosFormulario
     })
       .then(respuesta => respuesta.json())
       .then(resultado => {
         console.log("Película creada:", resultado);
         alert("¡Película creada correctamente!");
-        formulario.reset(); // Vaciamos el formulario
+        formulario.reset();
       })
       .catch(error => {
         console.error("Error al crear la película:", error);
@@ -94,13 +92,33 @@ function modificarPelicula(id, datos) {
 }
 
 // DELETE: Eliminar una película por su ID
-function eliminarPelicula(id) {
-  fetch(`${API_URL}/pelicula/${id}`, {
+function eliminarPelicula(nombre) {
+
+  const eliminar = confirm(`¿Estás seguro de que deseas borrar la película "${nombre}"? Esta acción no se puede deshacer.`);
+
+  // 2. Si el usuario cancela, salimos de la función
+  if (!estaSeguro) {
+    console.log("Borrado cancelado por el usuario.");
+    return; 
+  }
+
+ fetch(`${API_URL}/pelicula/${encodeURIComponent(nombre)}`, {
     method: "DELETE"
   })
-    .then(respuesta => respuesta.json())
-    .then(resultado => console.log("Película eliminada:", resultado))
-    .catch(error => console.error("Error al eliminar la película:", error));
+    .then(respuesta => {
+      if (!respuesta.ok) {
+        throw new Error("No se pudo eliminar la película.");
+      }
+      return respuesta.json();
+    })
+    .then(resultado => {
+      console.log("Película eliminada:", resultado);
+      alert("Película eliminada correctamente");
+    })
+    .catch(error => {
+      console.error("Error al eliminar la película:", error);
+      alert("Ocurrió un error al intentar borrar la película.");
+    });
 }
 
 // FETCH DE PERSONAJES

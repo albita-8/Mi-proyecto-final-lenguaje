@@ -145,11 +145,11 @@ api.put("/pelicula/:id", uploadPelicula.single("ImgPel"), (req, res) => {
 });
 
 // DELETE: eliminar una película por su ID
-api.delete("/pelicula/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "DELETE FROM pelicula WHERE CodPel = ?";
+api.delete("/pelicula/:nombre", (req, res) => {
+  const { nombre } = req.params;
+  const sql = "DELETE FROM pelicula WHERE NomPel = ?";
  
-  pool_mysql.query(sql, [id], (error, resultado) => {
+  pool_mysql.query(sql, [nombre], (error, resultado) => {
     if (error) {
       console.error("Error al eliminar película:", error);
       return res.status(500).json({ error });
