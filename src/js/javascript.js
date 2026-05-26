@@ -15,9 +15,7 @@ const personajes = document.querySelector(".section-personajes");
 const canciones = document.querySelector(".section-canciones");
 
 // FORMULARIOS PELICULAS
-const form_cre_peli = document.getElementById("form-cre-peli");
-const form_mod_peli = document.getElementById("form-mod-peli");
-const form_del_peli = document.getElementById("form-del-peli");
+
 
 // FORMULARIOS PERSONAJES
 const form_cre_pers = document.getElementById("form-cre-pers");
@@ -34,16 +32,22 @@ document.addEventListener("DOMContentLoaded", function () {
   if (peliculas) { obtenerPeliculas(); }
   if (personajes) { obtenerPersonajes(); }
   if (canciones) { obtenerCanciones(); }
+
+  const form_cre_peli = document.getElementById("form-cre-peli");
+  const form_mod_peli = document.getElementById("form-mod-peli");
+  const form_del_peli = document.getElementById("form-del-peli");
+
   if (form_cre_peli) { crearPelicula(); }
-   if (form_mod_peli) {
-    form_mod_peli.addEventListener("submit", function (evento) {
+  if (form_mod_peli) {
+     form_mod_peli.addEventListener("submit", function (evento) {
       evento.preventDefault();
       const nom_peli = document.getElementById("mod-NomPel").value.trim();
       const form_datos = new FormData(form_mod_peli);
       modificarPelicula(nom_peli, form_datos);
-    });}
- if (form_del_peli) {
-   form_del_peli.addEventListener("submit", function (evento) {
+    });
+  }
+  if (form_del_peli) {
+    form_del_peli.addEventListener("submit", function (evento) {
       evento.preventDefault();
       const nom_peli = document.getElementById("del-NomPel").value;
       eliminarPelicula(nom_peli);
@@ -98,7 +102,6 @@ function crearPelicula() {
 
     fetch(`${API_URL}/pelicula`, {
       method: "POST",
-
       body: datosForm
     })
       .then(respuesta => respuesta.json())
@@ -116,6 +119,7 @@ function crearPelicula() {
 
 // PUT: Modificar una película existente por su ID
 function modificarPelicula(nombre, form_datos) {
+
   fetch(`${API_URL}/pelicula/${encodeURIComponent(nombre)}`, {
     method: "PUT",
     body: form_datos

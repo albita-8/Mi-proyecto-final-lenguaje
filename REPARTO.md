@@ -11,6 +11,7 @@
 - Endpoint `GET /pelicula` con filtro por nombre
 - Endpoint `GET /personaje` con filtro por nombre y tipo
 
+
 ### Frontend (HTML + CSS + JS)
 - Diseño y maquetación de la página `index.html`
 - Diseño y maquetación de la página `personaje.html`
@@ -19,6 +20,8 @@
 - Fetchs del archivo  de `javascript.js`
 - Diseño y creación del `README.md`
 - Creación archivo `pnpm-lock.yaml`
+- Fetchs de peliculas, personajes y canciones
+- formularios html
 ---
  
 ## 👩‍💻 Alba

@@ -126,48 +126,59 @@ api.put("/pelicula/:nombre", uploadPelicula.single("ImgPel"), (req, res) => {
   const { nombre } = req.params;
   const { NomPel, AnoPel, GenPel, SinPel, MinPel } = req.body;
 
-  let sql;
-  let valores;
+  let actualizar = [];
+  let valores = [];
 
-  // Comprobamos si el usuario ha subido un archivo de imagen nuevo
-  if (req.file) {
-    // SI HAY IMAGEN NUEVA: Actualizamos todos los campos, incluyendo ImgPel
-    const rutaImagen = `/assets/images/peliculas/${req.file.filename}`;
-    sql = "UPDATE pelicula SET NomPel = ?, AnoPel = ?, GenPel = ?, SinPel = ?, MinPel = ?, ImgPel = ? WHERE NomPel = ?";
-    valores = [NomPel, AnoPel, GenPel, SinPel, MinPel, rutaImagen, nombre];
-  } else {
-    // SI NO HAY IMAGEN: Actualizamos todo MENOS ImgPel. Así conserva la carátula antigua.
-    sql = "UPDATE pelicula SET NomPel = ?, AnoPel = ?, GenPel = ?, SinPel = ?, MinPel = ? WHERE NomPel = ?";
-    valores = [NomPel, AnoPel, GenPel, SinPel, MinPel, nombre];
+  if (NomPel) {
+    actualizar.push("NomPel = ?");
+    valores.push(NomPel);
   }
+
+  if (AnoPel) {
+    actualizar.push("AnoPel = ?");
+    valores.push(AnoPel);
+  }
+
+  if (GenPel) {
+    actualizar.push("GenPel = ?");
+    valores.push(GenPel);
+  }
+
+  if (MinPel) {
+    actualizar.push("MinPel = ?");
+    valores.push(MinPel);
+  }
+
+  if (SinPel) {
+    actualizar.push("SinPel = ?");
+    valores.push(SinPel);
+  }
+
+  if (req.file) {
+    actualizar.push("ImgPel = ?");
+    valores.push(`/assets/images/peliculas/${req.file.filename}`);
+  }
+
+  if (actualizar.length === 0) {
+    return res.status(400).json({ error: "No se enviaron datos para modificar." });
+  }
+
+  const sql = `UPDATE pelicula SET ${actualizar.join(", ")} WHERE NomPel = ?`;
+  valores.push(nombre);
 
   pool_mysql.query(sql, valores, (error, resultado) => {
     if (error) {
-      console.error("Error al modificar película:", error);
-      return res.status(500).json({ error });
+      console.error("Error al modificar película en la DB:", error);
+      return res.status(500).json({ error: "Error en la base de datos" });
     }
+
     if (resultado.affectedRows === 0) {
-      return res.status(404).json({ mensaje: "Película no encontrada" });
+      return res.status(404).json({ error: "No se encontró ninguna película con ese nombre." });
     }
-    res.json({ mensaje: "Película modificada correctamente" });
+
+    res.json({ mensaje: "Película modificada correctamente." });
   });
 });
-//   const rutaImagen = req.file ? `/assets/images/peliculas/${req.file.filename}` : req.body.ImgPel;
-
-//   const sql =
-//     "UPDATE pelicula SET NomPel = ?, AnoPel = ?, GenPel = ?, SinPel = ?, MinPel = ?, ImgPel = ? WHERE NomPel = ?";
-//   const valores = [NomPel, AnoPel, GenPel, SinPel, MinPel, rutaImagen, nombre];
-
-//   pool_mysql.query(sql, valores, (error, resultado) => {
-//     if (error) {
-//       console.error("Error al modificar película:", error);
-//       return res.status(500).json({ error });
-//     }
-//     if (resultado.affectedRows === 0)
-//       return res.status(404).json({ mensaje: "Película no encontrada" });
-//     res.json({ mensaje: "Película modificada correctamente" });
-//   });
-// });
 
 // DELETE: eliminar una película por su ID
 api.delete("/pelicula/:nombre", (req, res) => {

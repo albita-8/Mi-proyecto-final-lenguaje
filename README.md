@@ -59,9 +59,12 @@ API REST desarrollada con **Node.js y Express**. Gestiona las rutas, la lógica 
 ```
 GET    /api/personajes      → Listar todos los personajes
 GET    /api/peliculas       → Listar todas las películas
+POST   /api/perliculas      → Crear personaje
 POST   /api/personajes      → Crear personaje
-PUT    /api/peliculas       → Actualizar personaje
-DELETE /api/peliculas       → Eliminar personaje
+PUT    /api/peliculas       → Actualizar pelicula
+PUT    /api/personajes       → Actualizar personaje
+DELETE /api/peliculas       → Eliminar peliculas
+DELETE /api/personajes       → Eliminar personajes
 ```
 
 ### Base de Datos
@@ -217,6 +220,11 @@ disney-api/
 - Interfaz web en `src/index.html` que consume la API mediante `fetch` y muestra los personajes.
 - Tabla `peli_pers` para gestionar la relación muchos a muchos entre películas y personajes.
 - Tabla `cancion` y `canc_peli` para almacenar canciones asociadas a las películas.
+- Dependencia de `multer` en `server.js` para poder cargar imagenes desde el cliente al server
+- CRUD de peliculas, personajes y canciones
+- FETCH de crear, modificar y eliminar y de peliculas, personajes y canciones
+- Creacion de paginas con formularios para cada tabla (pelis, personajes y canciones) y cada accio (crear, modificar y eliminar)
+
 
 ### Modificado
 - Base de datos migrada de **SQL Server** a **MySQL**, adaptando la sintaxis (`IDENTITY` → `AUTO_INCREMENT`, tipos de datos, etc.).
@@ -224,7 +232,8 @@ disney-api/
 - La relación entre `personaje` y `pelicula` se ha extraído a una tabla intermedia `peli_pers`, eliminando la clave foránea directa en `personaje`, para soportar personajes que aparecen en varias películas.
 - Estructura del proyecto: separación clara entre carpetas `src/`, `backend/` y `data/`.
 - README actualizado con instrucciones de uso, tecnologías reales y estructura de carpetas definitiva.
-
+- Modificacion de archivo pnpm-lock.yaml
+- 
 ### Eliminado
 - Clave foránea directa `CodPel` en la tabla `personaje`, sustituida por la tabla intermedia `peli_pers`.
 - Referencia a SQL Server Management Studio (SSMS), sustituida por MySQL Workbench.
