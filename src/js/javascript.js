@@ -52,7 +52,7 @@ function renderizarPeliculas(peliculas) {
 
 // POST: Crear una nueva película
 function crearPelicula() {
-  const formulario = document.getElementById("formulario-crear-pelicula");
+  const formulario = document.getElementById("form-cre-peli");
 
   if (!formulario) return; 
 
@@ -97,7 +97,7 @@ function eliminarPelicula(nombre) {
   const eliminar = confirm(`¿Estás seguro de que deseas borrar la película "${nombre}"? Esta acción no se puede deshacer.`);
 
   // 2. Si el usuario cancela, salimos de la función
-  if (!estaSeguro) {
+  if (!eliminar) {
     console.log("Borrado cancelado por el usuario.");
     return; 
   }

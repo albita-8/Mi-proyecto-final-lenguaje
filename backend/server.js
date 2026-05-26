@@ -52,7 +52,7 @@ inicioSrv();
 // =============================================================  
 
 // Configuración para Películas
-const storagePeliculas = multer.diskStorage({
+const imagenPeliculas = multer.diskStorage({
   destination: function (req, file, cb) {
     // Las guarda en src/assets/images/peliculas/
     cb(null, path.join(__dirname, '../src/assets/images/peliculas/'));
@@ -61,10 +61,10 @@ const storagePeliculas = multer.diskStorage({
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
-const uploadPelicula = multer({ storage: storagePeliculas });
+const uploadPelicula = multer({ storage: imagenPeliculas });
 
 // Configuración para Personajes
-const storagePersonajes = multer.diskStorage({
+const imagenPersonajes = multer.diskStorage({
   destination: function (req, file, cb) {
     // Las guarda en src/assets/images/personajes/
     cb(null, path.join(__dirname, '../src/assets/images/personajes/'));
@@ -73,7 +73,7 @@ const storagePersonajes = multer.diskStorage({
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
-const uploadPersonaje = multer({ storage: storagePersonajes });
+const uploadPersonaje = multer({ storage: imagenPersonajes });
 
 // =============================================================
 //                      CREACIÓN APIS

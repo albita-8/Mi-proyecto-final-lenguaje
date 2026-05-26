@@ -412,3 +412,144 @@
   font-family: Arial, sans-serif;
   box-sizing: border-box;
 }
+.ayuda-pelicula {
+    padding: 40px 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    margin: 40px auto;
+    max-width: 800px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.ayuda-titulo-peli h2 {
+    font-family: 'ClassicDisneyBold', sans-serif;
+    color: #003087;
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+}
+
+.ayuda-titulo-peli p {
+    color: #444;
+    margin-bottom: 25px;
+    font-size: 1rem;
+}
+
+.ayuda-btn ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 0;
+}
+
+.btn-pelicula-ayuda {
+    display: block;
+    padding: 15px 25px;
+    background-color: #003087;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-crear-peli:hover {
+   background-color: #2196f3;
+
+    transform: translateY(-3px);
+}
+
+.btn-modificar-peli:hover {
+   background-color: #f5c518;
+    transform: translateY(-3px);
+}
+
+.btn-eliminar-peli:hover {
+    background-color: #ff4d4d;
+    transform: translateY(-3px);
+}
+.form-peli {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.form-peli h2 {
+    font-family: 'ClassicDisneyBold', sans-serif;
+    color: #003087;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+fieldset {
+    border: 2px solid #003087;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+legend {
+    font-weight: bold;
+    color: #003087;
+    padding: 0 10px;
+}
+
+.ele-form-peli {
+    margin-bottom: 15px;
+}
+
+.ele-form-peli label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.ele-form-peli input, 
+.ele-form-peli textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+}
+
+/* --- ESTILOS DE BOTONES --- */
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.3s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+
+.cre-peli-prin button {
+    background-color: #add8e6; 
+    color: #003087;
+}
+
+.form-mod-peli button {
+    background-color: #f5c518;
+    color: #003087;
+}
+
+.del-peli-prin button {
+    background-color: #ff4d4d;
+    color: #ffffff;
+}
