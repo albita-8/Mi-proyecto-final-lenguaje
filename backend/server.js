@@ -104,14 +104,14 @@ api.get("/pelicula", (req, res) => {
 // POST: insertar una nueva película con soporte para archivos multimedia
 api.post("/pelicula", uploadPelicula.single("ImgPel"), (req, res) => {
   const { NomPel, AnoPel, GenPel, SinPel, MinPel } = req.body;
-  
+
   // Si se ha subido un archivo, creamos la ruta web relativa para la base de datos
   const rutaImagen = req.file ? `/assets/images/peliculas/${req.file.filename}` : "Sin imagen";
 
   const sql =
     "INSERT INTO pelicula (NomPel, AnoPel, GenPel, SinPel, MinPel, ImgPel) VALUES (?, ?, ?, ?, ?, ?)";
   const valores = [NomPel, AnoPel, GenPel, SinPel, MinPel, rutaImagen];
- 
+
   pool_mysql.query(sql, valores, (error, resultado) => {
     if (error) {
       console.error("Error al insertar película:", error);
@@ -122,33 +122,58 @@ api.post("/pelicula", uploadPelicula.single("ImgPel"), (req, res) => {
 });
 
 // PUT: modificar una película existente por su ID con soporte para cambiar la imagen
-api.put("/pelicula/:id", uploadPelicula.single("ImgPel"), (req, res) => {
-  const { id } = req.params;
-  const { NomPel, AnoPel, GenPel, SinPel, MinPel, ImgPel } = req.body;
-  
-  // Si se sube una nueva foto, se guarda la nueva; si no, se mantiene la que ya tenía (enviada por body)
-  const rutaImagen = req.file ? `/assets/images/peliculas/${req.file.filename}` : req.body.ImgPel;
+api.put("/pelicula/:nombre", uploadPelicula.single("ImgPel"), (req, res) => {
+  const { nombre } = req.params;
+  const { NomPel, AnoPel, GenPel, SinPel, MinPel } = req.body;
 
-  const sql =
-    "UPDATE pelicula SET NomPel = ?, AnoPel = ?, GenPel = ?, SinPel = ?, MinPel = ?, ImgPel = ? WHERE CodPel = ?";
-  const valores = [NomPel, AnoPel, GenPel, SinPel, MinPel, rutaImagen, id];
- 
+  let sql;
+  let valores;
+
+  // Comprobamos si el usuario ha subido un archivo de imagen nuevo
+  if (req.file) {
+    // SI HAY IMAGEN NUEVA: Actualizamos todos los campos, incluyendo ImgPel
+    const rutaImagen = `/assets/images/peliculas/${req.file.filename}`;
+    sql = "UPDATE pelicula SET NomPel = ?, AnoPel = ?, GenPel = ?, SinPel = ?, MinPel = ?, ImgPel = ? WHERE NomPel = ?";
+    valores = [NomPel, AnoPel, GenPel, SinPel, MinPel, rutaImagen, nombre];
+  } else {
+    // SI NO HAY IMAGEN: Actualizamos todo MENOS ImgPel. Así conserva la carátula antigua.
+    sql = "UPDATE pelicula SET NomPel = ?, AnoPel = ?, GenPel = ?, SinPel = ?, MinPel = ? WHERE NomPel = ?";
+    valores = [NomPel, AnoPel, GenPel, SinPel, MinPel, nombre];
+  }
+
   pool_mysql.query(sql, valores, (error, resultado) => {
     if (error) {
       console.error("Error al modificar película:", error);
       return res.status(500).json({ error });
     }
-    if (resultado.affectedRows === 0)
+    if (resultado.affectedRows === 0) {
       return res.status(404).json({ mensaje: "Película no encontrada" });
+    }
     res.json({ mensaje: "Película modificada correctamente" });
   });
 });
+//   const rutaImagen = req.file ? `/assets/images/peliculas/${req.file.filename}` : req.body.ImgPel;
+
+//   const sql =
+//     "UPDATE pelicula SET NomPel = ?, AnoPel = ?, GenPel = ?, SinPel = ?, MinPel = ?, ImgPel = ? WHERE NomPel = ?";
+//   const valores = [NomPel, AnoPel, GenPel, SinPel, MinPel, rutaImagen, nombre];
+
+//   pool_mysql.query(sql, valores, (error, resultado) => {
+//     if (error) {
+//       console.error("Error al modificar película:", error);
+//       return res.status(500).json({ error });
+//     }
+//     if (resultado.affectedRows === 0)
+//       return res.status(404).json({ mensaje: "Película no encontrada" });
+//     res.json({ mensaje: "Película modificada correctamente" });
+//   });
+// });
 
 // DELETE: eliminar una película por su ID
 api.delete("/pelicula/:nombre", (req, res) => {
   const { nombre } = req.params;
   const sql = "DELETE FROM pelicula WHERE NomPel = ?";
- 
+
   pool_mysql.query(sql, [nombre], (error, resultado) => {
     if (error) {
       console.error("Error al eliminar película:", error);
@@ -199,7 +224,7 @@ api.get("/personaje", (req, res) => {
 // POST: insertar un nuevo personaje con soporte para archivos multimedia
 api.post("/personaje", uploadPersonaje.single("ImgPer"), (req, res) => {
   const { NomPer, EdaPer, TipPer, EspPer, AliPer, GenPer, DesPer, CodRei } = req.body;
-  
+
   // Si se ha subido un archivo, creamos la ruta web relativa para la base de datos
   const rutaImagen = req.file ? `/assets/images/personajes/${req.file.filename}` : "Sin imagen";
 
@@ -214,7 +239,7 @@ api.post("/personaje", uploadPersonaje.single("ImgPer"), (req, res) => {
     rutaImagen,
     CodRei,
   ];
- 
+
   pool_mysql.query(sql, valores, (error, resultado) => {
     if (error) {
       console.error("Error al insertar personaje:", error);
@@ -228,14 +253,14 @@ api.post("/personaje", uploadPersonaje.single("ImgPer"), (req, res) => {
 api.put("/personaje/:id", uploadPersonaje.single("ImgPer"), (req, res) => {
   const { id } = req.params;
   const { NomPer, EdaPer, TipPer, EspPer, AliPer, GenPer, DesPer, CodRei } = req.body;
-  
+
   // Si se sube una nueva foto, se guarda la nueva; si no, se mantiene la que ya tenía (enviada por body)
   const rutaImagen = req.file ? `/assets/images/personajes/${req.file.filename}` : req.body.ImgPer;
 
   const sql =
     "UPDATE personaje SET NomPer = ?, EdaPer = ?, TipPer = ?, EspPer = ?, AliPer = ?, GenPer = ?, DesPer = ?, ImgPer = ?, CodRei = ? WHERE CodPer = ?";
   const valores = [NomPer, EdaPer, TipPer, EspPer, AliPer, GenPer, DesPer, rutaImagen, CodRei, id];
- 
+
   pool_mysql.query(sql, valores, (error, resultado) => {
     if (error) {
       console.error("Error al modificar personaje:", error);
@@ -251,7 +276,7 @@ api.put("/personaje/:id", uploadPersonaje.single("ImgPer"), (req, res) => {
 api.delete("/personaje/:id", (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM personaje WHERE CodPer = ?";
- 
+
   pool_mysql.query(sql, [id], (error, resultado) => {
     if (error) {
       console.error("Error al eliminar personaje:", error);
@@ -279,7 +304,7 @@ api.get("/cancion", (req, res) => {
 api.post("/cancion", (req, res) => {
   const { NomCan } = req.body;
   const sql = "INSERT INTO cancion (NomCan) VALUES (?)";
- 
+
   pool_mysql.query(sql, [NomCan], (error, resultado) => {
     if (error) {
       console.error("Error al insertar canción:", error);
@@ -294,7 +319,7 @@ api.put("/cancion/:id", (req, res) => {
   const { id } = req.params;
   const { NomCan } = req.body;
   const sql = "UPDATE cancion SET NomCan = ? WHERE CodCan = ?";
- 
+
   pool_mysql.query(sql, [NomCan, id], (error, resultado) => {
     if (error) {
       console.error("Error al modificar canción:", error);
@@ -305,12 +330,12 @@ api.put("/cancion/:id", (req, res) => {
     res.json({ mensaje: "Canción modificada correctamente" });
   });
 });
- 
+
 // DELETE: eliminar una canción por su ID
 api.delete("/cancion/:id", (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM cancion WHERE CodCan = ?";
- 
+
   pool_mysql.query(sql, [id], (error, resultado) => {
     if (error) {
       console.error("Error al eliminar canción:", error);

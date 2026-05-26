@@ -38,9 +38,9 @@ document.addEventListener("DOMContentLoaded", function () {
    if (form_mod_peli) {
     form_mod_peli.addEventListener("submit", function (evento) {
       evento.preventDefault();
-      const cod_peli = document.getElementById("mod-CodPel").value;
+      const nom_peli = document.getElementById("mod-NomPel").value.trim();
       const form_datos = new FormData(form_mod_peli);
-      modificarPelicula(cod_peli, form_datos);
+      modificarPelicula(nom_peli, form_datos);
     });}
  if (form_del_peli) {
    form_del_peli.addEventListener("submit", function (evento) {
@@ -56,12 +56,12 @@ document.addEventListener("DOMContentLoaded", function () {
 function obtenerPeliculas() {
   fetch(API_URL + "/pelicula")
     .then(respuesta => respuesta.json())
-    .then(peliculas => obtenerPeliculas(peliculas))
+    .then(peliculas => cargarPeliculas(peliculas))
     .catch(error => console.error("Error al cargar películas:", error));
 }
 
 // PROYECTA PELICULAS
-function obtenerPeliculas(peliculas) {
+function cargarPeliculas(peliculas) {
   const seccion_peli = document.querySelector(".section-peliculas");
   if (!seccion_peli) return;
 
@@ -115,21 +115,32 @@ function crearPelicula() {
 }
 
 // PUT: Modificar una película existente por su ID
-function modificarPelicula(cod_peli, form_datos) {
-  fetch(`${API_URL}/pelicula/${id}`, {
+function modificarPelicula(nombre, form_datos) {
+  fetch(`${API_URL}/pelicula/${encodeURIComponent(nombre)}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(form_datos)
+    body: form_datos
   })
-    .then(respuesta => respuesta.json())
-    .then(resultado => console.log("Película modificada:", resultado))
-    .catch(error => console.error("Error al modificar la película:", error));
+    .then(respuesta => {
+      if (!respuesta.ok) {
+        throw new Error("No se pudo actualizar la película. Verifica si el nombre existe.");
+      }
+      return respuesta.json();
+    })
+    .then(resultado => {
+      console.log("Película modificada:", resultado);
+      alert("¡La película se ha modificado correctamente!");
+      document.getElementById("form-mod-peli").reset();
+    })
+    .catch(error => {
+      console.error("Error al modificar la película:", error);
+      alert("No se encontró ninguna película con ese nombre o hubo un error en el servidor.");
+    });
 }
 
 // DELETE: Eliminar una película por su ID
 function eliminarPelicula(nom_peli) {
 
-  const eliminar = confirm(`¿Estás seguro de que deseas borrar la película "${nombre}"? Esta acción no se puede deshacer.`);
+  const eliminar = confirm(`¿Estás seguro de que deseas borrar la película "${nom_peli}"? Esta acción no se puede deshacer.`);
 
   // 2. Si el usuario cancela, salimos de la función
   if (!eliminar) {
@@ -137,7 +148,7 @@ function eliminarPelicula(nom_peli) {
     return;
   }
 
-  fetch(`${API_URL}/pelicula/${encodeURIComponent(nombre)}`, {
+  fetch(`${API_URL}/pelicula/${encodeURIComponent(nom_peli)}`, {
     method: "DELETE"
   })
     .then(respuesta => {
