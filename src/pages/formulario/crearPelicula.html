@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <meta name="author" content="Alba Agüera Cuadra, Elisabet Soria Zaitseva" />
+    <meta name="author" content="Alba Agüera Cuadra, Elisabet Soria Zaitseva" />
     <link rel="stylesheet" href="../../css/styles.css">
     <link rel="icon" href="../../assets/images/icono.png" type="image/png">
     <title>Canciones Disney</title>
@@ -13,8 +14,8 @@
     <header class="cabecera">
         <nav class="navegador">
             <ul>
-                <li class="nav-menu"><a href="../index.html">Inicio<img src="../../assets/images/nav_Inicio.png" alt="Inicio"
-                            class="nav-img"></a></li>
+                <li class="nav-menu"><a href="../index.html">Inicio<img src="../../assets/images/nav_Inicio.png"
+                            alt="Inicio" class="nav-img"></a></li>
                 <li class="nav-menu"><a href="../visita.html">Visita Disney<img src="../../assets/images/nav_visita.png"
                             alt="Perfil" class="nav-img"></a></li>
                 <li class="nav-menu"><a href="sobre-nosotras.html">Sobre Nosotros<img
@@ -23,58 +24,63 @@
         </nav>
     </header>
 
-  <main class="form-cre-peli">
-<h2>Añadir Nueva Película</h2>
-    <form action="/crear_pelicula" method="POST">
-        <fieldset>
-            <legend>Información de la Película</legend>
-            <div class="ele-form-peli">
-            <label>Nombre de la Película:
-                <input type="text" class="NomPel" name="NomPel" maxlength="50" required>
-            </label>
-</div>
- <div class="ele-form-peli">
-            <label>Año / Fecha de Estreno:
-                <input type="date" class="AnoPel" name="AnoPel" maxlength="15" required>
-            </label>
-</div>
-<div class="ele-form-peli">
-            <label>Género:
-                <input type="text" class="GenPel" name="GenPel" maxlength="15" required>
-            </label>
-</div>
-<div class="ele-form-peli">
-            <label>Duración (minutos):
-                <input type="number" class="MinPel" name="MinPel" min="1" required>
-            </label>
-</div>
-<div class="ele-form-peli">
-            <label>Ruta o URL de la Imagen:
-                <input type="text" class="ImgPel" name="ImgPel" maxlength="500" value="Sin imagen">
-            </label>
-</div>
-<div class="ele-form-peli">
-            <label>Sinopsis:<br>
-                <textarea class="SinPel" name="SinPel" maxlength="500" rows="4" cols="50" required></textarea>
-            </label><br><br>
-   </div>         
-        </fieldset>
-        
-        <br>
-        <button type="submit">Crear Película</button>
-    </form>
+    <main class="form-cre-peli">
+        <h2>Añadir Nueva Película</h2>
+        <form action="/crear_pelicula" method="POST">
+            <fieldset>
+                <legend>Información de la Película</legend>
+                <div class="ele-form-peli">
+                    <label>Nombre de la Película:</label>
+                    <input type="text" class="NomPel" name="NomPel" maxlength="50" required>
 
-  </main>
+                </div>
+                <div class="ele-form-peli">
+                    <label>Año / Fecha de Estreno:</label>
+                    <input type="date" class="AnoPel" name="AnoPel" maxlength="15" required>
+
+                </div>
+                <div class="ele-form-peli">
+                    <label>Género:</label>
+                    <input type="text" class="GenPel" name="GenPel" maxlength="15" required>
+
+                </div>
+                <div class="ele-form-peli">
+                    <label>Duración (minutos):</label>
+                    <input type="number" class="MinPel" name="MinPel" min="1" required>
+
+                </div>
+                <div class="ele-form-peli">
+                    <label>Ruta o URL de la Imagen:</label>
+                    <input type="text" class="ImgPel" name="ImgPel" maxlength="500" value="Sin imagen">
+
+                </div>
+                <div class="ele-form-peli">
+                    <label>Sinopsis:</label>
+                    <textarea class="SinPel" name="SinPel" maxlength="500" rows="4" cols="50" required></textarea>
+
+                </div>
+            </fieldset>
+
+
+            <button type="submit">Crear Película</button>
+        </form>
+
+    </main>
 
     <footer class="pie">
         <ul>
-            <li><a href="https://www.instagram.com/disney/"><img src="../../assets/images/pie_Instagram.png" alt="Instagram de Disney"></a></li>
-            <li><a href="https://www.tiktok.com/@disney?lang=es-419"><img src="../../assets/images/pie_TikTok.png" alt="TikTok de Disney"></a></li>
-            <li><a href="https://www.disney.es/"><img src="../../assets/images/pie_Disney.png" alt="Página de Disney"></a></li>
-            <li><a href="https://x.com/DisneySpain"><img src="../../assets/images/pie_X.png" alt="Twitter de Disney"></a></li>
+            <li><a href="https://www.instagram.com/disney/"><img src="../../assets/images/pie_Instagram.png"
+                        alt="Instagram de Disney"></a></li>
+            <li><a href="https://www.tiktok.com/@disney?lang=es-419"><img src="../../assets/images/pie_TikTok.png"
+                        alt="TikTok de Disney"></a></li>
+            <li><a href="https://www.disney.es/"><img src="../../assets/images/pie_Disney.png"
+                        alt="Página de Disney"></a></li>
+            <li><a href="https://x.com/DisneySpain"><img src="../../assets/images/pie_X.png"
+                        alt="Twitter de Disney"></a></li>
         </ul>
     </footer>
 
-  <script src="../../js/javascript.js"></script>
+    <script src="../../js/javascript.js"></script>
 </body>
+
 </html>
