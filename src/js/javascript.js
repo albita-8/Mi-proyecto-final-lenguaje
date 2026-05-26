@@ -10,23 +10,58 @@ const ENDPOINT_GET_PELICULAS = "pelicula";
 const ENDPOINT_GET_PERSONAJES = "personaje";
 const ENDPOINT_GET_CANCIONES = "cancion";
 
+const peliculas = document.querySelector(".section-peliculas");
+const personajes = document.querySelector(".section-personajes");
+const canciones = document.querySelector(".section-canciones");
+
+// FORMULARIOS PELICULAS
+const form_cre_peli = document.getElementById("form-cre-peli");
+const form_mod_peli = document.getElementById("form-mod-peli");
+const form_del_peli = document.getElementById("form-del-peli");
+
+// FORMULARIOS PERSONAJES
+const form_cre_pers = document.getElementById("form-cre-pers");
+const form_mod_pers = document.getElementById("form-mod-pers");
+const form_del_pers = document.getElementById("form-del-pers");
+
+// FORMULARIOS CANCIONES
+const form_cre_canc = document.getElementById("form-cre-canc");
+const form_mod_canc = document.getElementById("form-mod-canc");
+const form_del_canc = document.getElementById("form-del-canc");
+
 document.addEventListener("DOMContentLoaded", function () {
-  cargarPeliculas();
-  cargarPersonajes();
-  crearPelicula();
+
+  if (peliculas) { obtenerPeliculas(); }
+  if (personajes) { obtenerPersonajes(); }
+  if (canciones) { obtenerCanciones(); }
+  if (form_cre_peli) { crearPelicula(); }
+   if (form_mod_peli) {
+    form_mod_peli.addEventListener("submit", function (evento) {
+      evento.preventDefault();
+      const cod_peli = document.getElementById("mod-CodPel").value;
+      const form_datos = new FormData(form_mod_peli);
+      modificarPelicula(cod_peli, form_datos);
+    });}
+ if (form_del_peli) {
+   form_del_peli.addEventListener("submit", function (evento) {
+      evento.preventDefault();
+      const nom_peli = document.getElementById("del-NomPel").value;
+      eliminarPelicula(nom_peli);
+    });
+  }
 });
 
 
 // FETCH DE PELICULAS
-function cargarPeliculas() {
+function obtenerPeliculas() {
   fetch(API_URL + "/pelicula")
     .then(respuesta => respuesta.json())
-    .then(peliculas => renderizarPeliculas(peliculas))
+    .then(peliculas => obtenerPeliculas(peliculas))
     .catch(error => console.error("Error al cargar películas:", error));
 }
 
 // PROYECTA PELICULAS
-function renderizarPeliculas(peliculas) {
+function obtenerPeliculas(peliculas) {
   const seccion_peli = document.querySelector(".section-peliculas");
   if (!seccion_peli) return;
 
@@ -54,17 +89,17 @@ function renderizarPeliculas(peliculas) {
 function crearPelicula() {
   const formulario = document.getElementById("form-cre-peli");
 
-  if (!formulario) return; 
+  if (!formulario) return;
 
   formulario.addEventListener("submit", function (evento) {
     evento.preventDefault();
 
-    const datosFormulario = new FormData(formulario);
+    const datosForm = new FormData(formulario);
 
     fetch(`${API_URL}/pelicula`, {
       method: "POST",
 
-      body: datosFormulario
+      body: datosForm
     })
       .then(respuesta => respuesta.json())
       .then(resultado => {
@@ -80,11 +115,11 @@ function crearPelicula() {
 }
 
 // PUT: Modificar una película existente por su ID
-function modificarPelicula(id, datos) {
+function modificarPelicula(cod_peli, form_datos) {
   fetch(`${API_URL}/pelicula/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(datos)
+    body: JSON.stringify(form_datos)
   })
     .then(respuesta => respuesta.json())
     .then(resultado => console.log("Película modificada:", resultado))
@@ -92,17 +127,17 @@ function modificarPelicula(id, datos) {
 }
 
 // DELETE: Eliminar una película por su ID
-function eliminarPelicula(nombre) {
+function eliminarPelicula(nom_peli) {
 
   const eliminar = confirm(`¿Estás seguro de que deseas borrar la película "${nombre}"? Esta acción no se puede deshacer.`);
 
   // 2. Si el usuario cancela, salimos de la función
   if (!eliminar) {
     console.log("Borrado cancelado por el usuario.");
-    return; 
+    return;
   }
 
- fetch(`${API_URL}/pelicula/${encodeURIComponent(nombre)}`, {
+  fetch(`${API_URL}/pelicula/${encodeURIComponent(nombre)}`, {
     method: "DELETE"
   })
     .then(respuesta => {
@@ -125,12 +160,12 @@ function eliminarPelicula(nombre) {
 function cargarPersonajes() {
   fetch(API_URL + "/personaje")
     .then(respuesta => respuesta.json())
-    .then(personajes => renderizarPersonajes(personajes))
+    .then(personajes => cargarPersonajes(personajes))
     .catch(error => console.error("Error al cargar personajes:", error));
 }
 
 // PROYECTAR PERSONAJES
-function renderizarPersonajes(personajes) {
+function cargarPersonajes(personajes) {
   const seccion_personaje = document.querySelector(".section-personajes");
   if (!seccion_personaje) return;
 
