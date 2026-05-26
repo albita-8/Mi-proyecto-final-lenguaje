@@ -124,7 +124,7 @@ api.post("/pelicula", uploadPelicula.single("ImgPel"), (req, res) => {
 // PUT: modificar una película existente por su ID con soporte para cambiar la imagen
 api.put("/pelicula/:id", uploadPelicula.single("ImgPel"), (req, res) => {
   const { id } = req.params;
-  const { NomPel, AnoPel, GenPel, SinPel, MinPel } = req.body;
+  const { NomPel, AnoPel, GenPel, SinPel, MinPel, ImgPel } = req.body;
   
   // Si se sube una nueva foto, se guarda la nueva; si no, se mantiene la que ya tenía (enviada por body)
   const rutaImagen = req.file ? `/assets/images/peliculas/${req.file.filename}` : req.body.ImgPel;
