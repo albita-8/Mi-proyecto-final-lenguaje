@@ -23,8 +23,22 @@
         </nav>
     </header>
 
-  <main class="cont-prin-canciones">
+  <main class="form-peli form-del-peli">
+    <form action="/eliminar_pelicula" method="POST">
 
+    <fieldset>
+        <legend>Eliminar una película</legend>
+
+        <div class="ele-form-peli">
+            <label>Nombre de la Película:</label>
+            <input type="text" class="del-NomPel" name="NomPel" maxlength="50" required>
+        </div>
+
+    </fieldset>
+
+    <button type="submit">Eliminar Película</button>
+
+</form>
 
   </main>
  <footer class="pie">

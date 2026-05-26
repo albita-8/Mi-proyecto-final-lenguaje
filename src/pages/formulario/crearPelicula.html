@@ -24,39 +24,38 @@
         </nav>
     </header>
 
-    <main class="form-cre-peli">
-        <h2>Añadir Nueva Película</h2>
+    <main class="form-peli form-cre-peli">
         <form action="/crear_pelicula" method="POST">
             <fieldset>
-                <legend>Información de la Película</legend>
+                <legend>Añadir nueva película</legend>
                 <div class="ele-form-peli">
                     <label>Nombre de la Película:</label>
-                    <input type="text" class="NomPel" name="NomPel" maxlength="50" required>
+                    <input type="text" class="cre-NomPel" name="NomPel" maxlength="50" required>
 
                 </div>
                 <div class="ele-form-peli">
                     <label>Año / Fecha de Estreno:</label>
-                    <input type="date" class="AnoPel" name="AnoPel" maxlength="15" required>
+                    <input type="date" class="cre-AnoPel" name="AnoPel" maxlength="15" required>
 
                 </div>
                 <div class="ele-form-peli">
                     <label>Género:</label>
-                    <input type="text" class="GenPel" name="GenPel" maxlength="15" required>
+                    <input type="text" class="cre-GenPel" name="GenPel" maxlength="15" required>
 
                 </div>
                 <div class="ele-form-peli">
                     <label>Duración (minutos):</label>
-                    <input type="number" class="MinPel" name="MinPel" min="1" required>
+                    <input type="number" class="cre-MinPel" name="MinPel" min="1" required>
 
                 </div>
                 <div class="ele-form-peli">
-                    <label>Ruta o URL de la Imagen:</label>
-                    <input type="text" class="ImgPel" name="ImgPel" maxlength="500" value="Sin imagen">
+                   <label>Imagen de la Película:</label>
+                    <input type="file" class="cre-ImgPel" name="ImgPel" accept="image/*">
 
                 </div>
                 <div class="ele-form-peli">
                     <label>Sinopsis:</label>
-                    <textarea class="SinPel" name="SinPel" maxlength="500" rows="4" cols="50" required></textarea>
+                    <textarea class="SinPel" name="cre-SinPel" maxlength="500" rows="4" cols="50" required></textarea>
 
                 </div>
             </fieldset>
