@@ -201,7 +201,7 @@ function cargarReinosDesplegable(selectCod) {
 
     if (!selectReino) return;
 
-    fetch('/api/reinos')
+    fetch(`${API_URL}/api/reinos`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error en la respuesta del servidor al cargar reinos');
@@ -260,7 +260,7 @@ function cargarPersonajes(personajes) {
 // POST: Crear un nuevo personaje
 function crearPersonaje() {
 
-  cargarReinosDesplegable('cre-NomRei');
+  cargarReinosDesplegable('.cre-NomRei');
 
   const formulario = document.getElementById("form-cre-pers");
   if (!formulario) return;
@@ -285,6 +285,9 @@ function crearPersonaje() {
 
 // PUT: Modificar un personaje existente por su ID
 function modificarPersonaje() {
+
+  cargarReinosDesplegable('.mod-NomRei');
+
  const formulario = document.getElementById("form-mod-pers");
   if (!formulario) return;
 
@@ -318,7 +321,7 @@ function modificarPersonaje() {
       })
       .catch(error => {
         console.error("Error en la petición PUT:", error);
-        alert(error.message);
+        alert("No se ha podido modificar el personaje");
       });
   });
 }
