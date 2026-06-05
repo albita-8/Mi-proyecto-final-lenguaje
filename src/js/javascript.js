@@ -6,275 +6,281 @@
 
 const API_URL = "http://localhost:3000";
 
-const ENDPOINT_GET_PELICULAS = "peliculas";
-const ENDPOINT_GET_PERSONAJES = "personajes";
-const ENDPOINT_GET_CANCIONES = "canciones";
+const ENDPOINT_GET_PELICULAS = "pelicula";
+const ENDPOINT_GET_PERSONAJES = "personaje";
+const ENDPOINT_GET_CANCIONES = "cancion";
 
-const gridPeli  = document.querySelector(".grid-elemento-peli");
-const buscador_peli  = document.querySelector(".buscador-peli");
-const filtroGen = document.querySelector(".filtro-pelis");
-const count_pelis  = document.querySelector(".count-pelis");
-const gridCancion = document.querySelector(".canciones-grid");
+const peliculas = document.querySelector(".section-peliculas");
+const personajes = document.querySelector(".section-personajes");
+const canciones = document.querySelector(".section-canciones");
 
-document.addEventListener("DOMContentLoaded", function() {
-  if (gridPeli) {
-    cargarPeliculas();
+// FORMULARIOS PELICULAS
+
+
+// FORMULARIOS PERSONAJES
+const form_cre_pers = document.getElementById("form-cre-pers");
+const form_mod_pers = document.getElementById("form-mod-pers");
+const form_del_pers = document.getElementById("form-del-pers");
+
+// FORMULARIOS CANCIONES
+const form_cre_canc = document.getElementById("form-cre-canc");
+const form_mod_canc = document.getElementById("form-mod-canc");
+const form_del_canc = document.getElementById("form-del-canc");
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  if (peliculas) { obtenerPeliculas(); }
+  if (personajes) { obtenerPersonajes(); }
+  if (canciones) { obtenerCanciones(); }
+
+  const form_cre_peli = document.getElementById("form-cre-peli");
+  const form_mod_peli = document.getElementById("form-mod-peli");
+  const form_del_peli = document.getElementById("form-del-peli");
+
+  if (form_cre_peli) { crearPelicula(); }
+  if (form_mod_peli) {
+     form_mod_peli.addEventListener("submit", function (evento) {
+      evento.preventDefault();
+      const nom_peli = document.getElementById("mod-NomPel").value.trim();
+      const form_datos = new FormData(form_mod_peli);
+      modificarPelicula(nom_peli, form_datos);
+    });
   }
-
-  if (gridCancion) {
-    cargarCanciones();
+  if (form_del_peli) {
+    form_del_peli.addEventListener("submit", function (evento) {
+      evento.preventDefault();
+      const nom_peli = document.getElementById("del-NomPel").value;
+      eliminarPelicula(nom_peli);
+    });
   }
 });
 
-function cargarPeliculas() {
+
+// FETCH DE PELICULAS
+function obtenerPeliculas() {
   fetch(API_URL + "/pelicula")
+    .then(respuesta => respuesta.json())
+    .then(peliculas => cargarPeliculas(peliculas))
+    .catch(error => console.error("Error al cargar películas:", error));
+}
+
+// PROYECTA PELICULAS
+function cargarPeliculas(peliculas) {
+  const seccion_peli = document.querySelector(".section-peliculas");
+  if (!seccion_peli) return;
+
+  const card_peli = seccion_peli.querySelector(".card-pelicula");
+  if (!card_peli) return;
+
+  seccion_peli.innerHTML = "";
+
+  peliculas.forEach(p => {
+    const card = card_peli.cloneNode(true);
+
+    card.querySelector(".card-img img").src = p.ImgPel !== "Sin imagen" ? p.ImgPel : "";
+    card.querySelector(".card-img img").alt = p.NomPel;
+    card.querySelector(".card-ano").textContent = p.AnoPel ? new Date(p.AnoPel).getFullYear() : "—";
+    card.querySelector(".card-gen").textContent = p.GenPel;
+    card.querySelector(".card-tit").textContent = p.NomPel;
+    card.querySelector(".card-sinop").textContent = p.SinPel;
+    card.querySelector(".card-min span").textContent = p.MinPel;
+
+    seccion_peli.appendChild(card);
+  });
+}
+
+// POST: Crear una nueva película
+function crearPelicula() {
+  const formulario = document.getElementById("form-cre-peli");
+
+  if (!formulario) return;
+
+  formulario.addEventListener("submit", function (evento) {
+    evento.preventDefault();
+
+    const datosForm = new FormData(formulario);
+
+    fetch(`${API_URL}/pelicula`, {
+      method: "POST",
+      body: datosForm
+    })
+      .then(respuesta => respuesta.json())
+      .then(resultado => {
+        console.log("Película creada:", resultado);
+        alert("¡Película creada correctamente!");
+        formulario.reset();
+      })
+      .catch(error => {
+        console.error("Error al crear la película:", error);
+        alert("Hubo un error al crear la película.");
+      });
+  });
+}
+
+// PUT: Modificar una película existente por su ID
+function modificarPelicula(nombre, form_datos) {
+
+  fetch(`${API_URL}/pelicula/${encodeURIComponent(nombre)}`, {
+    method: "PUT",
+    body: form_datos
+  })
     .then(respuesta => {
       if (!respuesta.ok) {
-        throw new Error("Habido un error en el servidor: " + respuesta.status);
+        throw new Error("No se pudo actualizar la película. Verifica si el nombre existe.");
       }
       return respuesta.json();
     })
-    .then(peliculas => {
-      window._peliculas = peliculas;
-      renderizarPeliculas(peliculas);
+    .then(resultado => {
+      console.log("Película modificada:", resultado);
+      alert("¡La película se ha modificado correctamente!");
+      document.getElementById("form-mod-peli").reset();
     })
     .catch(error => {
-      mostrarError(error.message, ".grid-elemento-peli");
+      console.error("Error al modificar la película:", error);
+      alert("No se encontró ninguna película con ese nombre o hubo un error en el servidor.");
     });
 }
 
-function renderizarPeliculas(peliculas) {
-  if (!gridPeli) return;
-  gridPeli.innerHTML = "";
+// DELETE: Eliminar una película por su ID
+function eliminarPelicula(nom_peli) {
 
-  if (peliculas.length === 0) {
-    gridPeli.innerHTML = '<p class="sin-resultados">No se encontraron películas.</p>';
+  const eliminar = confirm(`¿Estás seguro de que deseas borrar la película "${nom_peli}"? Esta acción no se puede deshacer.`);
+
+  // 2. Si el usuario cancela, salimos de la función
+  if (!eliminar) {
+    console.log("Borrado cancelado por el usuario.");
     return;
   }
 
-  peliculas.forEach(function(peli, i) {
-    const año = peli.AnoPel ? peli.AnoPel : "—";
-    const imagenHTML = peli.ImgPel && peli.ImgPel !== "Sin imagen"
-      ? '<img src="' + peli.ImgPel + '" alt="' + peli.NomPel + '">'
-      : '<div class="card-img-placeholder">🎬</div>';
-
-    const card = document.createElement("article");
-    card.className = "card";
-    card.style.animationDelay = (i * 50) + "ms";
-
-    card.innerHTML =
-      '<div class="card-img">' +
-        imagenHTML +
-        '<span class="card-year">' + año + '</span>' +
-      '</div>' +
-      '<div class="card-elemento">' +
-        '<span class="card-gen">' + peli.GenPel + '</span>' +
-        '<h2 class="card-tit">' + peli.NomPel + '</h2>' +
-        '<p class="card-sinopsis">' + peli.SinPel + '</p>' +
-      '</div>' +
-      '<div class="card-footer">' +
-        '<span class="card-min"><strong>' + peli.MinPel + '</strong> min</span>' +
-      '</div>';
-    gridPeli.appendChild(card);
-  });
-}
-
-// === FUNCIONES PARA CANCIONES (AÑADIDAS SIN MODIFICAR LO ANTERIOR) ===
-
-function cargarCanciones() {
-  fetch(API_URL + "/cancion")
-    .then(res => {
-      if (!res.ok) throw new Error("Error en la respuesta de la API: " + res.status);
-      return res.json();
-    })
-    .then(canciones => {
-      renderizarCanciones(canciones);
-    })
-    .catch(error => {
-      if (gridCancion) {
-        gridCancion.innerHTML = '<p class="error-msg">Error cargando canciones: ' + error.message + '</p>';
+  fetch(`${API_URL}/pelicula/${encodeURIComponent(nom_peli)}`, {
+    method: "DELETE"
+  })
+    .then(respuesta => {
+      if (!respuesta.ok) {
+        throw new Error("No se pudo eliminar la película.");
       }
+      return respuesta.json();
+    })
+    .then(resultado => {
+      console.log("Película eliminada:", resultado);
+      alert("Película eliminada correctamente");
+    })
+    .catch(error => {
+      console.error("Error al eliminar la película:", error);
+      alert("Ocurrió un error al intentar borrar la película.");
     });
 }
 
-function renderizarCanciones(canciones) {
-  if (!gridCancion) return;
-  gridCancion.innerHTML = "";
-  
-  if (canciones.length === 0) {
-    gridCancion.innerHTML = '<p class="sin-resultados">No hay canciones disponibles.</p>';
-    return;
-  }
-
-  canciones.forEach(can => {
-    const card = document.createElement("article");
-    card.className = "cancion-card";
-    card.innerHTML = `
-      <div class="cancion-info">
-        <p class="cancion-nombre">🎶 ${can.NomCan}</p>
-        <p class="cancion-desc">Disponible en el catálogo mágico.</p>
-      </div>
-    `;
-    gridCancion.appendChild(card);
-  });
+// FETCH DE PERSONAJES
+function cargarPersonajes() {
+  fetch(API_URL + "/personaje")
+    .then(respuesta => respuesta.json())
+    .then(personajes => cargarPersonajes(personajes))
+    .catch(error => console.error("Error al cargar personajes:", error));
 }
 
-// ── POST: Crear nueva canción ──────────────────────────────
-function crearCancion() {
-  const nombre = document.getElementById("cancionNombre").value.trim();
- 
-  if (!nombre) {
-    mostrarMsgCrud("Por favor, escribe el nombre de la canción.", "error");
-    return;
-  }
- 
-  fetch(API_URL + "/cancion", {
+// PROYECTAR PERSONAJES
+function cargarPersonajes(personajes) {
+  const seccion_personaje = document.querySelector(".section-personajes");
+  if (!seccion_personaje) return;
+
+  const card_personaje = seccion_personaje.querySelector(".card-personaje");
+  if (!card_personaje) return;
+
+  const plantilla = card_personaje.cloneNode(true);
+  seccion_personaje.innerHTML = "";
+
+  personajes.forEach(per => {
+    const card = plantilla.cloneNode(true);
+
+    card.querySelector(".per-img").src = per.ImgPer !== "Sin imagen" ? per.ImgPer : "";
+    card.querySelector(".per-img").alt = per.NomPer;
+    card.querySelector(".per-nombre").textContent = per.NomPer;
+    card.querySelector(".per-tipo").textContent = per.TipPer;
+    card.querySelector(".per-especie").textContent = per.EspPer;
+    card.querySelector(".per-reino").textContent = per.Reino;
+    card.querySelector(".per-desc").textContent = per.DesPer;
+
+    seccion_personaje.appendChild(card);
+  });
+}
+// POST: Crear un nuevo personaje
+function crearPersonaje(datos) {
+  fetch(`${API_URL}/personaje`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ NomCan: nombre })
+    body: JSON.stringify(datos)
   })
-    .then(res => res.json())
-    .then(data => {
-      mostrarMsgCrud((data.mensaje || "Canción creada correctamente."), "ok");
-      limpiarFormulario();
-      cargarCanciones();
-    })
-    .catch(err => {
-      mostrarMsgCrud("Error al crear la canción: " + err.message, "error");
-    });
-}
- 
-// ── PUT: Modificar canción existente ───────────────────────
-function editarCancion() {
-  const nombreActual = document.getElementById("cancionNombreActual").value.trim();
-  const nombreNuevo  = document.getElementById("cancionNombre").value.trim();
- 
-  if (!nombreActual) {
-    mostrarMsgCrud("Escribe el nombre actual de la canción que quieres modificar.", "error");
-    return;
-  }
- 
-  if (!nombreNuevo) {
-    mostrarMsgCrud("Escribe el nuevo nombre que quieres poner.", "error");
-    return;
-  }
- 
-  fetch(API_URL + "/cancion")
-    .then(res => res.json())
-    .then(canciones => {
-      const encontrada = canciones.find(
-        c => c.NomCan.toLowerCase() === nombreActual.toLowerCase()
-      );
- 
-      if (!encontrada) {
-        mostrarMsgCrud('No se encontró ninguna canción con el nombre "' + nombreActual + '".', "error");
-        return;
-      }
- 
-      _fetchPut(encontrada.CodCan, nombreNuevo);
-    })
-    .catch(err => {
-      mostrarMsgCrud("Error al buscar la canción: " + err.message, "error");
-    });
+    .then(respuesta => respuesta.json())
+    .then(resultado => console.log("Personaje creado:", resultado))
+    .catch(error => console.error("Error al crear el personaje:", error));
 }
 
-function _fetchPut(id, nombreNuevo) {
-  fetch(API_URL + "/cancion/" + id, {
+// PUT: Modificar un personaje existente por su ID
+function modificarPersonaje(id, datos) {
+  fetch(`${API_URL}/personaje/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ NomCan: nombreNuevo })
+    body: JSON.stringify(datos)
   })
-    .then(res => res.json())
-    .then(data => {
-      mostrarMsgCrud((data.mensaje || "Canción modificada correctamente."), "ok");
-      limpiarFormulario();
-      cargarCanciones();
-    })
-    .catch(err => {
-      mostrarMsgCrud("Error al modificar la canción: " + err.message, "error");
-    });
-}
- 
-// ── DELETE: Eliminar canción (desde formulario) ────────────
-function eliminarCancion() {
-  const nombre = document.getElementById("cancionNombre").value.trim();
- 
-  if (!nombre) {
-    mostrarMsgCrud("Escribe el nombre de la canción que quieres eliminar.", "error");
-    return;
-  }
- 
-  // Busca la canción por nombre en la lista ya cargada
-  fetch(API_URL + "/cancion")
-    .then(res => res.json())
-    .then(canciones => {
-      const encontrada = canciones.find(
-        c => c.NomCan.toLowerCase() === nombre.toLowerCase()
-      );
- 
-      if (!encontrada) {
-        mostrarMsgCrud('No se encontró ninguna canción con el nombre "' + nombre + '".', "error");
-        return;
-      }
- 
-      if (!confirm('¿Eliminar la canción "' + encontrada.NomCan + '"?')) return;
- 
-      _fetchDelete(encontrada.CodCan);
-    })
-    .catch(err => {
-      mostrarMsgCrud("Error al buscar la canción: " + err.message, "error");
-    });
-}
- 
-/** Eliminar directamente desde la tarjeta del grid */
-function eliminarCancionDirecta(id, nombre) {
-  if (!confirm('¿Eliminar la canción "' + nombre + '"?')) return;
-  _fetchDelete(id);
-}
- 
-/** Función interna compartida para el DELETE */
-function _fetchDelete(id) {
-  fetch(API_URL + "/cancion/" + id, { method: "DELETE" })
-    .then(res => res.json())
-    .then(data => {
-      mostrarMsgCrud((data.mensaje || "Canción eliminada correctamente."), "ok");
-      limpiarFormulario();
-      cargarCanciones();
-    })
-    .catch(err => {
-      mostrarMsgCrud("Error al eliminar la canción: " + err.message, "error");
-    });
-}
- 
-// ── Helpers del formulario ─────────────────────────────────
- 
-/** Rellena el formulario con los datos de una canción para editarla */
-function cargarEnFormulario(id, nombre) {
-  document.getElementById("cancionId").value     = id;
-  document.getElementById("cancionNombre").value = nombre;
-  mostrarMsgCrud("Canción cargada. Modifica el nombre y pulsa Modificar.", "ok");
-  document.getElementById("cancionNombre").focus();
-}
- 
-/** Vacía el formulario y el mensaje de estado */
-function limpiarFormulario() {
-  document.getElementById("cancionId").value     = "";
-  document.getElementById("cancionNombre").value = "";
-  const msg = document.getElementById("crudMsg");
-  if (msg) { msg.className = "crud-msg"; msg.textContent = ""; }
-}
- 
-/** Muestra un mensaje de resultado en el formulario */
-function mostrarMsgCrud(texto, tipo) {
-  const msg = document.getElementById("crudMsg");
-  if (!msg) return;
-  msg.textContent = texto;
-  msg.className   = "crud-msg " + tipo;
+    .then(respuesta => respuesta.json())
+    .then(resultado => console.log("Personaje modificado:", resultado))
+    .catch(error => console.error("Error al modificar el personaje:", error));
 }
 
-function mostrarError(mensaje, selector) {
-  const contenedor = document.querySelector(selector);
-  if (contenedor) {
-    contenedor.innerHTML = '<p class="error-msg">⚠️ ' + mensaje + '</p>';
-  }
+// DELETE: Eliminar un personaje por su ID
+function eliminarPersonaje(id) {
+  fetch(`${API_URL}/personaje/${id}`, {
+    method: "DELETE"
+  })
+    .then(respuesta => respuesta.json())
+    .then(resultado => console.log("Personaje eliminado:", resultado))
+    .catch(error => console.error("Error al eliminar el personaje:", error));
+}
+
+// GET: Obtener todas las canciones
+function obtenerCanciones() {
+  fetch(`${API_URL}/cancion`, {
+    method: "GET"
+  })
+    .then(respuesta => respuesta.json())
+    .then(canciones => {
+      console.log("Lista de canciones:", canciones);
+      // Aquí puedes llamar a una función para renderizar las canciones en el HTML
+    })
+    .catch(error => console.error("Error al obtener las canciones:", error));
+}
+
+// POST: Crear una nueva canción
+function crearCancion(datos) {
+  fetch(`${API_URL}/cancion`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datos)
+  })
+    .then(respuesta => respuesta.json())
+    .then(resultado => console.log("Canción creada:", resultado))
+    .catch(error => console.error("Error al crear la canción:", error));
+}
+
+// PUT: Modificar una canción existente por su ID
+function modificarCancion(id, datos) {
+  fetch(`${API_URL}/cancion/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datos)
+  })
+    .then(respuesta => respuesta.json())
+    .then(resultado => console.log("Canción modificada:", resultado))
+    .catch(error => console.error("Error al modificar la canción:", error));
+}
+
+// DELETE: Eliminar una canción por su ID
+function eliminarCancion(id) {
+  fetch(`${API_URL}/cancion/${id}`, {
+    method: "DELETE"
+  })
+    .then(respuesta => respuesta.json())
+    .then(resultado => console.log("Canción eliminada:", resultado))
+    .catch(error => console.error("Error al eliminar la canción:", error));
 }
