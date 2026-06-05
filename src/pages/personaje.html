@@ -1,37 +1,71 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/styles.css" />
-    <link rel="icon" href="../assets/images/icono.png" type="image/png">
-    <title>Personajes Disney - The API of Wonderland</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Alba Agüera Cuadra, Elisabet Soria Zaitseva" />
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="icon" href="../assets/images/icono.png" type="image/png">
+  <title>Personajes Disney</title>
 </head>
+
 <body>
   <header class="cabecera">
     <nav class="navegador">
-      <ul>
-        <li class="nav-menu"><a href="../index.html">Inicio<img src="../assets/images/nav_Inicio.png" alt="Inicio" class="nav-img"></a></li>
-        <li class="nav-menu"><a href="perfil.html">Perfil<img src="../assets/images/nav_Perfil.png" alt="Perfil" class="nav-img"></a></li>
-        <li class="nav-menu"><a href="sobre-nosotras.html">Sobre Nosotros<img src="../assets/images/nav_Nosotros.png" alt="Sobre Nosotros" class="nav-img"></a></li>
-      </ul>
+       <ul>
+                <li class="nav-menu"><a href="../index.html">Inicio<img src="../assets/images/nav_Inicio.png" alt="Inicio"
+                            class="nav-img"></a></li>
+                <li class="nav-menu"><a href="visita.html">Visita Dinsey<img src="../assets/images/nav_visita.png"
+                            alt="Perfil" class="nav-img"></a></li>
+                <li class="nav-menu"><a href="sobre-nosotras.html">Sobre Nosotros<img
+                            src="../assets/images/nav_Nosotros.png" alt="Sobre Nosotros" class="nav-img"></a></li>
+            </ul>
     </nav>
   </header>
- 
-  <main class="grid-wrapper">
-    <div class="grid-personajes">
-        <p class="cargando">Reuniendo a los héroes y villanos...</p>
-    </div>
-  </main>
 
+  <main class="cont-prin-personajes">
+    <section class="section-personajes">
+      <h2>Cargando personajes...</h2>
+      <div class="card-personaje">
+        <img class="per-img" src="" alt="">
+        <div class="per-des">
+          <h2 class="per-nombre"></h2>
+          <h3 class="per-tipo"></h3>
+          <p class="per-especie"></p>
+          <p class="per-reino"></p>
+          <p class="per-desc"></p>
+        </div>
+      </div>
+    </section>
+    <section class="ayuda-personaje">
+      <div class="ayuda-titulo-per">
+        <h2>¡Ayúdanos a mejorar la página!</h2>
+        <p>Estamos en construcción ¡Aporta tu granito de arena para hacer que esta página sea mejor!</p>
+      </div>
+      <p>¿Que quieres hacer?</p>
+      <div class="ayuda-btn">
+        <ul>
+          <li><a href="../pages/formulario/crearPersonaje.html" class="btn-personaje-ayuda btn-crear-pers">CREAR PERSONAJE</a></li>
+          <li><a href="../pages/formulario/modPersonaje.html" class="btn-personaje-ayuda btn-modificar-pers">MODIFICAR PERSONAJE</a></li>
+          <li><a href="../pages/formulario/delPersonaje.html" class="btn-personaje-ayuda btn-eliminar-pers">ELIMINAR PERSONAJE</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
   <footer class="pie">
     <ul>
-      <li><a href="https://www.instagram.com/disney/"><img src="../assets/images/pie_Instagram.png" alt="Instagram"></a></li>
-      <li><a href="https://www.tiktok.com/@disney"><img src="../assets/images/pie_TikTok.png" alt="TikTok"></a></li>
+      <li><a href="https://www.instagram.com/disney/"><img src="../assets/images/pie_Instagram.png"
+            alt="Instagram de Disney"></a></li>
+      <li><a href="https://www.tiktok.com/@disney?lang=es-419"><img src="../assets/images/pie_TikTok.png"
+            alt="TikTok de Disney"></a></li>
+      <li><a href="https://www.disney.es/"><img src="../assets/images/pie_Disney.png" alt="Página de Disney"></a>
+      </li>
+      <li><a href="https://x.com/DisneySpain"><img src="../assets/images/pie_X.png" alt="Twitter de Disney"></a>
+      </li>
     </ul>
-    <p>The API of Wonderland © 2024</p>
   </footer>
-
   <script src="../js/javascript.js"></script>
 </body>
+
 </html>

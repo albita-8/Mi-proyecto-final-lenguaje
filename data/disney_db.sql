@@ -74,7 +74,7 @@ CREATE TABLE canc_peli
 );
 
 -- ============================================================
---							 DATOS
+--						          	 DATOS
 -- ============================================================
 
 INSERT INTO pelicula (NomPel, AnoPel, GenPel, MinPel, SinPel, ImgPel) VALUES 

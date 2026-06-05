@@ -1,19 +1,21 @@
 const express = require("express");
+
 const mysql2 = require("mysql2");
+
 const cors = require("cors");
+
+const multer = require('multer');
+
 const path = require("path");
 
 const api = express();
 
 api.use(cors());
 api.use(express.json());
-
-// Servir archivos estáticos
 api.use(express.static(path.join(__dirname, "../src")));
 
 const PORT = 3000;
 
-// Configuración del Pool de MySQL
 const pool_mysql = mysql2.createPool({
   host: "localhost",
   port: 3306,
@@ -28,26 +30,59 @@ const pool_mysql = mysql2.createPool({
 function inicioSrv() {
   pool_mysql.getConnection((error, connection) => {
     if (error) {
-      console.error("Se ha producido un error al conectar con el MySQL:", error);
+      console.error(
+        "Se ha producido un error al conectar con el MySQL:",
+        error,
+      );
       process.exit(1);
     }
     connection.release();
 
     api.listen(PORT, () => {
-      console.log(`Se ha conectado satisfactoriamente a MySQL. Servidor corriendo en http://localhost:${PORT}`);
+      console.log(
+        `Se ha conectado satisfactoriamente a MySQL. Servidor corriendo en http://localhost:${PORT}`,
+      );
     });
   });
 }
-
 inicioSrv();
 
 // =============================================================
-//                      CREACIÓN APIS
-// =============================================================
+//               CONFIGURACIÓN DE SUBIDA (MULTER)
+// =============================================================  
 
-// 1. API Películas
+// Configuración para Películas
+const imagenPeliculas = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Las guarda en src/assets/images/peliculas/
+    cb(null, path.join(__dirname, '../src/assets/images/peliculas/'));
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+const uploadPelicula = multer({ storage: imagenPeliculas });
+
+// Configuración para Personajes
+const imagenPersonajes = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Las guarda en src/assets/images/personajes/
+    cb(null, path.join(__dirname, '../src/assets/images/personajes/'));
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+const uploadPersonaje = multer({ storage: imagenPersonajes });
+
+// =============================================================
+//                      CREACIÓN APIS
+// =============================================================  
+
+// GET: leer las películas que hay
 api.get("/pelicula", (req, res) => {
   const nombre = req.query.nombre;
+
   let valores = [];
   let sql = "SELECT * FROM pelicula";
 
@@ -61,17 +96,22 @@ api.get("/pelicula", (req, res) => {
       console.error("Error al realizar la consulta:", error);
       return res.status(500).json({ error });
     }
+
     res.json(resultados);
   });
 });
 
-//POST: insertar una nueva película
-api.post("/pelicula", (req, res) => {
-  const { NomPel, AnoPel, GenPel, SinPel, MinPel, ImgPel } = req.body;
+// POST: insertar una nueva película con soporte para archivos multimedia
+api.post("/pelicula", uploadPelicula.single("ImgPel"), (req, res) => {
+  const { NomPel, AnoPel, GenPel, SinPel, MinPel } = req.body;
+
+  // Si se ha subido un archivo, creamos la ruta web relativa para la base de datos
+  const rutaImagen = req.file ? `/assets/images/peliculas/${req.file.filename}` : "Sin imagen";
+
   const sql =
     "INSERT INTO pelicula (NomPel, AnoPel, GenPel, SinPel, MinPel, ImgPel) VALUES (?, ?, ?, ?, ?, ?)";
-  const valores = [NomPel, AnoPel, GenPel, SinPel, MinPel, ImgPel || "Sin imagen"];
- 
+  const valores = [NomPel, AnoPel, GenPel, SinPel, MinPel, rutaImagen];
+
   pool_mysql.query(sql, valores, (error, resultado) => {
     if (error) {
       console.error("Error al insertar película:", error);
@@ -81,31 +121,71 @@ api.post("/pelicula", (req, res) => {
   });
 });
 
-// PUT: modificar una película existente por su ID
-api.put("/pelicula/:id", (req, res) => {
-  const { id } = req.params;
-  const { NomPel, AnoPel, GenPel, SinPel, MinPel, ImgPel } = req.body;
-  const sql =
-    "UPDATE pelicula SET NomPel = ?, AnoPel = ?, GenPel = ?, SinPel = ?, MinPel = ?, ImgPel = ? WHERE CodPel = ?";
-  const valores = [NomPel, AnoPel, GenPel, SinPel, MinPel, ImgPel, id];
- 
+// PUT: modificar una película existente por su ID con soporte para cambiar la imagen
+api.put("/pelicula/:nombre", uploadPelicula.single("ImgPel"), (req, res) => {
+  const { nombre } = req.params;
+  const { NomPel, AnoPel, GenPel, SinPel, MinPel } = req.body;
+
+  let actualizar = [];
+  let valores = [];
+
+  if (NomPel) {
+    actualizar.push("NomPel = ?");
+    valores.push(NomPel);
+  }
+
+  if (AnoPel) {
+    actualizar.push("AnoPel = ?");
+    valores.push(AnoPel);
+  }
+
+  if (GenPel) {
+    actualizar.push("GenPel = ?");
+    valores.push(GenPel);
+  }
+
+  if (MinPel) {
+    actualizar.push("MinPel = ?");
+    valores.push(MinPel);
+  }
+
+  if (SinPel) {
+    actualizar.push("SinPel = ?");
+    valores.push(SinPel);
+  }
+
+  if (req.file) {
+    actualizar.push("ImgPel = ?");
+    valores.push(`/assets/images/peliculas/${req.file.filename}`);
+  }
+
+  if (actualizar.length === 0) {
+    return res.status(400).json({ error: "No se enviaron datos para modificar." });
+  }
+
+  const sql = `UPDATE pelicula SET ${actualizar.join(", ")} WHERE NomPel = ?`;
+  valores.push(nombre);
+
   pool_mysql.query(sql, valores, (error, resultado) => {
     if (error) {
-      console.error("Error al modificar película:", error);
-      return res.status(500).json({ error });
+      console.error("Error al modificar película en la DB:", error);
+      return res.status(500).json({ error: "Error en la base de datos" });
     }
-    if (resultado.affectedRows === 0)
-      return res.status(404).json({ mensaje: "Película no encontrada" });
-    res.json({ mensaje: "Película modificada correctamente" });
+
+    if (resultado.affectedRows === 0) {
+      return res.status(404).json({ error: "No se encontró ninguna película con ese nombre." });
+    }
+
+    res.json({ mensaje: "Película modificada correctamente." });
   });
 });
 
-//DELETE: eliminar una película por su ID
-api.delete("/pelicula/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "DELETE FROM pelicula WHERE CodPel = ?";
- 
-  pool_mysql.query(sql, [id], (error, resultado) => {
+// DELETE: eliminar una película por su ID
+api.delete("/pelicula/:nombre", (req, res) => {
+  const { nombre } = req.params;
+  const sql = "DELETE FROM pelicula WHERE NomPel = ?";
+
+  pool_mysql.query(sql, [nombre], (error, resultado) => {
     if (error) {
       console.error("Error al eliminar película:", error);
       return res.status(500).json({ error });
@@ -116,14 +196,14 @@ api.delete("/pelicula/:id", (req, res) => {
   });
 });
 
-// 2. API Personajes
+// GET: leer los personajes que hay o filtrar por nombre y tipo
 api.get("/personaje", (req, res) => {
   const nombre = req.query.nombre;
   const tipo = req.query.tipo;
 
   let valores = [];
   let sql = `
-    SELECT 
+    SELECT
       p.CodPer, p.NomPer, p.EdaPer, p.TipPer,
       p.EspPer, p.AliPer, p.GenPer, p.DesPer, p.ImgPer,
       r.NomRei AS Reino
@@ -147,13 +227,18 @@ api.get("/personaje", (req, res) => {
       console.error("Error al realizar la consulta:", error);
       return res.status(500).json({ error });
     }
+
     res.json(resultados);
   });
 });
 
-// POST: insertar un nuevo personaje
-api.post("/personaje", (req, res) => {
-  const { NomPer, EdaPer, TipPer, EspPer, AliPer, GenPer, DesPer, ImgPer, CodRei } = req.body;
+// POST: insertar un nuevo personaje con soporte para archivos multimedia
+api.post("/personaje", uploadPersonaje.single("ImgPer"), (req, res) => {
+  const { NomPer, EdaPer, TipPer, EspPer, AliPer, GenPer, DesPer, CodRei } = req.body;
+
+  // Si se ha subido un archivo, creamos la ruta web relativa para la base de datos
+  const rutaImagen = req.file ? `/assets/images/personajes/${req.file.filename}` : "Sin imagen";
+
   const sql =
     "INSERT INTO personaje (NomPer, EdaPer, TipPer, EspPer, AliPer, GenPer, DesPer, ImgPer, CodRei) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
   const valores = [
@@ -162,10 +247,10 @@ api.post("/personaje", (req, res) => {
     AliPer || "Desconocido",
     GenPer,
     DesPer || "No hay descripción",
-    ImgPer || "Sin imagen",
+    rutaImagen,
     CodRei,
   ];
- 
+
   pool_mysql.query(sql, valores, (error, resultado) => {
     if (error) {
       console.error("Error al insertar personaje:", error);
@@ -175,14 +260,18 @@ api.post("/personaje", (req, res) => {
   });
 });
 
-// PUT: modificar un personaje existente por su ID
-api.put("/personaje/:id", (req, res) => {
+// PUT: modificar un personaje existente por su ID con soporte para cambiar la imagen
+api.put("/personaje/:id", uploadPersonaje.single("ImgPer"), (req, res) => {
   const { id } = req.params;
-  const { NomPer, EdaPer, TipPer, EspPer, AliPer, GenPer, DesPer, ImgPer, CodRei } = req.body;
+  const { NomPer, EdaPer, TipPer, EspPer, AliPer, GenPer, DesPer, CodRei } = req.body;
+
+  // Si se sube una nueva foto, se guarda la nueva; si no, se mantiene la que ya tenía (enviada por body)
+  const rutaImagen = req.file ? `/assets/images/personajes/${req.file.filename}` : req.body.ImgPer;
+
   const sql =
     "UPDATE personaje SET NomPer = ?, EdaPer = ?, TipPer = ?, EspPer = ?, AliPer = ?, GenPer = ?, DesPer = ?, ImgPer = ?, CodRei = ? WHERE CodPer = ?";
-  const valores = [NomPer, EdaPer, TipPer, EspPer, AliPer, GenPer, DesPer, ImgPer, CodRei, id];
- 
+  const valores = [NomPer, EdaPer, TipPer, EspPer, AliPer, GenPer, DesPer, rutaImagen, CodRei, id];
+
   pool_mysql.query(sql, valores, (error, resultado) => {
     if (error) {
       console.error("Error al modificar personaje:", error);
@@ -194,11 +283,11 @@ api.put("/personaje/:id", (req, res) => {
   });
 });
 
-//DELETE: eliminar un personaje por su ID
+// DELETE: eliminar un personaje por su ID
 api.delete("/personaje/:id", (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM personaje WHERE CodPer = ?";
- 
+
   pool_mysql.query(sql, [id], (error, resultado) => {
     if (error) {
       console.error("Error al eliminar personaje:", error);
@@ -210,7 +299,7 @@ api.delete("/personaje/:id", (req, res) => {
   });
 });
 
-// 3. API Canciones
+// GET: leer todas las canciones
 api.get("/cancion", (req, res) => {
   const sql = "SELECT * FROM cancion";
   pool_mysql.query(sql, (error, resultados) => {
@@ -222,11 +311,11 @@ api.get("/cancion", (req, res) => {
   });
 });
 
-//POST: insertar una nueva canción
+// POST: insertar una nueva canción
 api.post("/cancion", (req, res) => {
   const { NomCan } = req.body;
   const sql = "INSERT INTO cancion (NomCan) VALUES (?)";
- 
+
   pool_mysql.query(sql, [NomCan], (error, resultado) => {
     if (error) {
       console.error("Error al insertar canción:", error);
@@ -236,12 +325,12 @@ api.post("/cancion", (req, res) => {
   });
 });
 
-//PUT: modificar una canción existente por su ID
+// PUT: modificar una canción existente por su ID
 api.put("/cancion/:id", (req, res) => {
   const { id } = req.params;
   const { NomCan } = req.body;
   const sql = "UPDATE cancion SET NomCan = ? WHERE CodCan = ?";
- 
+
   pool_mysql.query(sql, [NomCan, id], (error, resultado) => {
     if (error) {
       console.error("Error al modificar canción:", error);
@@ -252,12 +341,12 @@ api.put("/cancion/:id", (req, res) => {
     res.json({ mensaje: "Canción modificada correctamente" });
   });
 });
- 
-//DELETE: eliminar una canción por su ID
+
+// DELETE: eliminar una canción por su ID
 api.delete("/cancion/:id", (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM cancion WHERE CodCan = ?";
- 
+
   pool_mysql.query(sql, [id], (error, resultado) => {
     if (error) {
       console.error("Error al eliminar canción:", error);
@@ -266,17 +355,5 @@ api.delete("/cancion/:id", (req, res) => {
     if (resultado.affectedRows === 0)
       return res.status(404).json({ mensaje: "Canción no encontrada" });
     res.json({ mensaje: "Canción eliminada correctamente" });
-  });
-});
-
-// GET: obtener todos los reinos (usado por el panel de administración)
-api.get("/reino", (req, res) => {
-  const sql = "SELECT * FROM reino";
-  pool_mysql.query(sql, (error, resultados) => {
-    if (error) {
-      console.error("Error en la consulta de reinos:", error);
-      return res.status(500).json({ error });
-    }
-    res.json(resultados);
   });
 });

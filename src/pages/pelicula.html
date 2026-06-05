@@ -1,35 +1,34 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="Alba Agüera Cuadra, Elisabet Soria Zaitseva" />
-  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/styles.css">
   <link rel="icon" href="../assets/images/icono.png" type="image/png">
   <title>Películas Disney</title>
 </head>
 
 <body>
-
   <header class="cabecera">
     <nav class="navegador">
       <ul>
-        <li class="nav-menu"><a href="../index.html">Inicio<img src="../assets/images/nav_Inicio.png" alt="Inicio"
-              class="nav-img"></a></li>
-        <li class="nav-menu"><a href="pages/ayudanos.html">Ayúdanos<img src="../assets/images/nav_Perfil.png"
-              alt="Perfil" class="nav-img"></a></li>
-        <li class="nav-menu"><a href="pages/sobre-nosotras.html">Sobre Nosotros<img
-              src="../assets/images/nav_Nosotros.png" alt="Sobre Nosotros" class="nav-img"></a></li>
-      </ul>
+                <li class="nav-menu"><a href="../index.html">Inicio<img src="../assets/images/nav_Inicio.png" alt="Inicio"
+                            class="nav-img"></a></li>
+                <li class="nav-menu"><a href="visita.html">Visita Dinsey<img src="../assets/images/nav_visita.png"
+                            alt="Perfil" class="nav-img"></a></li>
+                <li class="nav-menu"><a href="sobre-nosotras.html">Sobre Nosotros<img
+                            src="../assets/images/nav_Nosotros.png" alt="Sobre Nosotros" class="nav-img"></a></li>
+            </ul>
     </nav>
   </header>
-
 
   <main class="cont-prin-peli">
     <nav class="nav-peli">
       <div class="search-peli">
         <input type="text" id="input" placeholder="Buscar película...">
+        <img src="../assets/images/lupa_search.png" alt="Buscar...">
         <ul class=" menu-pelis"></ul>
       </div>
       <div class="orden-peli">
@@ -40,9 +39,40 @@
         </select>
       </div>
     </nav>
-    <div class="grid-elemento-peli">
+
+    <section class="section-peliculas">
       <h2>Cargando Películas...</h2>
-    </div>
+      <div class="card-pelicula">
+        <div class="card-img">
+          <img src="" alt="">
+          <span class="card-ano"></span>
+        </div>
+        <div class="card-elemento">
+          <span class="card-gen"></span>
+          <h2 class="card-tit"></h2>
+          <p class="card-sinop"></p>
+        </div>
+        <div class="card-footer">
+          <p class="card-min"><span></span> min</p>
+        </div>
+      </div>
+    </section>
+    <section class="ayuda-pelicula">
+      <div class="ayuda-titulo-peli">
+        <h2>¡Ayúdanos a mejorar la página!</h2>
+        <p>Estamos en construcción ¡Aporta tu granito de arena para hacer que esta página sea mejor!</p>
+        <p>¿Que quieres hacer?</p>
+      </div>
+      
+      <div class="ayuda-btn">
+        <ul>
+          <li><a href="../pages/formulario/crearPelicula.html" class="btn-pelicula-ayuda btn-crear-peli">CREAR PELÍCULA</a></li>
+          <li><a href="../pages/formulario/modPelicula.html" class="btn-pelicula-ayuda btn-modificar-peli">MODIFICAR PELÍCULA</a></li>
+          <li><a href="../pages/formulario/delPelicula.html" class="btn-pelicula-ayuda btn-eliminar-peli">ELIMINAR PELÍCULA</a></li>
+        </ul>
+      </div>
+    </section>
+   
   </main>
 
   <footer class="pie">

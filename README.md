@@ -59,9 +59,12 @@ API REST desarrollada con **Node.js y Express**. Gestiona las rutas, la lógica 
 ```
 GET    /api/personajes      → Listar todos los personajes
 GET    /api/peliculas       → Listar todas las películas
+POST   /api/perliculas      → Crear personaje
 POST   /api/personajes      → Crear personaje
-PUT    /api/peliculas       → Actualizar personaje
-DELETE /api/peliculas       → Eliminar personaje
+PUT    /api/peliculas       → Actualizar pelicula
+PUT    /api/personajes       → Actualizar personaje
+DELETE /api/peliculas       → Eliminar peliculas
+DELETE /api/personajes       → Eliminar personajes
 ```
 
 ### Base de Datos
@@ -210,24 +213,18 @@ disney-api/
 ## Control de cambios
 
 ### Añadido
-- Endpoint `GET /api/personajes` para listar todos los personajes desde la base de datos.
-- Endpoint `GET /api/peliculas` para listar todas las películas.
-- Servidor Node.js con Express en `backend/server.js` con conexión operativa a MySQL.
-- Fichero `package.json` con las dependencias necesarias (`express`, `mysql2`, `cors`).
-- Interfaz web en `src/index.html` que consume la API mediante `fetch` y muestra los personajes.
-- Tabla `peli_pers` para gestionar la relación muchos a muchos entre películas y personajes.
-- Tabla `cancion` y `canc_peli` para almacenar canciones asociadas a las películas.
+- Dependencia de `multer` en `server.js` para poder cargar imagenes desde el cliente al server
+- CRUD de peliculas, personajes y canciones
+- FETCH de crear, modificar y eliminar y de peliculas, personajes y canciones
+- Creacion de paginas con formularios para cada tabla (pelis, personajes y canciones) y cada accio (crear, modificar y eliminar)
+
 
 ### Modificado
-- Base de datos migrada de **SQL Server** a **MySQL**, adaptando la sintaxis (`IDENTITY` → `AUTO_INCREMENT`, tipos de datos, etc.).
-- Campo `AnoRei` de la tabla `reino` cambiado de `INT` con `DEFAULT 'Desconocido'` a `VARCHAR(15)` para ser coherente con los datos reales insertados.
-- La relación entre `personaje` y `pelicula` se ha extraído a una tabla intermedia `peli_pers`, eliminando la clave foránea directa en `personaje`, para soportar personajes que aparecen en varias películas.
-- Estructura del proyecto: separación clara entre carpetas `src/`, `backend/` y `data/`.
 - README actualizado con instrucciones de uso, tecnologías reales y estructura de carpetas definitiva.
-
+- Modificacion de archivo pnpm-lock.yaml
 ### Eliminado
 - Clave foránea directa `CodPel` en la tabla `personaje`, sustituida por la tabla intermedia `peli_pers`.
 - Referencia a SQL Server Management Studio (SSMS), sustituida por MySQL Workbench.
 
 ### Justificación de los cambios realizados
-Se ha migrado la base de datos de SQL Server a MySQL para cumplir con el requisito del proyecto (Node.js + MySQL). La relación directa entre `personaje` y `pelicula` se ha sustituido por una tabla intermedia porque varios personajes aparecen en más de una película (por ejemplo, personajes de Toy Story 1 y 2). El campo `FNacPer` se ha flexibilizado a texto porque los datos reales de Disney no siempre tienen fechas exactas. Estas decisiones permiten que la base de datos refleje mejor la realidad del dominio y sea coherente con los datos insertados.
+Elisabet: Añadi una dependencia más, ya que me he informado que para subir fotos al server y que se enpaqueten, se necesita la dependencia de multer, a esta dependencia le indicas la ruta donde se van a guardar las imagenes y ya. Los formularios he decidido hacerlo asi, ya que otra opcion que se me ocurria, era inyectar demasiado html en el js. Mi idea era, a base de 2 selectores (uno selecciona si es peli, personaje o cancion y el otro si es crear, modificar o eliminar) salga un formulario u otro. Al realizarlo, vi que el codigo del js quedaba muy "sucio", asi que decidi separarlo en 9 paginas distintas, donde los botones que llevan a esos formularios se encuentran en el final de cada pagina, como la de peliculas. Por ahora solo esta operativa la pagina de peliculas, mas adelante se modificara lo demas.
