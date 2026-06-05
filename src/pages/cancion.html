@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/cancion.css" />
   <link rel="icon" href="../assets/images/icono.png" type="image/png">
   <title>Canciones Disney - The API of Wonderland</title>
 </head>
@@ -20,14 +21,46 @@
   </header>
 
   <main>
+
+    <!-- ── FORMULARIO CRUD ── -->
+    <section class="crud-section">
+      <h2 class="crud-title">🎼 Gestionar Canciones</h2>
+
+      <div class="crud-form">
+        <!-- ID oculto, se rellena al cargar un registro para editar -->
+        <input type="hidden" id="cancionId" />
+
+        <div>
+          <label for="cancionNombreActual">Nombre actual (para Modificar / Eliminar)</label>
+          <input type="text" id="cancionNombreActual" placeholder="Ej: Let It Go" maxlength="50" />
+        </div>
+
+        <div>
+          <label for="cancionNombre">Nombre nuevo (para Crear / Modificar) *</label>
+          <input type="text" id="cancionNombre" placeholder="Ej: Into the Unknown" maxlength="50" />
+        </div>
+
+        <div class="crud-buttons">
+          <button class="btn-crud btn-crear"   onclick="crearCancion()">Crear</button>
+          <button class="btn-crud btn-editar"  onclick="editarCancion()">Modificar</button>
+          <button class="btn-crud btn-borrar"  onclick="eliminarCancion()">Eliminar</button>
+          <button class="btn-crud btn-limpiar" onclick="limpiarFormulario()">Limpiar</button>
+        </div>
+
+        <p id="crudMsg" class="crud-msg"></p>
+      </div>
+    </section>
+
+    <!-- ── LISTADO ── -->
     <section class="canciones-section">
       <h2 class="canciones-title">🎵 Bandas Sonoras Disney</h2>
       <p class="canciones-subtitle">Escucha la magia de nuestras películas</p>
-      
-      <div class="canciones-grid">
+
+      <div class="canciones-grid" id="cancionesGrid">
         <p class="cargando">Afinando las voces...</p>
       </div>
     </section>
+
   </main>
 
   <footer class="pie">

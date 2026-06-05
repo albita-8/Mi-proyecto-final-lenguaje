@@ -119,6 +119,159 @@ function renderizarCanciones(canciones) {
   });
 }
 
+// ── POST: Crear nueva canción ──────────────────────────────
+function crearCancion() {
+  const nombre = document.getElementById("cancionNombre").value.trim();
+ 
+  if (!nombre) {
+    mostrarMsgCrud("Por favor, escribe el nombre de la canción.", "error");
+    return;
+  }
+ 
+  fetch(API_URL + "/cancion", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ NomCan: nombre })
+  })
+    .then(res => res.json())
+    .then(data => {
+      mostrarMsgCrud((data.mensaje || "Canción creada correctamente."), "ok");
+      limpiarFormulario();
+      cargarCanciones();
+    })
+    .catch(err => {
+      mostrarMsgCrud("Error al crear la canción: " + err.message, "error");
+    });
+}
+ 
+// ── PUT: Modificar canción existente ───────────────────────
+function editarCancion() {
+  const nombreActual = document.getElementById("cancionNombreActual").value.trim();
+  const nombreNuevo  = document.getElementById("cancionNombre").value.trim();
+ 
+  if (!nombreActual) {
+    mostrarMsgCrud("Escribe el nombre actual de la canción que quieres modificar.", "error");
+    return;
+  }
+ 
+  if (!nombreNuevo) {
+    mostrarMsgCrud("Escribe el nuevo nombre que quieres poner.", "error");
+    return;
+  }
+ 
+  fetch(API_URL + "/cancion")
+    .then(res => res.json())
+    .then(canciones => {
+      const encontrada = canciones.find(
+        c => c.NomCan.toLowerCase() === nombreActual.toLowerCase()
+      );
+ 
+      if (!encontrada) {
+        mostrarMsgCrud('No se encontró ninguna canción con el nombre "' + nombreActual + '".', "error");
+        return;
+      }
+ 
+      _fetchPut(encontrada.CodCan, nombreNuevo);
+    })
+    .catch(err => {
+      mostrarMsgCrud("Error al buscar la canción: " + err.message, "error");
+    });
+}
+
+function _fetchPut(id, nombreNuevo) {
+  fetch(API_URL + "/cancion/" + id, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ NomCan: nombreNuevo })
+  })
+    .then(res => res.json())
+    .then(data => {
+      mostrarMsgCrud((data.mensaje || "Canción modificada correctamente."), "ok");
+      limpiarFormulario();
+      cargarCanciones();
+    })
+    .catch(err => {
+      mostrarMsgCrud("Error al modificar la canción: " + err.message, "error");
+    });
+}
+ 
+// ── DELETE: Eliminar canción (desde formulario) ────────────
+function eliminarCancion() {
+  const nombre = document.getElementById("cancionNombre").value.trim();
+ 
+  if (!nombre) {
+    mostrarMsgCrud("Escribe el nombre de la canción que quieres eliminar.", "error");
+    return;
+  }
+ 
+  // Busca la canción por nombre en la lista ya cargada
+  fetch(API_URL + "/cancion")
+    .then(res => res.json())
+    .then(canciones => {
+      const encontrada = canciones.find(
+        c => c.NomCan.toLowerCase() === nombre.toLowerCase()
+      );
+ 
+      if (!encontrada) {
+        mostrarMsgCrud('No se encontró ninguna canción con el nombre "' + nombre + '".', "error");
+        return;
+      }
+ 
+      if (!confirm('¿Eliminar la canción "' + encontrada.NomCan + '"?')) return;
+ 
+      _fetchDelete(encontrada.CodCan);
+    })
+    .catch(err => {
+      mostrarMsgCrud("Error al buscar la canción: " + err.message, "error");
+    });
+}
+ 
+/** Eliminar directamente desde la tarjeta del grid */
+function eliminarCancionDirecta(id, nombre) {
+  if (!confirm('¿Eliminar la canción "' + nombre + '"?')) return;
+  _fetchDelete(id);
+}
+ 
+/** Función interna compartida para el DELETE */
+function _fetchDelete(id) {
+  fetch(API_URL + "/cancion/" + id, { method: "DELETE" })
+    .then(res => res.json())
+    .then(data => {
+      mostrarMsgCrud((data.mensaje || "Canción eliminada correctamente."), "ok");
+      limpiarFormulario();
+      cargarCanciones();
+    })
+    .catch(err => {
+      mostrarMsgCrud("Error al eliminar la canción: " + err.message, "error");
+    });
+}
+ 
+// ── Helpers del formulario ─────────────────────────────────
+ 
+/** Rellena el formulario con los datos de una canción para editarla */
+function cargarEnFormulario(id, nombre) {
+  document.getElementById("cancionId").value     = id;
+  document.getElementById("cancionNombre").value = nombre;
+  mostrarMsgCrud("Canción cargada. Modifica el nombre y pulsa Modificar.", "ok");
+  document.getElementById("cancionNombre").focus();
+}
+ 
+/** Vacía el formulario y el mensaje de estado */
+function limpiarFormulario() {
+  document.getElementById("cancionId").value     = "";
+  document.getElementById("cancionNombre").value = "";
+  const msg = document.getElementById("crudMsg");
+  if (msg) { msg.className = "crud-msg"; msg.textContent = ""; }
+}
+ 
+/** Muestra un mensaje de resultado en el formulario */
+function mostrarMsgCrud(texto, tipo) {
+  const msg = document.getElementById("crudMsg");
+  if (!msg) return;
+  msg.textContent = texto;
+  msg.className   = "crud-msg " + tipo;
+}
+
 function mostrarError(mensaje, selector) {
   const contenedor = document.querySelector(selector);
   if (contenedor) {
