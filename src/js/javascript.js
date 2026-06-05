@@ -196,6 +196,34 @@ function buscarPelicula() {
   });
 }
 
+function cargarReinosDesplegable(selectCod) {
+    const selectReino = document.querySelector(selectCod);
+
+    if (!selectReino) return;
+
+    fetch('/api/reinos')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del servidor al cargar reinos');
+            }
+            return response.json();
+        })
+        .then(reinos => {
+
+            selectReino.innerHTML = '<option value="">-- Selecciona un reino --</option>';
+
+            reinos.forEach(reino => {
+                const option = document.createElement('option');
+                option.value = reino.CodRei;      
+                option.textContent = reino.NomRei;
+                selectReino.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error al cargar la lista de reinos:', error);
+        });
+}
+
 // FETCH DE PERSONAJES
 function obtenerPersonajes() {
   fetch(API_URL + "/personaje")
@@ -231,6 +259,9 @@ function cargarPersonajes(personajes) {
 }
 // POST: Crear un nuevo personaje
 function crearPersonaje() {
+
+  cargarReinosDesplegable('cre-NomRei');
+
   const formulario = document.getElementById("form-cre-pers");
   if (!formulario) return;
 
@@ -255,9 +286,8 @@ function crearPersonaje() {
 // PUT: Modificar un personaje existente por su ID
 function modificarPersonaje() {
  const formulario = document.getElementById("form-mod-pers");
-  if (!formulario) return; // Si no existe el formulario en esta vista, se cancela la ejecución silenciosamente
+  if (!formulario) return;
 
-  // Encapsulamos el escuchador del evento submit aquí dentro
   formulario.addEventListener("submit", function (evento) {
     evento.preventDefault();
 

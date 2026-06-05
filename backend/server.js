@@ -196,6 +196,20 @@ api.delete("/pelicula/:nombre", (req, res) => {
   });
 });
 
+// GET  de reinos para los personajes
+app.get('/api/reinos', (req, res) => {
+
+    const query = 'SELECT CodRei, NomRei FROM Reino ORDER BY NomRei ASC'; 
+    
+    conexion.query(query, (err, results) => {
+        if (err) {
+            console.error('Error al obtener los reinos:', err);
+            return res.status(500).json({ error: 'Error en la base de datos' });
+        }
+        res.json(results);
+    });
+});
+
 // GET: leer los personajes que hay o filtrar por nombre y tipo
 api.get("/personaje", (req, res) => {
   const nombre = req.query.nombre;
