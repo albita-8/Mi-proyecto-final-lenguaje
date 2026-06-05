@@ -81,14 +81,14 @@ const uploadPersonaje = multer({ storage: imagenPersonajes });
 
 // GET: leer las películas que hay
 api.get("/pelicula", (req, res) => {
-  const nombre = req.query.nombre;
+ const nombre = req.query.nombre;
 
   let valores = [];
   let sql = "SELECT * FROM pelicula";
 
   if (nombre) {
-    sql += " WHERE NomPel = ?";
-    valores.push(nombre);
+    sql += " WHERE NomPel LIKE ?";
+    valores.push(`%${nombre}%`);
   }
 
   pool_mysql.query(sql, valores, (error, resultados) => {
@@ -214,7 +214,7 @@ api.get('/api/reinos', (req, res) => {
 
 // GET: leer los personajes que hay o filtrar por nombre y tipo
 api.get("/personaje", (req, res) => {
-  const nombre = req.query.nombre;
+ const nombre = req.query.nombre;
   const tipo = req.query.tipo;
 
   let valores = [];
@@ -227,8 +227,8 @@ api.get("/personaje", (req, res) => {
     JOIN reino r ON (p.CodRei = r.CodRei)
   `;
   if (nombre) {
-    sql += " WHERE p.NomPer = ?";
-    valores.push(nombre);
+    sql += " WHERE p.NomPer LIKE ?";
+    valores.push(`%${nombre}%`);
   }
 
   pool_mysql.query(sql, valores, (error, resultados) => {

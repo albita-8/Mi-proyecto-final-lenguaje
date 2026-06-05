@@ -226,5 +226,29 @@ disney-api/
 - Clave foránea directa `CodPel` en la tabla `personaje`, sustituida por la tabla intermedia `peli_pers`.
 - Referencia a SQL Server Management Studio (SSMS), sustituida por MySQL Workbench.
 
-### Justificación de los cambios realizados
-Elisabet: Añadi una dependencia más, ya que me he informado que para subir fotos al server y que se enpaqueten, se necesita la dependencia de multer, a esta dependencia le indicas la ruta donde se van a guardar las imagenes y ya. Los formularios he decidido hacerlo asi, ya que otra opcion que se me ocurria, era inyectar demasiado html en el js. Mi idea era, a base de 2 selectores (uno selecciona si es peli, personaje o cancion y el otro si es crear, modificar o eliminar) salga un formulario u otro. Al realizarlo, vi que el codigo del js quedaba muy "sucio", asi que decidi separarlo en 9 paginas distintas, donde los botones que llevan a esos formularios se encuentran en el final de cada pagina, como la de peliculas. Por ahora solo esta operativa la pagina de peliculas, mas adelante se modificara lo demas.
+## Justificación de los cambios realizados
+
+## Elisabet
+
+### Reflexión y Dificultades Tecnológicas
+
+### 1. La curva de aprendizaje inicial y el flujo del proyecto
+Al principio, me costó un poco pillarle el truco a conectar todas las piezas del proyecto. Sin embargo, una vez que logré entender cómo hacer las peticiones `GET` en condiciones, cómo gestionar las dependencias de **Node.js** y cómo integrar el **JavaScript** con el **HTML**, me resultó mucho más fácil proseguir. Para entender mejor toda esta estructura arquitectónica, me apoyé bastante en algunos cursos de formación que he realizado en la empresa, así como en un curso de **DevOps** que cursé por las tardes. 
+
+### 2. El reto de las operaciones CRUD (POST, PUT, DELETE) y la lógica por "Nombre"
+Lo que más me ha costado del desarrollo ha sido averiguar cómo implementar los métodos `POST`, `PUT` y `DELETE`, y conectarlos correctamente con `fetch` y los formularios. 
+
+Particularmente, la operación de **modificar (PUT)** fue la que más dolores de cabeza y errores me dio. Como los códigos internos (IDs) de las tablas de la base de datos están ocultos para el usuario, quise diseñar una experiencia en la que se pudiera modificar o eliminar escribiendo directamente el **nombre** (del personaje, película o canción). Esto me obligó a crear una estructura mucho más compleja en el *backend* para buscar y validar esos datos antes de ejecutar las sentencias SQL.
+
+### 3. La gestión de formularios y la estructura de las páginas
+Otra cuestión importante fue el diseño de los formularios, ya que al principio no estaba muy segura de cómo estructurarlos de forma eficiente, lo que me llevó a tener que crear más páginas de las que había planeado inicialmente para separar la creación, edición y borrado de Películas y Personajes. 
+
+Sin embargo, **en la página de Canciones tomé una decisión de diseño distinta:** decidí integrar el formulario del CRUD al final de la misma página. Como las canciones solo requieren gestionar un campo (el nombre) tanto para crear, como para modificar o eliminar, esta solución me permitió ahorrar páginas extra y hacer la navegación más ágil.
+
+### 4. El desafío de las imágenes y la dependencia de Multer
+Conectar las imágenes supuso uno de los mayores problemas técnicos del proyecto. Tuve que investigar cómo conectar el *backend* a través de JavaScript y un formulario para permitir la subida de archivos multimedia. 
+
+Esto me llevó a enfrentarme a la dependencia **Multer**, algo totalmente nuevo para mí. Tuve que dedicar mucho tiempo a leer y averiguar cómo funcionaba para lograr que las imágenes se procesaran correctamente desde el formulario, se guardaran en la carpeta correspondiente del servidor, y que luego la ruta se guardara en la base de datos para poder proyectarlas bien en el *frontend*.
+
+### 5. Conclusión personal
+Le he dedicado muchísimas horas a este proyecto para hacer que todo funcione bien o, al menos, intentarlo hasta el final. Al haber avanzado en gran medida por mi cuenta, investigando y resolviendo cómo funciona cada pieza dentro de un CRUD completo, siento que he aprendido muchísimo y me llevo una base muy sólida de cómo se construye una aplicación web real.
