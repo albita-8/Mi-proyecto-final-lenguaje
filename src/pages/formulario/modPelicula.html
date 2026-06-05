@@ -32,22 +32,17 @@
             <fieldset>
                 <legend>Escribe aquí tus datos</legend>
                 <div class="ele-form-peli">
-                    <label>1. Película a modificar (Nombre Actual):</label>
+                    <label>PELÍCULA A MODIFICAR (Nombre Actual):</label>
                     <input type="text" id="mod-NomPel" placeholder="Ej: El Rey León" required>
                 </div>
 
-                <br>
-                <hr><br>
-                <p><strong>2. Rellena SOLO los campos que quieras cambiar:</strong></p>
+                <p>Rellena SOLO los campos que quieras cambiar:</p>
 
                 <div class="ele-form-peli">
                     <label>Nuevo Nombre:</label>
                     <input type="text" class="mod-NomPel-new" name="NomPel" maxlength="50">
                 </div>
-                <!-- <div class="ele-form-peli">
-                    <label>Nombre de la película:</label>
-                    <input type="text" id="mod-NomPel" placeholder="Ej: El Rey León" required>
-                </div> -->
+
                 <div class="ele-form-peli">
                     <label>Año / Fecha de Estreno:</label>
                     <input type="date" class="mod-AnoPel" name="AnoPel" maxlength="15">
@@ -75,7 +70,7 @@
 
             </fieldset>
 
-            <button type="submit">Modificar Película</button>
+            <button type="submit" onclick="modificarPelicula()">Modificar Película</button>
 
         </form>
     </main>

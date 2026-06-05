@@ -141,12 +141,11 @@ function modificarPelicula(nombre, form_datos) {
     });
 }
 
-// DELETE: Eliminar una película por su ID
+// DELETE: Eliminar una película por su nombre
 function eliminarPelicula(nom_peli) {
 
   const eliminar = confirm(`¿Estás seguro de que deseas borrar la película "${nom_peli}"? Esta acción no se puede deshacer.`);
 
-  // 2. Si el usuario cancela, salimos de la función
   if (!eliminar) {
     console.log("Borrado cancelado por el usuario.");
     return;
@@ -169,6 +168,33 @@ function eliminarPelicula(nom_peli) {
       console.error("Error al eliminar la película:", error);
       alert("Ocurrió un error al intentar borrar la película.");
     });
+}
+// Buscador de peliculas
+function buscarPelicula() {
+  const intro = document.getElementById("search-pel");
+  if (!intro) return;
+
+  intro.addEventListener("intro", function () {
+    const busqueda = intro.value.trim();
+
+    const url = busqueda
+      ? `${API_URL}/pelicula?nombre=${encodeURIComponent(busqueda)}`
+      : `${API_URL}/pelicula`;
+
+    fetch(url)
+      .then(respuesta => {
+        if (!respuesta.ok) throw new Error("Error en la búsqueda de películas.");
+        return respuesta.json();
+      })
+      .then(peliculas => {
+        if (peliculas.length === 0) {
+          mostrarMensajeVacio(".section-peliculas", "No se encontró ninguna película con ese nombre.");
+        } else {
+          cargarPeliculas(peliculas);
+        }
+      })
+      .catch(error => console.error("Error al buscar película:", error));
+  });
 }
 
 // FETCH DE PERSONAJES
@@ -237,6 +263,33 @@ function eliminarPersonaje(id) {
     .then(resultado => console.log("Personaje eliminado:", resultado))
     .catch(error => console.error("Error al eliminar el personaje:", error));
 }
+// Buscador de personajes
+function buscarPersonaje() {
+  const inputNombre = document.getElementById("buscador-personaje");
+  if (!inputNombre) return;
+
+  inputNombre.addEventListener("input", function () {
+    const nombre = inputNombre.value.trim();
+
+    const url = nombre
+      ? `${API_URL}/personaje?nombre=${encodeURIComponent(nombre)}`
+      : `${API_URL}/personaje`;
+
+    fetch(url)
+      .then(respuesta => {
+        if (!respuesta.ok) throw new Error("Error en la búsqueda de personajes.");
+        return respuesta.json();
+      })
+      .then(personajes => {
+        if (personajes.length === 0) {
+          mostrarMensajeVacio(".section-personajes", "No se encontró ningún personaje con esos criterios.");
+        } else {
+          cargarPersonajes(personajes);
+        }
+      })
+      .catch(error => console.error("Error al buscar personaje:", error));
+  });
+}
 
 // GET: Obtener todas las canciones
 function obtenerCanciones() {
@@ -246,7 +299,7 @@ function obtenerCanciones() {
     .then(respuesta => respuesta.json())
     .then(canciones => {
       console.log("Lista de canciones:", canciones);
-      // Aquí puedes llamar a una función para renderizar las canciones en el HTML
+     
     })
     .catch(error => console.error("Error al obtener las canciones:", error));
 }
