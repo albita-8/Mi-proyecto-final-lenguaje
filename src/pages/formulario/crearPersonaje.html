@@ -23,8 +23,46 @@
         </nav>
     </header>
 
-  <main class="cont-prin-canciones">
+    <main class="form-pers cre-pers-prin">
+           <h2>Crea una Película</h2>
+        <form id="form-cre-pers" enctype="multipart/form-data">
+            <fieldset>
+                <legend>Escribe aquí los datos</legend>
+                <div class="ele-form-pers">
+                    <label>Nombre de la Película:</label>
+                    <input type="text" class="cre-NomPer" name="NomPer" maxlength="50" required>
 
+                </div>
+                <div class="ele-form-pers">
+                    <label>Año / Fecha de Estreno:</label>
+                    <input type="date" class="cre-AnoPel" name="AnoPel" maxlength="15" required>
+
+                </div>
+                <div class="ele-form-pers">
+                    <label>Género:</label>
+                    <input type="text" class="cre-GenPel" name="GenPel" maxlength="15" required>
+
+                </div>
+                <div class="ele-form-pers">
+                    <label>Duración (minutos):</label>
+                    <input type="number" class="cre-MinPel" name="MinPel" min="1" required>
+
+                </div>
+                <div class="ele-form-pers">
+                   <label>Imagen de la Película:</label>
+                    <input type="file" class="cre-ImgPel" name="ImgPel" accept="image/*">
+
+                </div>
+                <div class="ele-form-pers">
+                    <label>Sinopsis:</label>
+                    <textarea class="cre-SinPel" name="SinPel" maxlength="500" rows="4" cols="50" required></textarea>
+
+                </div>
+            </fieldset>
+
+
+            <button type="submit">Crear Personaje</button>
+        </form>
 
   </main>
 
