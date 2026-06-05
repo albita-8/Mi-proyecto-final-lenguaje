@@ -245,7 +245,6 @@ api.get("/personaje", (req, res) => {
 api.post("/personaje", uploadPersonaje.single("ImgPer"), (req, res) => {
   const { NomPer, EdaPer, TipPer, EspPer, AliPer, GenPer, DesPer, CodRei } = req.body;
 
-  // Si se ha subido un archivo, creamos la ruta web relativa para la base de datos
   const rutaImagen = req.file ? `/assets/images/personajes/${req.file.filename}` : "Sin imagen";
 
   const sql =
@@ -334,7 +333,7 @@ api.put("/personaje/:nombre", uploadPersonaje.single("ImgPer"), (req, res) => {
         console.error("Error al ejecutar la actualización dinámica:", errorUpdate);
         return res.status(500).json({ error: errorUpdate });
       }
-      res.json({ mensaje: `¡El personaje "${nombreOriginal}" ha sido actualizado correctamente con los nuevos cambios!` });
+      res.json({ mensaje: `¡El personaje "${nombre}" ha sido actualizado correctamente con los nuevos cambios!` });
     });
   });
 });
@@ -342,50 +341,20 @@ api.put("/personaje/:nombre", uploadPersonaje.single("ImgPer"), (req, res) => {
 // DELETE: eliminar un personaje por su nombre
 api.delete("/personaje/:nombre", (req, res) => {
   const { nombre } = req.params;
-  const { pelicula } = req.query;
+  const sql = "DELETE FROM personaje WHERE NomPer = ?";
 
-  if (!pelicula) {
-    return res.status(400).json({ mensaje: "Falta el nombre de la película para realizar la verificación de seguridad." });
-  }
-
-  const sqlVerificar = `
-    SELECT pp.CodPer, pp.CodPel 
-    FROM peli_pers pp
-    JOIN personaje per ON pp.CodPer = per.CodPer
-    JOIN pelicula pel ON pp.CodPel = pel.CodPel
-    WHERE per.NomPer = ? AND pel.NomPel = ?
-  `;
-
-  pool_mysql.query(sqlVerificar, [nombre, pelicula], (error, resultados) => {
+  pool_mysql.query(sql, [nombre], (error, resultado) => {
     if (error) {
-      console.error("Error al verificar la relación:", error);
+      console.error("Error al eliminar personaje por nombre:", error);
       return res.status(500).json({ error });
     }
-
-    if (resultados.length === 0) {
-      return res.status(400).json({ 
-        mensaje: `Acción cancelada: El personaje "${nombre}" no pertenece a la película "${pelicula}" o los nombres están mal escritos.` 
-      });
+    
+    // Si affectedRows es 0 significa que no se encontró ningún personaje con ese nombre
+    if (resultado.affectedRows === 0) {
+      return res.status(404).json({ mensaje: "No se encontró ningún personaje con ese nombre" });
     }
-
-    const id_personaje = resultados[0].CodPer;
-
-    const sqlDeleteRelacion = "DELETE FROM peli_pers WHERE CodPer = ?";
-    pool_mysql.query(sqlDeleteRelacion, [id_personaje], (error) => {
-      if (error) {
-        console.error("Error al eliminar la relación intermedia:", error);
-        return res.status(500).json({ error });
-      }
-
-      const sqlDeletePersonaje = "DELETE FROM personaje WHERE CodPer = ?";
-      pool_mysql.query(sqlDeletePersonaje, [id_personaje], (error) => {
-        if (error) {
-          console.error("Error al eliminar el personaje de la tabla principal:", error);
-          return res.status(500).json({ error });
-        }
-        res.json({ mensaje: "Personaje eliminado correctamente." });
-      });
-    });
+    
+    res.json({ mensaje: `Personaje '${nombre}' eliminado correctamente` });
   });
 });
 

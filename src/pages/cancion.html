@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,7 +18,7 @@
           <a href="../index.html">Inicio<img src="../assets/images/nav_Inicio.png" alt="Inicio" class="nav-img" /></a>
         </li>
         <li class="nav-menu">
-          <a href="visita.html">Visita Dinsey<img src="../assets/images/nav_visita.png" alt="Perfil"
+          <a href="visita.html">Visita Disney<img src="../assets/images/nav_visita.png" alt="Perfil"
               class="nav-img" /></a>
         </li>
         <li class="nav-menu">
@@ -45,38 +46,38 @@
         <p>¿Que quieres hacer?</p>
       </div>
 
-      <form id="form-canc" enctype="multipart/form-data">
-         <input type="hidden" class="CodCan" name="CodCan" value=""/>
+      <form id="form-canc">
+        <input type="hidden" class="CodCan" name="CodCan" value="" />
 
         <fieldset>
           <legend>Escribe aquí el nombre</legend>
           <div class="ele-form-canc">
-            <label>Nombre de la Canción ACTUAL (para modificar / eliminar):</label>
-            <input type="text" class="NomCan" name="NomCan" maxlength="50" required>
+            <label>Nombre de la Canción ACTUAL (haz clic en una tarjeta de arriba para rellenar):</label>
+            <input type="text" class="NomCan" name="NomCan" maxlength="50">
           </div>
           <div class="ele-form-canc">
             <label>Nombre de la Canción NUEVA (para crear / modificar):</label>
-            <input type="text" class="NomCan-new" name="NomCan" maxlength="50" required>
+            <input type="text" class="NomCan-new" name="NomCanNew" maxlength="50">
           </div>
           <div class="ayuda-btn">
-            <button class="btn-ayuda btn-crear" onclick="crearCancion()">CREAR CANCIÓN</button>
-            <button class="btn-ayuda btn-modificar" onclick="editarCancion()">MODIFICAR CANCIÓN</button>
-            <button class="btn-ayuda btn-eliminar" onclick="eliminarCancion()">ELIMINAR CANCIÓN</button>
+            <button type="button" class="btn-ayuda" id="btn-crear-can">CREAR CANCIÓN</button>
+            <button type="button" class="btn-ayuda" id="btn-modificar-can">MODIFICAR CANCIÓN</button>
+            <button type="button" class="btn-ayuda" id="btn-eliminar-can">ELIMINAR CANCIÓN</button>
           </div>
         </fieldset>
       </form>
     </section>
 
-   <footer class="pie">
-    <ul>
-      <li><a href="https://www.instagram.com/disney/"><img src="../assets/images/pie_Instagram.png"
-            alt="Instagram de Disney"></a></li>
-      <li><a href="https://www.tiktok.com/@disney?lang=es-419"><img src="../assets/images/pie_TikTok.png"
-            alt="TikTok de Disney"></a></li>
-      <li><a href="https://www.disney.es/"><img src="../assets/images/pie_Disney.png" alt="Página de Disney"></a></li>
-      <li><a href="https://x.com/DisneySpain"><img src="../assets/images/pie_X.png" alt="Twitter de Disney"></a></li>
-    </ul>
-  </footer>
+    <footer class="pie">
+      <ul>
+        <li><a href="https://www.instagram.com/disney/"><img src="../assets/images/pie_Instagram.png"
+              alt="Instagram de Disney"></a></li>
+        <li><a href="https://www.tiktok.com/@disney?lang=es-419"><img src="../assets/images/pie_TikTok.png"
+              alt="TikTok de Disney"></a></li>
+        <li><a href="https://www.disney.es/"><img src="../assets/images/pie_Disney.png" alt="Página de Disney"></a></li>
+        <li><a href="https://x.com/DisneySpain"><img src="../assets/images/pie_X.png" alt="Twitter de Disney"></a></li>
+      </ul>
+    </footer>
 
     <script src="../js/javascript.js"></script>
 </body>
