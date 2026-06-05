@@ -210,16 +210,9 @@ api.get("/personaje", (req, res) => {
     FROM personaje p
     JOIN reino r ON (p.CodRei = r.CodRei)
   `;
-
-  if (nombre && tipo) {
-    sql += " WHERE p.NomPer = ? AND p.TipPer = ?";
-    valores.push(nombre, tipo);
-  } else if (nombre) {
+  if (nombre) {
     sql += " WHERE p.NomPer = ?";
     valores.push(nombre);
-  } else if (tipo) {
-    sql += " WHERE p.TipPer = ?";
-    valores.push(tipo);
   }
 
   pool_mysql.query(sql, valores, (error, resultados) => {
@@ -261,43 +254,125 @@ api.post("/personaje", uploadPersonaje.single("ImgPer"), (req, res) => {
 });
 
 // PUT: modificar un personaje existente por su ID con soporte para cambiar la imagen
-api.put("/personaje/:id", uploadPersonaje.single("ImgPer"), (req, res) => {
-  const { id } = req.params;
+api.put("/personaje/:nombre", uploadPersonaje.single("ImgPer"), (req, res) => {
+  const { nombre } = req.params;
   const { NomPer, EdaPer, TipPer, EspPer, AliPer, GenPer, DesPer, CodRei } = req.body;
 
-  // Si se sube una nueva foto, se guarda la nueva; si no, se mantiene la que ya tenía (enviada por body)
-  const rutaImagen = req.file ? `/assets/images/personajes/${req.file.filename}` : req.body.ImgPer;
-
-  const sql =
-    "UPDATE personaje SET NomPer = ?, EdaPer = ?, TipPer = ?, EspPer = ?, AliPer = ?, GenPer = ?, DesPer = ?, ImgPer = ?, CodRei = ? WHERE CodPer = ?";
-  const valores = [NomPer, EdaPer, TipPer, EspPer, AliPer, GenPer, DesPer, rutaImagen, CodRei, id];
-
-  pool_mysql.query(sql, valores, (error, resultado) => {
+ const sql = "SELECT * FROM personaje WHERE NomPer = ?";
+  pool_mysql.query(sql, [nombre], (error, resultados) => {
     if (error) {
-      console.error("Error al modificar personaje:", error);
+      console.error("Error al buscar personaje:", error);
       return res.status(500).json({ error });
     }
-    if (resultado.affectedRows === 0)
-      return res.status(404).json({ mensaje: "Personaje no encontrado" });
-    res.json({ mensaje: "Personaje modificado correctamente" });
+
+    if (resultados.length === 0) {
+      return res.status(404).json({ mensaje: `No se encontró ningún personaje registrado bajo el nombre "${nombre}".` });
+    }
+
+    const personajeFind = resultados[0];
+    const cod_personaje = personajeFind.CodPer;
+
+    let conjuntoCampos = [];
+    let valoresSentencia = [];
+
+    if (NomPer && NomPer.trim() !== "") {
+      conjuntoCampos.push("NomPer = ?");
+      valoresSentencia.push(NomPer.trim());
+    }
+    if (EdaPer && EdaPer.trim() !== "") {
+      conjuntoCampos.push("EdaPer = ?");
+      valoresSentencia.push(parseInt(EdaPer));
+    }
+    if (TipPer && TipPer.trim() !== "") {
+      conjuntoCampos.push("TipPer = ?");
+      valoresSentencia.push(TipPer.trim());
+    }
+    if (EspPer && EspPer.trim() !== "") {
+      conjuntoCampos.push("EspPer = ?");
+      valoresSentencia.push(EspPer.trim());
+    }
+    if (DesPer && DesPer.trim() !== "") {
+      conjuntoCampos.push("DesPer = ?");
+      valoresSentencia.push(DesPer.trim());
+    }
+    if (CodRei && CodRei.trim() !== "") {
+      conjuntoCampos.push("CodRei = ?");
+      valoresSentencia.push(parseInt(CodRei));
+    }
+    
+    if (req.file) {
+      conjuntoCampos.push("ImgPer = ?");
+      valoresSentencia.push(req.file.filename);
+    }
+
+    if (conjuntoCampos.length === 0) {
+      return res.status(400).json({ mensaje: "No has ingresado modificaciones en ningún campo." });
+    }
+
+    valoresSentencia.push(cod_personaje);
+
+    const sqlActu = `UPDATE personaje SET ${conjuntoCampos.join(", ")} WHERE CodPer = ?`;
+
+    pool_mysql.query(sqlActu, valoresSentencia, (errorUpdate, resultadoUpdate) => {
+      if (errorUpdate) {
+        console.error("Error al ejecutar la actualización dinámica:", errorUpdate);
+        return res.status(500).json({ error: errorUpdate });
+      }
+      res.json({ mensaje: `¡El personaje "${nombreOriginal}" ha sido actualizado correctamente con los nuevos cambios!` });
+    });
   });
 });
 
-// DELETE: eliminar un personaje por su ID
-api.delete("/personaje/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "DELETE FROM personaje WHERE CodPer = ?";
+// DELETE: eliminar un personaje por su nombre
+api.delete("/personaje/:nombre", (req, res) => {
+  const { nombre } = req.params;
+  const { pelicula } = req.query;
 
-  pool_mysql.query(sql, [id], (error, resultado) => {
+  if (!pelicula) {
+    return res.status(400).json({ mensaje: "Falta el nombre de la película para realizar la verificación de seguridad." });
+  }
+
+  const sqlVerificar = `
+    SELECT pp.CodPer, pp.CodPel 
+    FROM peli_pers pp
+    JOIN personaje per ON pp.CodPer = per.CodPer
+    JOIN pelicula pel ON pp.CodPel = pel.CodPel
+    WHERE per.NomPer = ? AND pel.NomPel = ?
+  `;
+
+  pool_mysql.query(sqlVerificar, [nombre, pelicula], (error, resultados) => {
     if (error) {
-      console.error("Error al eliminar personaje:", error);
+      console.error("Error al verificar la relación:", error);
       return res.status(500).json({ error });
     }
-    if (resultado.affectedRows === 0)
-      return res.status(404).json({ mensaje: "Personaje no encontrado" });
-    res.json({ mensaje: "Personaje eliminado correctamente" });
+
+    if (resultados.length === 0) {
+      return res.status(400).json({ 
+        mensaje: `Acción cancelada: El personaje "${nombre}" no pertenece a la película "${pelicula}" o los nombres están mal escritos.` 
+      });
+    }
+
+    const id_personaje = resultados[0].CodPer;
+
+    const sqlDeleteRelacion = "DELETE FROM peli_pers WHERE CodPer = ?";
+    pool_mysql.query(sqlDeleteRelacion, [id_personaje], (error) => {
+      if (error) {
+        console.error("Error al eliminar la relación intermedia:", error);
+        return res.status(500).json({ error });
+      }
+
+      const sqlDeletePersonaje = "DELETE FROM personaje WHERE CodPer = ?";
+      pool_mysql.query(sqlDeletePersonaje, [id_personaje], (error) => {
+        if (error) {
+          console.error("Error al eliminar el personaje de la tabla principal:", error);
+          return res.status(500).json({ error });
+        }
+        res.json({ mensaje: "Personaje eliminado correctamente." });
+      });
+    });
   });
 });
+
 
 // GET: leer todas las canciones
 api.get("/cancion", (req, res) => {

@@ -15,44 +15,31 @@ const personajes = document.querySelector(".section-personajes");
 const canciones = document.querySelector(".section-canciones");
 
 // FORMULARIOS PELICULAS
-
+const form_cre_peli = document.getElementById("form-cre-peli");
+const form_mod_peli = document.getElementById("form-mod-peli");
+const form_del_peli = document.getElementById("form-del-peli");
 
 // FORMULARIOS PERSONAJES
 const form_cre_pers = document.getElementById("form-cre-pers");
 const form_mod_pers = document.getElementById("form-mod-pers");
 const form_del_pers = document.getElementById("form-del-pers");
 
-// FORMULARIOS CANCIONES
-const form_cre_canc = document.getElementById("form-cre-canc");
-const form_mod_canc = document.getElementById("form-mod-canc");
-const form_del_canc = document.getElementById("form-del-canc");
 
 document.addEventListener("DOMContentLoaded", function () {
 
-  if (peliculas) { obtenerPeliculas(); }
-  if (personajes) { obtenerPersonajes(); }
+  if (peliculas) { obtenerPeliculas(); buscarPelicula(); }
+  if (personajes) { obtenerPersonajes(); buscarPersonaje(); }
   if (canciones) { obtenerCanciones(); }
 
-  const form_cre_peli = document.getElementById("form-cre-peli");
-  const form_mod_peli = document.getElementById("form-mod-peli");
-  const form_del_peli = document.getElementById("form-del-peli");
-
+  // PELICULAS -------------------------------------------------
   if (form_cre_peli) { crearPelicula(); }
-  if (form_mod_peli) {
-     form_mod_peli.addEventListener("submit", function (evento) {
-      evento.preventDefault();
-      const nom_peli = document.getElementById("mod-NomPel").value.trim();
-      const form_datos = new FormData(form_mod_peli);
-      modificarPelicula(nom_peli, form_datos);
-    });
-  }
-  if (form_del_peli) {
-    form_del_peli.addEventListener("submit", function (evento) {
-      evento.preventDefault();
-      const nom_peli = document.getElementById("del-NomPel").value;
-      eliminarPelicula(nom_peli);
-    });
-  }
+  if (form_mod_peli) { modificarPelicula(); }
+  if (form_del_peli) { eliminarPelicula(); }
+
+  // PERSONAJES ----------------------------------------------------
+  if (form_cre_pers) { crearPersonaje(); }
+  if (form_mod_pers) { modificarPersonaje(); }
+  if (form_del_pers) { eliminarPersonaje(); }
 });
 
 
@@ -118,56 +105,68 @@ function crearPelicula() {
 }
 
 // PUT: Modificar una película existente por su ID
-function modificarPelicula(nombre, form_datos) {
+function modificarPelicula() {
 
-  fetch(`${API_URL}/pelicula/${encodeURIComponent(nombre)}`, {
-    method: "PUT",
-    body: form_datos
-  })
-    .then(respuesta => {
-      if (!respuesta.ok) {
-        throw new Error("No se pudo actualizar la película. Verifica si el nombre existe.");
-      }
-      return respuesta.json();
+  const formulario = document.getElementById("form-mod-peli");
+  if (!formulario) return;
+
+  formulario.addEventListener("submit", function (evento) {
+    evento.preventDefault();
+    
+    const nom_peli = document.getElementById("mod-NomPel").value.trim();
+    const form_datos = new FormData(formulario);
+
+    fetch(`${API_URL}/pelicula/${encodeURIComponent(nom_peli)}`, {
+      method: "PUT",
+      body: form_datos
     })
-    .then(resultado => {
-      console.log("Película modificada:", resultado);
-      alert("¡La película se ha modificado correctamente!");
-      document.getElementById("form-mod-peli").reset();
-    })
-    .catch(error => {
-      console.error("Error al modificar la película:", error);
-      alert("No se encontró ninguna película con ese nombre o hubo un error en el servidor.");
-    });
+      .then(respuesta => {
+        if (!respuesta.ok) throw new Error("No se pudo actualizar la película.");
+        return respuesta.json();
+      })
+      .then(resultado => {
+        console.log("Película modificada:", resultado);
+        alert("¡La película se ha modificado correctamente!");
+        formulario.reset();
+      })
+      .catch(error => {
+        console.error("Error al modificar la película:", error);
+        alert("No se encontró ninguna película con ese nombre.");
+      });
+  });
 }
 
 // DELETE: Eliminar una película por su nombre
-function eliminarPelicula(nom_peli) {
+function eliminarPelicula() {
 
-  const eliminar = confirm(`¿Estás seguro de que deseas borrar la película "${nom_peli}"? Esta acción no se puede deshacer.`);
+  const formulario = document.getElementById("form-del-peli");
+  if (!formulario) return;
 
-  if (!eliminar) {
-    console.log("Borrado cancelado por el usuario.");
-    return;
-  }
+  formulario.addEventListener("submit", function (evento) {
+    evento.preventDefault();
+    
+    const nom_peli = document.getElementById("del-NomPel").value.trim();
+    const eliminar = confirm(`¿Estás seguro de que deseas borrar la película "${nom_peli}"? Esta acción no se puede deshacer.`);
 
-  fetch(`${API_URL}/pelicula/${encodeURIComponent(nom_peli)}`, {
-    method: "DELETE"
-  })
-    .then(respuesta => {
-      if (!respuesta.ok) {
-        throw new Error("No se pudo eliminar la película.");
-      }
-      return respuesta.json();
+    if (!eliminar) return;
+
+    fetch(`${API_URL}/pelicula/${encodeURIComponent(nom_peli)}`, {
+      method: "DELETE"
     })
-    .then(resultado => {
-      console.log("Película eliminada:", resultado);
-      alert("Película eliminada correctamente");
-    })
-    .catch(error => {
-      console.error("Error al eliminar la película:", error);
-      alert("Ocurrió un error al intentar borrar la película.");
-    });
+      .then(respuesta => {
+        if (!respuesta.ok) throw new Error("No se pudo eliminar la película.");
+        return respuesta.json();
+      })
+      .then(resultado => {
+        console.log("Película eliminada:", resultado);
+        alert("Película eliminada correctamente");
+        formulario.reset();
+      })
+      .catch(error => {
+        console.error("Error al eliminar la película:", error);
+        alert("Ocurrió un error al intentar borrar la película.");
+      });
+  });
 }
 // Buscador de peliculas
 function buscarPelicula() {
@@ -198,7 +197,7 @@ function buscarPelicula() {
 }
 
 // FETCH DE PERSONAJES
-function cargarPersonajes() {
+function obtenerPersonajes() {
   fetch(API_URL + "/personaje")
     .then(respuesta => respuesta.json())
     .then(personajes => cargarPersonajes(personajes))
@@ -231,63 +230,108 @@ function cargarPersonajes(personajes) {
   });
 }
 // POST: Crear un nuevo personaje
-function crearPersonaje(datos) {
-  fetch(`${API_URL}/personaje`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(datos)
-  })
-    .then(respuesta => respuesta.json())
-    .then(resultado => console.log("Personaje creado:", resultado))
-    .catch(error => console.error("Error al crear el personaje:", error));
+function crearPersonaje() {
+  const formulario = document.getElementById("form-cre-pers");
+  if (!formulario) return;
+
+  formulario.addEventListener("submit", function (evento) {
+    evento.preventDefault();
+    const datosForm = new FormData(formulario);
+
+    fetch(`${API_URL}/personaje`, {
+      method: "POST",
+      body: datosForm
+    })
+      .then(respuesta => respuesta.json())
+      .then(resultado => {
+        console.log("Personaje creado:", resultado);
+        alert("¡Personaje creado con éxito!");
+        formulario.reset();
+      })
+      .catch(error => console.error("Error al crear el personaje:", error));
+  });
 }
 
 // PUT: Modificar un personaje existente por su ID
-function modificarPersonaje(id, datos) {
-  fetch(`${API_URL}/personaje/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(datos)
-  })
-    .then(respuesta => respuesta.json())
-    .then(resultado => console.log("Personaje modificado:", resultado))
-    .catch(error => console.error("Error al modificar el personaje:", error));
+function modificarPersonaje() {
+ const formulario = document.getElementById("form-mod-pers");
+  if (!formulario) return; // Si no existe el formulario en esta vista, se cancela la ejecución silenciosamente
+
+  // Encapsulamos el escuchador del evento submit aquí dentro
+  formulario.addEventListener("submit", function (evento) {
+    evento.preventDefault();
+
+    const nombre = document.getElementById("mod-NomPer").value.trim();
+    if (!nombre) {
+      alert("Debes ingresar el nombre del personaje que deseas modificar.");
+      return;
+    }
+
+    const form_datos = new FormData(formulario);
+
+    fetch(`${API_URL}/personaje/${encodeURIComponent(nombre)}`, {
+      method: "PUT",
+      body: form_datos 
+    })
+      .then(respuesta => {
+        if (!respuesta.ok) {
+          return respuesta.json().then(err => { 
+            throw new Error(err.mensaje || "Error al actualizar el personaje."); 
+          });
+        }
+        return respuesta.json();
+      })
+      .then(resultado => {
+        console.log("Resultado de la actualización:", resultado);
+        alert(resultado.mensaje || "¡Personaje modificado correctamente!");
+        formulario.reset();
+      })
+      .catch(error => {
+        console.error("Error en la petición PUT:", error);
+        alert(error.message);
+      });
+  });
 }
 
 // DELETE: Eliminar un personaje por su ID
-function eliminarPersonaje(id) {
-  fetch(`${API_URL}/personaje/${id}`, {
-    method: "DELETE"
-  })
-    .then(respuesta => respuesta.json())
-    .then(resultado => console.log("Personaje eliminado:", resultado))
-    .catch(error => console.error("Error al eliminar el personaje:", error));
-}
-// Buscador de personajes
-function buscarPersonaje() {
-  const inputNombre = document.getElementById("buscador-personaje");
-  if (!inputNombre) return;
+function eliminarPersonaje() {
+ const formulario = document.getElementById("form-del-pers");
+  if (!formulario) return; // Si no estamos en la página del formulario, salimos de la función
 
-  inputNombre.addEventListener("input", function () {
-    const nombre = inputNombre.value.trim();
+  // Añadimos el escuchador del evento 'submit' dentro de la propia función
+  formulario.addEventListener("submit", function (evento) {
+    evento.preventDefault(); // Evitamos que la página se recargue automáticamente
 
-    const url = nombre
-      ? `${API_URL}/personaje?nombre=${encodeURIComponent(nombre)}`
-      : `${API_URL}/personaje`;
+    // Capturamos los datos directamente desde los inputs de tu HTML
+    const nom_per = document.getElementById("del-NomPer").value.trim();
+    const nom_pel = document.getElementById("del-NomPel").value.trim();
 
-    fetch(url)
+    // Mensaje de confirmación en el navegador como capa extra de seguridad
+    const confirmar = confirm(`¿Estás seguro de que deseas eliminar a "${nom_per}" de la película "${nom_pel}"? Esta acción no se puede deshacer.`);
+    if (!confirmar) return; // Si cancela, no hace nada
+
+    // Enviamos el nombre del personaje en la URL y el de la película como parámetro de consulta (?pelicula=...)
+    fetch(`${API_URL}/personaje/${encodeURIComponent(nom_per)}?pelicula=${encodeURIComponent(nom_pel)}`, {
+      method: "DELETE"
+    })
       .then(respuesta => {
-        if (!respuesta.ok) throw new Error("Error en la búsqueda de personajes.");
+        // Si el servidor devuelve un error de validación (ej: código 400), procesamos el mensaje personalizado
+        if (!respuesta.ok) {
+          return respuesta.json().then(err => { 
+            throw new Error(err.mensaje || "Error al intentar eliminar el personaje."); 
+          });
+        }
         return respuesta.json();
       })
-      .then(personajes => {
-        if (personajes.length === 0) {
-          mostrarMensajeVacio(".section-personajes", "No se encontró ningún personaje con esos criterios.");
-        } else {
-          cargarPersonajes(personajes);
-        }
+      .then(resultado => {
+        console.log("Personaje eliminado:", resultado);
+        alert(`¡El personaje "${nom_per}" ha sido eliminado con éxito!`);
+        formulario.reset(); // Limpia los campos del formulario
       })
-      .catch(error => console.error("Error al buscar personaje:", error));
+      .catch(error => {
+        console.error("Error al eliminar el personaje:", error);
+        alert(error.message); // Muestra el error exacto controlado que envíe el servidor
+      });
   });
 }
 
@@ -299,7 +343,7 @@ function obtenerCanciones() {
     .then(respuesta => respuesta.json())
     .then(canciones => {
       console.log("Lista de canciones:", canciones);
-     
+
     })
     .catch(error => console.error("Error al obtener las canciones:", error));
 }

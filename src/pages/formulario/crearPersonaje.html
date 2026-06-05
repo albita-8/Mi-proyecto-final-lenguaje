@@ -25,61 +25,64 @@
     </header>
 
     <main class="form-pers cre-pers-prin">
-        <div class="ele-form-pers">
-            <label>Nombre del Personaje:</label>
-            <input type="text" class="cre-NomPer" name="NomPer" maxlength="50" required>
-        </div>
+        <h2>Crea un Personaje</h2>
+        <form id="form-cre-pers" enctype="multipart/form-data">
+            </fieldset>
+            <div class="ele-form-pers">
+                <label>Nombre del Personaje:</label>
+                <input type="text" class="cre-NomPer" name="NomPer" maxlength="50" required>
+            </div>
 
-        <div class="ele-form-pers">
-            <label>Edad:</label>
-            <input type="number" class="cre-EdaPer" name="EdaPer" min="0" required>
-        </div>
+            <div class="ele-form-pers">
+                <label>Edad:</label>
+                <input type="number" class="cre-EdaPer" name="EdaPer" min="0" required>
+            </div>
 
-        <div class="ele-form-pers">
-            <label>Tipo:</label>
-            <input type="text" class="cre-TipPer" name="TipPer" maxlength="50"
-                placeholder="Ej: Protagonista, Villano, Secundario" required>
-        </div>
+            <div class="ele-form-pers">
+                <label>Tipo:</label>
+                <input type="text" class="cre-TipPer" name="TipPer" maxlength="50"
+                    placeholder="Ej: Protagonista, Villano, Secundario" required>
+            </div>
 
-        <div class="ele-form-pers">
-            <label>Especie:</label>
-            <input type="text" class="cre-EspPer" name="EspPer" maxlength="50" placeholder="Ej: León, Humano…">
-        </div>
+            <div class="ele-form-pers">
+                <label>Especie:</label>
+                <input type="text" class="cre-EspPer" name="EspPer" maxlength="50" placeholder="Ej: León, Humano…">
+            </div>
 
-        <div class="ele-form-pers">
-            <label>Alias:</label>
-            <input type="text" class="cre-AliPer" name="AliPer" maxlength="20" placeholder="La reina de las Nieves">
-        </div>
+            <div class="ele-form-pers">
+                <label>Alias:</label>
+                <input type="text" class="cre-AliPer" name="AliPer" maxlength="20" placeholder="La reina de las Nieves">
+            </div>
 
-        <div class="ele-form-pers">
-            <label>Género:</label>
-            <select class="cre-GenPer" name="GenPer" required>
-                <option value="">-- Selecciona --</option>
-                <option value="Masculino">Masculino</option>
-                <option value="Femenino">Femenino</option>
-                <option value="Desconocido">Desconocido</option>
-            </select>
-        </div>
+            <div class="ele-form-pers">
+                <label>Género:</label>
+                <select class="cre-GenPer" name="GenPer" required>
+                    <option value="">-- Selecciona --</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Desconocido">Desconocido</option>
+                </select>
+            </div>
 
-        <div class="ele-form-pers">
-            <label>Descripción:</label>
-            <textarea class="cre-DesPer" name="DesPer" maxlength="500" rows="4" cols="50"
-                placeholder="Sin Descripción"></textarea>
-        </div>
+            <div class="ele-form-pers">
+                <label>Descripción:</label>
+                <textarea class="cre-DesPer" name="DesPer" maxlength="500" rows="4" cols="50"
+                    placeholder="Sin Descripción"></textarea>
+            </div>
 
-        <div class="ele-form-pers">
-            <label>Imagen del Personaje:</label>
-            <input type="file" class="cre-ImgPer" name="ImgPer" accept="image/*">
-        </div>
+            <div class="ele-form-pers">
+                <label>Imagen del Personaje:</label>
+                <input type="file" class="cre-ImgPer" name="ImgPer" accept="image/*">
+            </div>
 
-        <div class="ele-form-pers">
-            <label>Reino:</label>
-            <select class="cre-CodRei" name="CodRei" required>
-                <option value="">-- Selecciona un reino --</option>
-            </select>
-        </div>
-        </fieldset>
-        <button type="submit" onclick="CrearPersonaje()">Crear Personaje</button>
+            <div class="ele-form-pers">
+                <label>Reino:</label>
+                <select class="cre-CodRei" name="CodRei" required>
+                    <option value="">-- Selecciona un reino --</option>
+                </select>
+            </div>
+            </fieldset>
+            <button type="submit">Crear Personaje</button>
         </form>
 
     </main>
