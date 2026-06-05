@@ -175,11 +175,11 @@ function eliminarPelicula() {
 }
 // Buscador de peliculas
 function buscarPelicula() {
-  const intro = document.getElementById("search-pel");
-  if (!intro) return;
+  const buscador = document.getElementById("input");
+  if (!buscador) return;
 
-  intro.addEventListener("intro", function () {
-    const busqueda = intro.value.trim();
+  buscador.addEventListener("input", function () {
+    const busqueda = buscador.value.trim();
 
     const url = busqueda
       ? `${API_URL}/pelicula?nombre=${encodeURIComponent(busqueda)}`
@@ -191,8 +191,10 @@ function buscarPelicula() {
         return respuesta.json();
       })
       .then(peliculas => {
+        const seccion_peli = document.querySelector(".section-peliculas");
+        
         if (peliculas.length === 0) {
-          mostrarMensajeVacio(".section-peliculas", "No se encontró ninguna película con ese nombre.");
+          seccion_peli.innerHTML = "<h2>No se encontró ninguna película con ese nombre</h2>";
         } else {
           cargarPeliculas(peliculas);
         }
@@ -365,6 +367,36 @@ function eliminarPersonaje() {
     } else {
       alert("Por favor, introduce el nombre del personaje que deseas eliminar.");
     }
+  });
+}
+
+function buscarPersonaje() {
+  
+  const buscador = document.getElementById("input-per");
+  if (!buscador) return;
+
+  buscador.addEventListener("input", function () {
+    const busqueda = buscador.value.trim();
+
+    const url = busqueda
+      ? `${API_URL}/personaje?nombre=${encodeURIComponent(busqueda)}`
+      : `${API_URL}/personaje`;
+
+    fetch(url)
+      .then(respuesta => {
+        if (!respuesta.ok) throw new Error("Error en la búsqueda de personajes.");
+        return respuesta.json();
+      })
+      .then(personajes => {
+        const seccion_personaje = document.querySelector(".section-personajes");
+        
+        if (personajes.length === 0) {
+          seccion_personaje.innerHTML = "<h2>No se encontró ningún personaje con ese nombre.</h2>";
+        } else {
+          cargarPersonajes(personajes);
+        }
+      })
+      .catch(error => console.error("Error al buscar personaje:", error));
   });
 }
 

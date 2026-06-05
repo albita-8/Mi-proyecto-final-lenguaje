@@ -43,23 +43,24 @@
 }
 
 .navegador ul {
-  width: 30%;
-  list-style: none;
-  display: flex;
-  gap: 10px;
-  margin-left: auto;
-  padding: 5px;
+list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    gap: 25px; 
+    margin-left: auto;
+    padding: 5px;
 }
 
 .nav-menu a {
   color: #ffffff;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1rem;
-  font-family: Montserrat, Questrial;
-  display: flex;
-  transition: color 0.2s;
-  gap: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
 }
 
 .nav-menu a:hover {
@@ -67,11 +68,15 @@
 }
 
 .nav-img {
-  width: 5%;
-  height: 10%;
-  align-items: center;
+ width: 24px; 
+    height: 24px;
+    object-fit: contain;
+    transition: transform 0.2s;
 }
 
+.nav-menu a:hover .nav-img {
+    transform: scale(1.1); 
+}
 .pie {
   background-color: #003087;
   padding: 16px;
@@ -97,7 +102,7 @@
 }
 
 .pie img:hover {
-  transform: scale(1.1);
+  transform: scale(0.95);
 }
 
 .cont-prin-inicio {
@@ -529,66 +534,188 @@
 
 .cont-prin-visita {
     padding: 24px 32px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
+    display: flex;           
+    flex-direction: column;  
+    align-items: center;      
+    gap: 40px;                
     background-color: #f4f4f4;
     min-height: 100vh;
     font-family: Questrial, Arial, sans-serif;
     box-sizing: border-box;
 }
+
 
 .cont-prin-visita h2 {
-   padding: 24px 32px;
-    display: flex;             /* ACTIVAMOS FLEXBOX */
-    flex-wrap: wrap;           /* PERMITIMOS QUE SALTEN DE LÍNEA */
-    gap: 24px;                 /* ESPACIO ENTRE LAS TARJETAS */
-    justify-content: center;   /* CENTRAMOS LAS TARJETAS */
-    background-color: #f4f4f4;
-    min-height: 100vh;
-    font-family: Questrial, Arial, sans-serif;
-    box-sizing: border-box;
+    font-family: 'ClassicDisneyBold', sans-serif;
+    color: #003087;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 10px;
+    width: 100%;
 }
 
-.card-visita{
- background: #ffffff; 
+
+.card-visita {
+    width: 100%;
+    max-width: 900px; 
+    background: #ffffff; 
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
-    padding: 20px;
+    padding: 30px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
     transition: transform 0.2s;
 }
-
 
 .card-visita:hover {
     transform: translateY(-4px); 
 }
 
 .card-visita h3 {
-    font-family: Georgia, serif; /* Misma fuente elegante que los títulos de películas */ 
-    font-size: 1.2rem;
+    font-family: Georgia, serif; 
+    font-size: 1.5rem;
     color: #003087;
     margin: 0;
 }
 
-.card-visita p{
-    font-size: 0.9rem;
+.card-visita p {
+    font-size: 1rem;
     color: #444444;
     margin: 0;
 }
 
-
 .card-visita iframe {
-   width: 100% !important; 
-    height: 200px;
+    width: 100% !important; 
+    height: 350px; 
     border-radius: 8px;
     border: 3px solid #f5c518; 
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    margin-top: auto; 
+    margin-top: 15px; 
+}
+.cont-prin-nosotras {
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+    font-family: 'Montserrat', Arial, sans-serif;
+    box-sizing: border-box;
 }
 
+.seccion-presentacion, 
+.section-proyecto, 
+.section-tecnologias {
+    width: 100%;
+    max-width: 900px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.cont-prin-nosotras h2 {
+    font-family: 'ClassicDisneyBold', sans-serif;
+    color: #003087;
+    font-size: 2.4rem;
+    margin-bottom: 20px;
+}
+
+
+.cont-prin-nosotras p {
+    font-size: 1.05rem;
+    color: #444444;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.contenedor-foto {
+    margin: 30px auto;
+    width: 100%;
+    max-width: 400px;
+}
+
+.foto-nosotras {
+    width: 100%;
+    border-radius: 12px;
+    border: 4px solid #f5c518;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: block;
+}
+
+.perfil-estudiante {
+    background-color: #f4f4f4;
+    padding: 15px 20px;
+    border-left: 5px solid #003087;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.perfil-estudiante h3 {
+    font-family: Georgia, serif;
+    color: #003087;
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+}
+
+.perfil-estudiante p {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.contenedor-tecnologias {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.tecnologias, .grupo-tec {
+    background-color: #ffffff;
+    padding: 25px 20px;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    border-top: 5px solid #add8e6;
+    text-align: left;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.tecnologias:hover, .grupo-tec:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+.tecnologias h3, .grupo-tec h3 {
+    font-family: Georgia, serif;
+    color: #003087;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #f5c518;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.tecnologias ul, .grupo-tec ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tecnologias li, .grupo-tec li {
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    color: #333333;
+    line-height: 1.5;
+}
+
+.tecnologias li strong, .grupo-tec li strong {
+    color: #003087;
+}
 .ayuda {
     padding: 40px 20px;
     background-color: #ffffff;
@@ -698,7 +825,7 @@ legend {
     font-family: Arial, sans-serif;
 }
 
-/* --- ESTILOS DE BOTONES --- */
+
 
 button {
     width: 100%;
@@ -773,8 +900,6 @@ button:hover {
     border-radius: 8px;
     font-family: Arial, sans-serif;
 }
-
-/* --- ESTILOS DE BOTONES (Personajes) --- */
 
 .mod-pers-prin button {
     background-color: #f5c518;
